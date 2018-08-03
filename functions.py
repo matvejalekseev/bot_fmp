@@ -63,3 +63,23 @@ def change(req, db_in = db):
         return True
     except:
         pass
+
+def event(name = None,
+          price = None,
+          account = None,
+          status = None,
+          users = None):
+    event_name = "*" + xstr(name) + "*\n"
+    event_date = "*Сумма:* " + xstr(price) + "\n"
+    event_time = "*Перевести:* " + xstr(account) + "\n"
+    for user in users:
+        event_user = event_user + xstr(user) + "\n"
+    event_status = "\n*Статус:* " + xstr(status) + "\n"
+    order = event_name + event_date + event_time + event_user + event_status
+    return order
+
+def check_event(name, price, account):
+    if is_str(name) and is_str(price) and is_str(account):
+        return True
+    else:
+        return False
