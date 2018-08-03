@@ -72,6 +72,7 @@ def event(name = None,
     event_name = "*" + xstr(name) + "*\n"
     event_date = "*Сумма:* " + xstr(price) + "\n"
     event_time = "*Перевести:* " + xstr(account) + "\n"
+    event_user = ""
     if not(users):
         event_user = "Нет виновника\n"
     else:
