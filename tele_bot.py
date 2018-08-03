@@ -28,8 +28,13 @@ bot = telebot.TeleBot(telegrambot_test)
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ");")
-    bot.send_message(message.chat.id, start_msg, reply_markup=startmarkup)
+    if message.chat.type == 'private':
+        change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ","
+           + str(message.chat.username) + "," +
+           str(message.chat.last_name) + " " + str(message.chat.first_name) + ");")
+        bot.send_message(message.chat.id, start_msg, reply_markup=startmarkup)
+    else:
+        bot.send_message(message.chat.id, not_private_msg)
 
 
 @bot.message_handler(func=lambda message: True)
@@ -67,8 +72,28 @@ def echo_message(message):
                 bot.send_message(chat_id, reply, parse_mode='MARKDOWN', disable_web_page_preview=True)
             elif text == btn_event:
                 bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(chat_id, event(), parse_mode='MARKDOWN', disable_web_page_preview=True,
-                                 reply_markup=eventmarkup)
+                current_event = select("select name, price, account, rowid from events "
+                                        "where status = 0 order by rowid desc limit 1;")
+                if len(current_event) == 0:
+                    change("INSERT INTO events(chat_id) VALUES (" + str(chat_id)+ ");")
+                    bot.send_message(message.chat.id, event(), parse_mode='MARKDOWN',
+                                     reply_markup=eventmarkup)
+                else:
+                    for row in select(
+                            "select name, price, account, id, rowid from events where "
+                            "status = 0 order by rowid desc limit 1;"):
+                        users = select("select name, username from chats where chat_id in "
+                                       "( select chat_id from u2e where event_id = " + row[3] + ");")
+                        text = event(name=row[0], price=row[1], account=row[2],
+                                     users=users)
+                        if check_event(row[0], row[1], row[2]):
+                            bot.send_message(chat_id, text,
+                                             parse_mode='MARKDOWN',
+                                             reply_markup=eventsendmarkup)
+                        else:
+                            bot.send_message(chat_id, text,
+                                             parse_mode='MARKDOWN',
+                                             reply_markup=eventmarkup)
         else:
             if text == btn_bg:
                 bot.send_chat_action(chat_id, 'typing')

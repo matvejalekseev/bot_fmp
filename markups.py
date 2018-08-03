@@ -16,7 +16,14 @@ row=[]
 row.append(types.InlineKeyboardButton(text=btn_account, callback_data="event_account"))
 row.append(types.InlineKeyboardButton(text=btn_user, callback_data="event_user"))
 eventmarkup.row(*row)
+row=[]
+row.append(types.InlineKeyboardButton(text=btn_cancel, callback_data="event_cancel"))
+eventmarkup.row(*row)
 
+eventsendmarkup = eventmarkup
+row=[]
+row.append(types.InlineKeyboardButton(text=btn_send, callback_data="event_send"))
+eventsendmarkup.row(*row)
 
 #Примеры
 elementmarkup_soc = types.InlineKeyboardMarkup()

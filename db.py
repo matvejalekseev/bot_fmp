@@ -5,8 +5,8 @@ conn = sqlite3.connect(db) # или :memory: чтобы сохранить в RA
 cursor = conn.cursor()
  
 # Создание таблицы "Чаты"
-#cursor.execute("DROP TABLE chats;")
-#cursor.execute("CREATE TABLE chats(chat_id real, username text DEFAULT 'None', name text DEFAULT 'Your name', status INTEGER DEFAULT 0, UNIQUE(chat_id) );")
+cursor.execute("DROP TABLE chats;")
+cursor.execute("CREATE TABLE chats(chat_id real, username text DEFAULT 'None', name text DEFAULT 'Your name', status INTEGER DEFAULT 0, UNIQUE(chat_id) );")
 #моя личка chat_id = '109099327'
 #cursor.execute("UPDATE chats SET status = 1 where chat_id = -241874218;")
 
@@ -20,9 +20,14 @@ cursor = conn.cursor()
 #cursor.execute("INSERT INTO stats(stat,name) VALUES ('orders_send','Всего отправлено предзаказов');")
 
 
-# Создание таблицы "Заказы"
-#cursor.execute("DROP TABLE orders;")
-#cursor.execute("CREATE TABLE orders(chat_id real, status INTEGER DEFAULT 0, header text DEFAULT 'None',date text DEFAULT 'None',time text DEFAULT 'None',place text DEFAULT 'None',comment text DEFAULT 'None',customer text DEFAULT 'None',phone_number text DEFAULT 'None');")
+# Создание таблицы "Мероприятия"
+#cursor.execute("DROP TABLE events;")
+cursor.execute("CREATE TABLE events(id integer primary key autoincrement, chat_id real, status INTEGER DEFAULT 0, "
+               "name text DEFAULT 'None', price text DEFAULT 'None', account text DEFAULT 'None');")
+
+# Создание таблицы связи "Виновники меровприятий"
+#cursor.execute("DROP TABLE u2e;")
+cursor.execute("CREATE TABLE u2e(event_id integer, chat_id real );")
 
 conn.commit()
 conn.close()
