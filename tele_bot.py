@@ -114,20 +114,22 @@ def echo_message(message):
                                          reply_markup=eventmarkup, disable_web_page_preview=True)
             elif chat_id in ineventuser:
                 bot.send_chat_action(chat_id, 'typing')
-                row_username = select("select chat_id from chats where chat_id ="
-                           + str(text) + " or username = '" + str(text)[1:] + "';")
-                if not row_username:
-                    bot.send_message(chat_id, user_not_found + str(text)[1:])
+                id = str(text)
+                username = str(text)[1:]
+                row = select("select chat_id from chats where chat_id ="
+                           + id + " or username = '" + username + "';")
+                if not row:
+                    bot.send_message(chat_id, user_not_found + username)
                 else:
                     if select("select chat_id from u2e where chat_id = (select chat_id from chats where chat_id ="
-                           + str(text) + " or username = '" + str(text)[1:] + "' limit 1) "
+                           + id + " or username = '" + username + "' limit 1) "
                             "and event_id = (select id from events where status = 0 limit 1);"):
                         change("delete from u2e where chat_id = (select chat_id from chats where chat_id ="
-                           + str(text) + " or username = '" + str(text)[1:] + "' limit 1) "
+                           + id + " or username = '" + username + "' limit 1) "
                             "and event_id = (select id from events where status = 0 limit 1);")
                     else:
                         change("insert into u2e(chat_id, event_id) values((select chat_id from chats where chat_id ="
-                           + str(text) + " or username = '" + str(text)[1:] + "'), (select id from events where "
+                           + id + " or username = '" + username + "'), (select id from events where "
                             "status = 0 limit 1));")
                 for row in select(
                         "select name, price, account, id, rowid from events where "
