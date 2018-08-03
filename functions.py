@@ -73,7 +73,7 @@ def event(name = None,
     event_date = "*Сумма:* " + xstr(price) + "\n"
     event_time = "*Перевести:* " + xstr(account) + "\n"
     if not(users):
-        event_user = "Не заданы\n"
+        event_user = "Нет воновника\n"
     else:
         for user in users:
             event_user = event_user + xstr(user) + "\n"
