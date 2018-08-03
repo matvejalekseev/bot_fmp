@@ -119,7 +119,14 @@ def echo_message(message):
                 if not row_username:
                     bot.send_message(chat_id, user_not_found + str(text)[1:])
                 else:
-                    change("insert into u2e(chat_id, event_id) values((select chat_id from chats where chat_id ="
+                    if select("select chat_id from u2e where chat_id = (select chat_id from chats where chat_id ="
+                           + str(text) + " or username = '" + str(text)[1:] + "' limit 1) "
+                            "and event_id = (select id from events where status = 0 limit 1);"):
+                        change("delete from u2e where chat_id = (select chat_id from chats where chat_id ="
+                           + str(text) + " or username = '" + str(text)[1:] + "' limit 1) "
+                            "and event_id = (select id from events where status = 0 limit 1);")
+                    else:
+                        change("insert into u2e(chat_id, event_id) values((select chat_id from chats where chat_id ="
                            + str(text) + " or username = '" + str(text)[1:] + "'), (select id from events where "
                             "status = 0 limit 1));")
                 for row in select(
