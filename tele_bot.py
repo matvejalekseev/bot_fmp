@@ -5,6 +5,7 @@ import telebot
 from conf import *
 from markups import *
 from functions import *
+from msg import *
 import logging
 from datetime import datetime
 import time
@@ -27,8 +28,9 @@ bot = telebot.TeleBot(telegrambot_test)
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    change("INSERT INTO chats(chat_id) VALUES (" + str(message.chat.id) + ");")
-    bot.send_message(message.chat.id, "Привет! Справшивай, я расскажу", reply_markup=startmarkup)
+
+    change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ");")
+    bot.send_message(message.chat.id, start_msg, reply_markup=startmarkup)
 
 
 @bot.message_handler(func=lambda message: True)
@@ -51,20 +53,20 @@ def echo_message(message):
             if text == 'Статистика':
                 bot.send_chat_action(chat_id, 'typing')
                 label_follow = '*На меня подписано:*\n'
-
                 for row in select(
                             "select (case when status = 0 then 'Пользователей' "
-                            "when status = 1 then 'Зарегистрированных пользователей' "
                             "else 'Администраторов' end) as label,count(chat_id) from chats group by label;"):
                         label_follow = label_follow + str(row[0]) + ": *" + str(row[1]) + "*\n"
 
                 label_stats = '*Показатели:*\n'
+                stats = ""
                 for row in select(
                             "select name, number from stats;"):
-                        label_stats = label_stats + str(row[0]) + ": *" + str(row[1]) + "*\n"
+                        stats = str(row[0]) + ": *" + str(row[1]) + "*\n"
 
                 reply = label_follow + "\n" + \
-                            label_stats
+                        label_stats + "\n" + \
+                        stats
 
                 bot.send_message(chat_id, reply, parse_mode='MARKDOWN', disable_web_page_preview=True)
         else:
