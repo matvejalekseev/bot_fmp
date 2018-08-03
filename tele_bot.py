@@ -97,7 +97,7 @@ def echo_message(message):
             elif text == btn_list_user:
                 bot.send_chat_action(chat_id, 'typing')
                 text = ""
-                users = select("select username,name,chat_id from chats;")
+                users = select("select username,name,chat_id from chats where status = 0;")
                 for user in users:
                     text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(user[2]) + "\n"
                 bot.send_message(message.chat.id, ladel_users + text, parse_mode='MARKDOWN')
