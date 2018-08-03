@@ -117,7 +117,7 @@ def echo_message(message):
                 id = str(text)
                 username = str(text)[1:]
                 row = select("select chat_id from chats where chat_id ='"
-                           + id + ''" or username = '" + username + "';")
+                           + id + "' or username = '" + username + "';")
                 if not row:
                     bot.send_message(chat_id, user_not_found + username)
                 else:
