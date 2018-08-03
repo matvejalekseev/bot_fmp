@@ -36,6 +36,11 @@ row=[]
 row.append(types.InlineKeyboardButton(text=btn_send, callback_data="event_send"))
 eventsendmarkup.row(*row)
 
+sbormarkup = types.InlineKeyboardMarkup()
+row=[]
+row.append(types.InlineKeyboardButton(text=btn_sbor, callback_data="sbor_send"))
+eventsendmarkup.row(*row)
+
 #Примеры
 elementmarkup_soc = types.InlineKeyboardMarkup()
 elementmarkup_soc.add(types.InlineKeyboardButton(text="Instagram", url="https://www.instagram.com/element_show"))

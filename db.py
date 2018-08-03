@@ -27,7 +27,7 @@ cursor = conn.cursor()
 
 # Создание таблицы связи "Виновники меровприятий"
 #cursor.execute("DROP TABLE u2e;")
-#cursor.execute("CREATE TABLE u2e(event_id integer, chat_id real );")
+#cursor.execute("CREATE TABLE u2e(event_id integer, chat_id real, UNIQUE(chat_id,event_id));")
 
 conn.commit()
 conn.close()
