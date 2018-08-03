@@ -69,11 +69,11 @@ def echo_message(message):
                     if check_event(row[0], row[1], row[2]):
                         bot.send_message(chat_id, text,
                                          parse_mode='MARKDOWN',
-                                         reply_markup=eventsendmarkup)
+                                         reply_markup=eventsendmarkup, disable_web_page_preview=True)
                     else:
                         bot.send_message(chat_id, text,
                                          parse_mode='MARKDOWN',
-                                         reply_markup=eventmarkup)
+                                         reply_markup=eventmarkup, disable_web_page_preview=True)
             elif chat_id in ineventname:
                 bot.send_chat_action(chat_id, 'typing')
                 change("update events set name = '" + text + "' where status = 0;")
@@ -88,11 +88,11 @@ def echo_message(message):
                     if check_event(row[0], row[1], row[2]):
                         bot.send_message(chat_id, text,
                                          parse_mode='MARKDOWN',
-                                         reply_markup=eventsendmarkup)
+                                         reply_markup=eventsendmarkup, disable_web_page_preview=True)
                     else:
                         bot.send_message(chat_id, text,
                                          parse_mode='MARKDOWN',
-                                         reply_markup=eventmarkup)
+                                         reply_markup=eventmarkup, disable_web_page_preview=True)
             elif chat_id in ineventprice:
                 bot.send_chat_action(chat_id, 'typing')
                 change("update events set price = '" + text + "' where status = 0;")
@@ -107,11 +107,11 @@ def echo_message(message):
                     if check_event(row[0], row[1], row[2]):
                         bot.send_message(chat_id, text,
                                          parse_mode='MARKDOWN',
-                                         reply_markup=eventsendmarkup)
+                                         reply_markup=eventsendmarkup, disable_web_page_preview=True)
                     else:
                         bot.send_message(chat_id, text,
                                          parse_mode='MARKDOWN',
-                                         reply_markup=eventmarkup)
+                                         reply_markup=eventmarkup, disable_web_page_preview=True)
             elif chat_id in ineventuser:
                 bot.send_chat_action(chat_id, 'typing')
                 row_username = select('select chat_id from chats where chat_id ='
@@ -122,21 +122,21 @@ def echo_message(message):
                     change('insert into u2e(chat_id, event_id) values((select chat_id from chats where chat_id ='
                            + str(text) + ' or username = ' + str(text)[1:] + '), (select id from events where '
                             'status = 0 limit 1));')
-                    for row in select(
-                            "select name, price, account, id, rowid from events where "
-                            "status = 0 order by rowid desc limit 1;"):
-                        users = select("select name, username from chats where chat_id in "
-                                       "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
-                        text = event(name=row[0], price=row[1], account=row[2],
-                                     users=users)
-                        if check_event(row[0], row[1], row[2]):
-                            bot.send_message(chat_id, text,
-                                             parse_mode='MARKDOWN',
-                                             reply_markup=eventsendmarkup)
-                        else:
-                            bot.send_message(chat_id, text,
-                                             parse_mode='MARKDOWN',
-                                             reply_markup=eventmarkup)
+                for row in select(
+                        "select name, price, account, id, rowid from events where "
+                        "status = 0 order by rowid desc limit 1;"):
+                    users = select("select name, username from chats where chat_id in "
+                                   "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
+                    text = event(name=row[0], price=row[1], account=row[2],
+                                 users=users)
+                    if check_event(row[0], row[1], row[2]):
+                        bot.send_message(chat_id, text,
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventsendmarkup, disable_web_page_preview=True)
+                    else:
+                        bot.send_message(chat_id, text,
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventmarkup, disable_web_page_preview=True)
                 ineventuser.remove(chat_id)
             elif text == btn_static:
                 bot.send_chat_action(chat_id, 'typing')
@@ -174,11 +174,11 @@ def echo_message(message):
                         if check_event(row[0], row[1], row[2]):
                             bot.send_message(chat_id, text,
                                              parse_mode='MARKDOWN',
-                                             reply_markup=eventsendmarkup)
+                                             reply_markup=eventsendmarkup, disable_web_page_preview=True)
                         else:
                             bot.send_message(chat_id, text,
                                              parse_mode='MARKDOWN',
-                                             reply_markup=eventmarkup)
+                                             reply_markup=eventmarkup, disable_web_page_preview=True)
             elif text == btn_list_user:
                 bot.send_chat_action(chat_id, 'typing')
                 text = ""
