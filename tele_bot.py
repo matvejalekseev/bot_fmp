@@ -235,18 +235,25 @@ def less_day(call):
             text = event(name=row[0], price=row[1], account=row[2],
                          users=users)
 
+        for row in select(
+                "select name, price, account, id, rowid from events where "
+                "status = 0 order by rowid desc limit 1;"):
+            text_to_user = event(name=row[0], price=row[1], account=row[2])
+
         user_to_send = []
         for row in select("select chat_id from chats where status = 0;"):
             user_to_send.append(row[0])
         for row in select("select chat_id from u2e where event_id = (select id from events where "
                             "status = 0 limit 1);"):
             user_to_send.remove(row[0])
+        k = 0
         for user in user_to_send:
-            bot.send_message(user, in_work,
+            k = k + 1
+            bot.send_message(user, text_to_user,
                              parse_mode='MARKDOWN',
                              reply_markup=sbormarkup, disable_web_page_preview=True)
         change("update events set status = 1 where status = 0;")
-        bot.edit_message_text(text + sbor_complete_md + customer, call.message.chat.id,
+        bot.edit_message_text(text + sbor_complete_md + customer + count + str(k), call.message.chat.id,
                               call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
 
     except:

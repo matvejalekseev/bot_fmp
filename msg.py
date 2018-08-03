@@ -7,6 +7,7 @@ to_work_ready = 'Я запущен! Погнали!'
 not_private_msg = 'Только для личных чатов'
 sbor_complete = 'Сбор отправлен'
 sbor_complete_md = '\n*Сбор отправлен:* '
+count = '\n*Сообщений отправил:* '
 
 btn_static = 'Статистика'
 btn_event = 'Сбор'
