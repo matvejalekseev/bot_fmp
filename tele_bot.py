@@ -239,7 +239,7 @@ def less_day(call):
         for row in select("select chat_id from chats where status = 0;"):
             user_to_send.append(row[0])
         for row in select("select chat_id from u2e where event_id = (select id from events where "
-                            "status = 0 limit 1;"):
+                            "status = 0 limit 1);"):
             user_to_send.remove(row[0])
         for user in user_to_send:
             bot.send_message(user, in_work,
