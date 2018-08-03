@@ -99,7 +99,8 @@ def echo_message(message):
                 text = ""
                 users = select("select username,name,chat_id from chats;")
                 for user in users:
-                    text = text + user[1] + " " + "@" + user[0] + " " + user[2] + "\n"
+                    text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(user[2]) + "\n"
+                bot.send_message(message.chat.id, ladel_users + text, parse_mode='MARKDOWN')
         else:
             if text == btn_bg:
                 bot.send_chat_action(chat_id, 'typing')
