@@ -29,9 +29,9 @@ bot = telebot.TeleBot(telegrambot_test)
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     if message.chat.type == 'private':
-        change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ","
-           + str(message.chat.username) + "," +
-           str(message.chat.last_name) + " " + str(message.chat.first_name) + ");")
+        change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ",'"
+           + str(message.chat.username) + "','" +
+           str(message.chat.last_name) + " " + str(message.chat.first_name) + "');")
         bot.send_message(message.chat.id, start_msg, reply_markup=startmarkup)
     else:
         bot.send_message(message.chat.id, not_private_msg)
