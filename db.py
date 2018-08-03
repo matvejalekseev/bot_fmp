@@ -5,10 +5,10 @@ conn = sqlite3.connect(db) # или :memory: чтобы сохранить в RA
 cursor = conn.cursor()
  
 # Создание таблицы "Чаты"
-cursor.execute("DROP TABLE chats;")
-cursor.execute("CREATE TABLE chats(chat_id real, username text DEFAULT 'None', name text DEFAULT 'Your name', status INTEGER DEFAULT 0, UNIQUE(chat_id) );")
+#cursor.execute("DROP TABLE chats;")
+#cursor.execute("CREATE TABLE chats(chat_id real, username text DEFAULT 'None', name text DEFAULT 'Your name', status INTEGER DEFAULT 0, UNIQUE(chat_id) );")
 #моя личка chat_id = '109099327'
-#cursor.execute("UPDATE chats SET status = 1 where chat_id = -241874218;")
+#cursor.execute("insert into chats(status,chat_id) values (1,-241874218);")
 
 # Создание таблицы "Статистики"
 #cursor.execute("DROP TABLE stats;")
@@ -22,12 +22,12 @@ cursor.execute("CREATE TABLE chats(chat_id real, username text DEFAULT 'None', n
 
 # Создание таблицы "Мероприятия"
 #cursor.execute("DROP TABLE events;")
-cursor.execute("CREATE TABLE events(id integer primary key autoincrement, chat_id real, status INTEGER DEFAULT 0, "
-               "name text DEFAULT 'None', price text DEFAULT 'None', account text DEFAULT 'None');")
+#cursor.execute("CREATE TABLE events(id integer primary key autoincrement, chat_id real, status INTEGER DEFAULT 0, "
+#               "name text DEFAULT 'None', price text DEFAULT 'None', account text DEFAULT 'None');")
 
 # Создание таблицы связи "Виновники меровприятий"
 #cursor.execute("DROP TABLE u2e;")
-cursor.execute("CREATE TABLE u2e(event_id integer, chat_id real );")
+#cursor.execute("CREATE TABLE u2e(event_id integer, chat_id real );")
 
 conn.commit()
 conn.close()
