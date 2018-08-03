@@ -15,10 +15,10 @@ adminchatid = []
 userchatid = []
 
 
-for row in select("select chat_id from chats where status = 2;"):
+for row in select("select chat_id from chats where status = 1;"):
     adminchatid.append(float(row[0]))
 
-for row in select("select chat_id from chats where status = 1;"):
+for row in select("select chat_id from chats where status = 0;"):
     userchatid.append(float(row[0]))
 
 
