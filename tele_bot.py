@@ -114,7 +114,7 @@ def echo_message(message):
                                          reply_markup=eventmarkup)
             elif chat_id in ineventuser:
                 bot.send_chat_action(chat_id, 'typing')
-                row_username = select('select chat_id chats where chat_id ='
+                row_username = select('select chat_id from chats where chat_id ='
                            + str(text) + ' or username = ' + str(text)[1:] + ';')
                 if not row_username:
                     bot.send_message(chat_id, user_not_found)
