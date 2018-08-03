@@ -57,7 +57,7 @@ def echo_message(message):
         if chat_id in adminchatid:
             if chat_id in ineventaccount:
                 bot.send_chat_action(chat_id, 'typing')
-                change("update events set account = '" + text + "' where and status = 0;")
+                change("update events set account = '" + text + "' where status = 0;")
                 ineventaccount.remove(chat_id)
                 for row in select(
                         "select name, price, account, id, rowid from events where "
@@ -76,7 +76,7 @@ def echo_message(message):
                                          reply_markup=eventmarkup)
             elif chat_id in ineventname:
                 bot.send_chat_action(chat_id, 'typing')
-                change("update events set name = '" + text + "' where and status = 0;")
+                change("update events set name = '" + text + "' where status = 0;")
                 ineventname.remove(chat_id)
                 for row in select(
                         "select name, price, account, id, rowid from events where "
@@ -95,7 +95,7 @@ def echo_message(message):
                                          reply_markup=eventmarkup)
             elif chat_id in ineventprice:
                 bot.send_chat_action(chat_id, 'typing')
-                change("update events set price = '" + text + "' where and status = 0;")
+                change("update events set price = '" + text + "' where status = 0;")
                 ineventprice.remove(chat_id)
                 for row in select(
                         "select name, price, account, id, rowid from events where "
@@ -215,7 +215,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'event_name')
 def less_day(call):
     try:
-        row = select("select name, price, account, id, rowid from events where "
+        row = select("select id, rowid from events where "
                     "status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
             bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
@@ -230,7 +230,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'event_price')
 def less_day(call):
     try:
-        row = select("select name, price, account, id, rowid from events where "
+        row = select("select id, rowid from events where "
                     "status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
             bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
@@ -245,7 +245,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'event_account')
 def less_day(call):
     try:
-        row = select("select name, price, account, id, rowid from events where "
+        row = select("select id, rowid from events where "
                     "status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
             bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
@@ -260,7 +260,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'event_user')
 def less_day(call):
     try:
-        row = select("select name, price, account, id, rowid from events where "
+        row = select("select id, rowid from events where "
                     "status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
             bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
