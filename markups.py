@@ -20,7 +20,18 @@ row=[]
 row.append(types.InlineKeyboardButton(text=btn_cancel, callback_data="event_cancel"))
 eventmarkup.row(*row)
 
-eventsendmarkup = eventmarkup
+eventsendmarkup = types.InlineKeyboardMarkup()
+row=[]
+row.append(types.InlineKeyboardButton(text=btn_name, callback_data="event_name"))
+row.append(types.InlineKeyboardButton(text=btn_price, callback_data="event_price"))
+eventsendmarkup.row(*row)
+row=[]
+row.append(types.InlineKeyboardButton(text=btn_account, callback_data="event_account"))
+row.append(types.InlineKeyboardButton(text=btn_user, callback_data="event_user"))
+eventsendmarkup.row(*row)
+row=[]
+row.append(types.InlineKeyboardButton(text=btn_cancel, callback_data="event_cancel"))
+eventsendmarkup.row(*row)
 row=[]
 row.append(types.InlineKeyboardButton(text=btn_send, callback_data="event_send"))
 eventsendmarkup.row(*row)
