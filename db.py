@@ -1,6 +1,7 @@
 import sqlite3
+from conf import db
  
-conn = sqlite3.connect("fmp_database.db") # или :memory: чтобы сохранить в RAM
+conn = sqlite3.connect(db) # или :memory: чтобы сохранить в RAM
 cursor = conn.cursor()
  
 # Создание таблицы "Чаты"

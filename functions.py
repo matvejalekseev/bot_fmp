@@ -1,8 +1,7 @@
 import re
 import random
 import sqlite3
-from conf \
-    import *
+from conf import db
 
 def RepresentsInt(s):
     try:
