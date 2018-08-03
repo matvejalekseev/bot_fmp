@@ -67,7 +67,6 @@ def change(req, db_in = db):
 def event(name = None,
           price = None,
           account = None,
-          status = None,
           users = None):
     event_name = "*" + xstr(name) + "*\n"
     event_date = "*Сумма:* " + xstr(price) + "\n"
@@ -82,8 +81,7 @@ def event(name = None,
                    + "](https://t.me/" + user[1] + ")\n"
             else:
                 event_user = event_user + user[0] + "\n"
-    event_status = "\n*Статус:* " + xstr(status) + "\n"
-    order = event_name + event_date + event_time + event_user + event_status
+    order = event_name + event_date + event_time + event_user
     return order
 
 def check_event(name, price, account):
