@@ -1,12 +1,14 @@
 start_msg = 'Привет, новый сотрудник!\n\nЯ тебе очень пригожусь ;)'
 label_follow = '*На меня подписано:*\n'
 label_stats = '*Показатели:*\n'
+ladel_users = '*Пользователи:*\n'
 in_work = 'В работе'
 to_work_ready = 'Я запущен! Погнали!'
 not_private_msg = 'Только для личных чатов'
 
 btn_static = 'Статистика'
 btn_event = 'Сбор'
+btn_list_user = 'Список пользователей'
 btn_name = "➕ Имя"
 btn_price = "➕ Сумму"
 btn_account = "➕ Счет"

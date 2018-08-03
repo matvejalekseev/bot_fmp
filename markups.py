@@ -34,5 +34,6 @@ elementmarkup_soc.add(types.InlineKeyboardButton(text="Официальный с
 adminmarkup = types.ReplyKeyboardMarkup(row_width=1)
 itembtn1 = types.KeyboardButton(btn_event)
 itembtn2 = types.KeyboardButton(btn_static)
-adminmarkup.add(itembtn1, itembtn2)
+itembtn3 = types.KeyboardButton(btn_list_user)
+adminmarkup.add(itembtn1, itembtn2, itembtn3)
 

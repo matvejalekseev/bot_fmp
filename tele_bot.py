@@ -94,6 +94,12 @@ def echo_message(message):
                             bot.send_message(chat_id, text,
                                              parse_mode='MARKDOWN',
                                              reply_markup=eventmarkup)
+            elif text == btn_list_user:
+                bot.send_chat_action(chat_id, 'typing')
+                text = ""
+                users = select("select username,name,chat_id from chats;")
+                for user in users:
+                    text = text + user[1] + " " + "@" + user[0] + " " + user[2] + "\n"
         else:
             if text == btn_bg:
                 bot.send_chat_action(chat_id, 'typing')
