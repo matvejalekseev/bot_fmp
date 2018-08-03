@@ -72,8 +72,11 @@ def event(name = None,
     event_name = "*" + xstr(name) + "*\n"
     event_date = "*Сумма:* " + xstr(price) + "\n"
     event_time = "*Перевести:* " + xstr(account) + "\n"
-    for user in users:
-        event_user = event_user + xstr(user) + "\n"
+    if not(users):
+        event_user = "Не заданы\n"
+    else:
+        for user in users:
+            event_user = event_user + xstr(user) + "\n"
     event_status = "\n*Статус:* " + xstr(status) + "\n"
     order = event_name + event_date + event_time + event_user + event_status
     return order
