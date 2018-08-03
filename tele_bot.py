@@ -83,7 +83,7 @@ def echo_message(message):
                             "select name, price, account, id, rowid from events where "
                             "status = 0 order by rowid desc limit 1;"):
                         users = select("select name, username from chats where chat_id in "
-                                       "( select chat_id from u2e where event_id = " + row[3] + ");")
+                                       "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
                         text = event(name=row[0], price=row[1], account=row[2],
                                      users=users)
                         if check_event(row[0], row[1], row[2]):
