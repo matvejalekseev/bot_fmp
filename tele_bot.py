@@ -117,7 +117,7 @@ def echo_message(message):
                 row_username = select('select chat_id from chats where chat_id ='
                            + str(text) + ' or username = ' + str(text)[1:] + ';')
                 if not row_username:
-                    bot.send_message(chat_id, user_not_found)
+                    bot.send_message(chat_id, user_not_found + str(text)[1:])
                 else:
                     change('insert into u2e(chat_id, event_id) values((select chat_id from chats where chat_id ='
                            + str(text) + ' or username = ' + str(text)[1:] + '), (select id from events where '
