@@ -72,13 +72,13 @@ def echo_message(message):
         else:
             if text == btn_bg:
                 bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(admin_chat_id, in_work)
+                bot.send_message(chat_id, in_work)
             elif text == btn_egisz:
                 bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(admin_chat_id, in_work)
+                bot.send_message(chat_id, in_work)
             elif text == btn_adap:
                 bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(admin_chat_id, in_work)
+                bot.send_message(chat_id, in_work)
 
 
 try:
