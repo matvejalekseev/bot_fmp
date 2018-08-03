@@ -116,20 +116,20 @@ def echo_message(message):
                 bot.send_chat_action(chat_id, 'typing')
                 id = str(text)
                 username = str(text)[1:]
-                row = select("select chat_id from chats where chat_id ="
-                           + id + " or username = '" + username + "';")
+                row = select("select chat_id from chats where chat_id ='"
+                           + id + ''" or username = '" + username + "';")
                 if not row:
                     bot.send_message(chat_id, user_not_found + username)
                 else:
-                    if select("select chat_id from u2e where chat_id = (select chat_id from chats where chat_id ="
-                           + id + " or username = '" + username + "' limit 1) "
+                    if select("select chat_id from u2e where chat_id = (select chat_id from chats where chat_id ='"
+                           + id + "' or username = '" + username + "' limit 1) "
                             "and event_id = (select id from events where status = 0 limit 1);"):
-                        change("delete from u2e where chat_id = (select chat_id from chats where chat_id ="
-                           + id + " or username = '" + username + "' limit 1) "
+                        change("delete from u2e where chat_id = (select chat_id from chats where chat_id ='"
+                           + id + "' or username = '" + username + "' limit 1) "
                             "and event_id = (select id from events where status = 0 limit 1);")
                     else:
-                        change("insert into u2e(chat_id, event_id) values((select chat_id from chats where chat_id ="
-                           + id + " or username = '" + username + "'), (select id from events where "
+                        change("insert into u2e(chat_id, event_id) values((select chat_id from chats where chat_id ='"
+                           + id + "' or username = '" + username + "'), (select id from events where "
                             "status = 0 limit 1));")
                 for row in select(
                         "select name, price, account, id, rowid from events where "
