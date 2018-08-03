@@ -14,7 +14,10 @@ logging.basicConfig(filename="logs/tele_bot.log", level=logging.INFO)
 
 adminchatid = []
 userchatid = []
-
+ineventname = []
+ineventaccount =[]
+ineventprice = []
+ineventuser = []
 
 for row in select("select chat_id from chats where status = 1;"):
     adminchatid.append(float(row[0]))
@@ -52,7 +55,68 @@ def echo_message(message):
         change("update stats set number = number+1 where stat = 'messages';")
         text = str(message.text)
         if chat_id in adminchatid:
-            if text == btn_static:
+            if chat_id in ineventaccount:
+                bot.send_chat_action(chat_id, 'typing')
+                change("update events set account = '" + text + "' where and status = 0;")
+                ineventaccount.remove(chat_id)
+                for row in select(
+                        "select name, price, account, id, rowid from events where "
+                        "status = 0 order by rowid desc limit 1;"):
+                    users = select("select name, username from chats where chat_id in "
+                                   "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
+                    text = event(name=row[0], price=row[1], account=row[2],
+                                 users=users)
+                    if check_event(row[0], row[1], row[2]):
+                        bot.send_message(chat_id, text,
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventsendmarkup)
+                    else:
+                        bot.send_message(chat_id, text,
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventmarkup)
+            elif chat_id in ineventname:
+                bot.send_chat_action(chat_id, 'typing')
+                change("update events set name = '" + text + "' where and status = 0;")
+                ineventname.remove(chat_id)
+                for row in select(
+                        "select name, price, account, id, rowid from events where "
+                        "status = 0 order by rowid desc limit 1;"):
+                    users = select("select name, username from chats where chat_id in "
+                                   "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
+                    text = event(name=row[0], price=row[1], account=row[2],
+                                 users=users)
+                    if check_event(row[0], row[1], row[2]):
+                        bot.send_message(chat_id, text,
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventsendmarkup)
+                    else:
+                        bot.send_message(chat_id, text,
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventmarkup)
+            elif chat_id in ineventprice:
+                bot.send_chat_action(chat_id, 'typing')
+                change("update events set price = '" + text + "' where and status = 0;")
+                ineventprice.remove(chat_id)
+                for row in select(
+                        "select name, price, account, id, rowid from events where "
+                        "status = 0 order by rowid desc limit 1;"):
+                    users = select("select name, username from chats where chat_id in "
+                                   "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
+                    text = event(name=row[0], price=row[1], account=row[2],
+                                 users=users)
+                    if check_event(row[0], row[1], row[2]):
+                        bot.send_message(chat_id, text,
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventsendmarkup)
+                    else:
+                        bot.send_message(chat_id, text,
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventmarkup)
+            elif chat_id in ineventuser:
+                bot.send_chat_action(chat_id, 'typing')
+                bot.send_message(chat_id, in_work)
+                ineventuser.remove(chat_id)
+            elif text == btn_static:
                 bot.send_chat_action(chat_id, 'typing')
                 stats = ""
                 follow = ""
@@ -68,7 +132,6 @@ def echo_message(message):
                         follow + \
                         label_stats + \
                         stats
-
                 bot.send_message(chat_id, reply, parse_mode='MARKDOWN', disable_web_page_preview=True)
             elif text == btn_event:
                 bot.send_chat_action(chat_id, 'typing')
@@ -112,6 +175,102 @@ def echo_message(message):
                 bot.send_chat_action(chat_id, 'typing')
                 bot.send_message(chat_id, in_work)
 
+
+@bot.callback_query_handler(func=lambda call: call.data == 'event_cancel')
+def less_day(call):
+    try:
+        bot.answer_callback_query(call.id, text=msg_cancel)
+        bot.edit_message_text(msg_cancel_md, call.message.chat.id,
+                          call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
+    except:
+        pass
+
+@bot.callback_query_handler(func=lambda call: call.data == 'event_send')
+def less_day(call):
+    try:
+        bot.answer_callback_query(call.id, text=sbor_complete)
+        if call.from_user.username:
+            customer = "[" + call.from_user.first_name \
+                   + "](https://t.me/" + call.from_user.username + ")"
+        else:
+            customer = call.from_user.first_name
+
+        for row in select(
+                "select name, price, account, id, rowid from events where "
+                "status = 0 order by rowid desc limit 1;"):
+            users = select("select name, username from chats where chat_id in "
+                           "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
+
+            text = event(name=row[0], price=row[1], account=row[2],
+                         users=users)
+
+        change("update events set status = 1 where status = 0;")
+        bot.edit_message_text(text + sbor_complete_md + customer, call.message.chat.id,
+                              call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
+
+    except:
+        bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
+                              parse_mode='MARKDOWN')
+
+@bot.callback_query_handler(func=lambda call: call.data == 'event_name')
+def less_day(call):
+    try:
+        row = select("select name, price, account, id, rowid from events where "
+                    "status = 0 order by rowid desc limit 1;")
+        if len(row) == 0:
+            bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
+                                  parse_mode='MARKDOWN')
+        else:
+            ineventname.append(call.message.chat.id)
+            bot.send_message(call.message.chat.id, msg_name_event, parse_mode='MARKDOWN',
+                             disable_web_page_preview=True)
+    except:
+        pass
+
+@bot.callback_query_handler(func=lambda call: call.data == 'event_price')
+def less_day(call):
+    try:
+        row = select("select name, price, account, id, rowid from events where "
+                    "status = 0 order by rowid desc limit 1;")
+        if len(row) == 0:
+            bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
+                                  parse_mode='MARKDOWN')
+        else:
+            ineventprice.append(call.message.chat.id)
+            bot.send_message(call.message.chat.id, msg_price_event, parse_mode='MARKDOWN',
+                             disable_web_page_preview=True)
+    except:
+        pass
+
+@bot.callback_query_handler(func=lambda call: call.data == 'event_account')
+def less_day(call):
+    try:
+        row = select("select name, price, account, id, rowid from events where "
+                    "status = 0 order by rowid desc limit 1;")
+        if len(row) == 0:
+            bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
+                                  parse_mode='MARKDOWN')
+        else:
+            ineventaccount.append(call.message.chat.id)
+            bot.send_message(call.message.chat.id, msg_account_event, parse_mode='MARKDOWN',
+                             disable_web_page_preview=True)
+    except:
+        pass
+
+@bot.callback_query_handler(func=lambda call: call.data == 'event_user')
+def less_day(call):
+    try:
+        row = select("select name, price, account, id, rowid from events where "
+                    "status = 0 order by rowid desc limit 1;")
+        if len(row) == 0:
+            bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
+                                  parse_mode='MARKDOWN')
+        else:
+            ineventuser.append(call.message.chat.id)
+            bot.send_message(call.message.chat.id, msg_user_event, parse_mode='MARKDOWN',
+                             disable_web_page_preview=True)
+    except:
+        pass
 
 try:
     for admin_chat_id in adminchatid:
