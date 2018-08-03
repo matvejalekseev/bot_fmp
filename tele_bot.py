@@ -65,7 +65,7 @@ def echo_message(message):
                         stats = str(row[0]) + ": *" + str(row[1]) + "*\n"
 
                 reply = label_follow + "\n" + \
-                        label_stats + "\n" + \
+                        label_stats + \
                         stats
 
                 bot.send_message(chat_id, reply, parse_mode='MARKDOWN', disable_web_page_preview=True)
