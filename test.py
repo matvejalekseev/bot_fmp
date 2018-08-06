@@ -1,6 +1,6 @@
 from functions \
     import *
 
-for row in select("select name, number from stats;"):
-    print(row[0], row[1])
-
+#row = select("select name from stats;")
+#print(row[0][0])
+print('/delete_user 123'[14:])
