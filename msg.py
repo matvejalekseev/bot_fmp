@@ -46,6 +46,10 @@ btn_default_account = 'По номеру +79655912274\nСбер 6259 6479 7200 5
 btn_event_new = 'Новый сбор'
 btn_event_status = 'Статус сбора'
 btn_back = 'Назад'
+btn_bd = 'День рожденье!'
+btn_wending = 'Свадьба'
+btn_kid = 'Рождение ребёнка'
+btn_bye = 'Увольнение'
 
 
 msg_confirm = 'Ваш перевод потверждён'

@@ -13,6 +13,13 @@ itembtn2 = types.KeyboardButton(btn_150)
 itembtn3 = types.KeyboardButton(btn_250)
 pricemarkup.add(itembtn1, itembtn2, itembtn3)
 
+namemarkup = types.ReplyKeyboardMarkup(row_width=1)
+itembtn1 = types.KeyboardButton(btn_bd)
+itembtn2 = types.KeyboardButton(btn_wending)
+itembtn3 = types.KeyboardButton(btn_kid)
+itembtn4 = types.KeyboardButton(btn_bye)
+namemarkup.add(itembtn1, itembtn2, itembtn3, itembtn4)
+
 accountmarkup = types.ReplyKeyboardMarkup(row_width=1)
 itembtn1 = types.KeyboardButton(btn_default_account)
 accountmarkup.add(itembtn1)
