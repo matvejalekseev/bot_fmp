@@ -44,6 +44,11 @@ row=[]
 row.append(types.InlineKeyboardButton(text=btn_status_back, callback_data="status_back"))
 statusbackmarkup.row(*row)
 
+confirmmarkup = types.InlineKeyboardMarkup()
+row=[]
+row.append(types.InlineKeyboardButton(text=btn_confirm, callback_data="status_confirm"))
+confirmmarkup.row(*row)
+
 eventmarkup = types.InlineKeyboardMarkup()
 row=[]
 row.append(types.InlineKeyboardButton(text=btn_name, callback_data="event_name"))

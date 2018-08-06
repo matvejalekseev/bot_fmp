@@ -16,8 +16,10 @@ label_status1 = '*Не перевели*\n'
 label_status2 = '*Перевели*\n'
 label_status3 = '*Подтверждены*\n'
 label_status4 = '*Другие*\n'
+label_pay = '\n*Пользователь говорит, что перевёл, надо бы подтвердить*\n'
 
 
+btn_confirm = 'Подтвердить'
 btn_status1 = 'Не перевели'
 btn_status2 = 'Перевели'
 btn_status3 = 'Подтверждены'
@@ -44,6 +46,9 @@ btn_event_new = 'Новый сбор'
 btn_event_status = 'Статус сбора'
 btn_back = 'Назад'
 
+
+msg_confirm = 'Ваш перевод потверждён'
+msg_thank_admin = 'Спасибо'
 msg_refresh = 'Данные обновлены'
 msg_thank = 'Спасибо, ждём подтверждения'
 msg_back = 'Вернулись'
