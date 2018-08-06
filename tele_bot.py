@@ -509,7 +509,8 @@ def get_day(call):
         bot.answer_callback_query(call.id, text="Дата выбрана")
         bot.edit_message_text(start_msg_2, call.from_user.id, call.message.message_id,
                               parse_mode='MARKDOWN')
-        bot.edit_message_reply_markup(call.from_user.id, call.message.message_id, reply_markup=startmarkup)
+        bot.send_message(call.message.chat.id, msg_menu, reply_markup=startmarkup,
+                         disable_web_page_preview=True)
     else:
         pass
 
