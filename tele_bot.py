@@ -188,7 +188,7 @@ def echo_message(message):
                 bot.send_chat_action(chat_id, 'typing')
                 bot.send_message(chat_id, msg_event,
                                  parse_mode='MARKDOWN',
-                                 reply_markup=sbormarkup, disable_web_page_preview=True)
+                                 reply_markup=sboradminmarkup, disable_web_page_preview=True)
             elif text == btn_event_status:
                 bot.send_chat_action(chat_id, 'typing')
                 bot.send_message(chat_id, in_work)
