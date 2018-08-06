@@ -8,6 +8,7 @@ not_private_msg = 'Только для личных чатов'
 sbor_complete = 'Сбор отправлен'
 sbor_complete_md = '\n*Сбор отправлен:* '
 count = '\n*Сообщений отправил:* '
+error_count = '\n*Ошибок*: '
 empty_send_list = '\nСписок для отправки пуст'
 
 btn_static = 'Статистика'
