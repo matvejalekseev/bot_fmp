@@ -10,8 +10,11 @@ import logging
 from datetime import datetime
 import time
 from telebot import types
+from telegramcalendar import create_calendar
 
 logging.basicConfig(filename="logs/tele_bot.log", level=logging.INFO)
+
+current_shown_dates={}
 
 adminchatid = []
 userchatid = []
@@ -39,7 +42,16 @@ def send_welcome(message):
            str(message.chat.last_name) + " " + str(message.chat.first_name) + "');")
         change("insert into status_sbor(chat_id) values (" + str(message.chat.id) + ");")
         bot.send_message(message.chat.id, start_msg, reply_markup=startmarkup)
+
+
         insettingstart.append(message.chat.id)
+
+        now = datetime.now()  # Current date
+        chat_id = message.chat.id
+        date = (now.year, now.month)
+        current_shown_dates[chat_id] = date  # Saving the current date in a dict
+        markup = create_calendar(now.year, now.month)
+        bot.send_message(message.chat.id, start_msg, reply_markup=markup)
     else:
         bot.send_message(message.chat.id, not_private_msg)
 
@@ -484,6 +496,59 @@ def less_day(call):
                              disable_web_page_preview=True)
     except:
         pass
+
+@bot.callback_query_handler(func=lambda call: call.data[0:13] == 'calendar-day-')
+def get_day(call):
+    chat_id = call.message.chat.id
+    saved_date = current_shown_dates.get(chat_id)
+    if(saved_date is not None):
+        day=call.data[13:]
+        date = datetime(int(saved_date[0]), int(saved_date[1]), int(day))
+        change("update chats set birthdate = '" + str(date.strftime("%d.%m")) + "' where chat_id = "
+                       + str(call.message.chat.id) + ";")
+        bot.answer_callback_query(call.id, text="Дата выбрана")
+    else:
+        pass
+
+@bot.callback_query_handler(func=lambda call: call.data == 'next-month')
+def next_month(call):
+    chat_id = call.message.chat.id
+    saved_date = current_shown_dates.get(chat_id)
+    if(saved_date is not None):
+        year,month = saved_date
+        month+=1
+        if month>12:
+            month=1
+            year+=1
+        date = (year,month)
+        current_shown_dates[chat_id] = date
+        markup= create_calendar(year,month)
+        bot.edit_message_text(call.message.text, call.from_user.id, call.message.message_id, reply_markup=markup)
+        bot.answer_callback_query(call.id, text="")
+    else:
+        pass
+
+@bot.callback_query_handler(func=lambda call: call.data == 'previous-month')
+def previous_month(call):
+    chat_id = call.message.chat.id
+    saved_date = current_shown_dates.get(chat_id)
+    if(saved_date is not None):
+        year,month = saved_date
+        month-=1
+        if month<1:
+            month=12
+            year-=1
+        date = (year,month)
+        current_shown_dates[chat_id] = date
+        markup= create_calendar(year,month)
+        bot.edit_message_text(call.message.text, call.from_user.id, call.message.message_id, reply_markup=markup)
+        bot.answer_callback_query(call.id, text="")
+    else:
+        pass
+
+@bot.callback_query_handler(func=lambda call: call.data == 'ignore')
+def ignore(call):
+    bot.answer_callback_query(call.id, text="")
 
 try:
     for admin_chat_id in adminchatid:
