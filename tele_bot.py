@@ -179,7 +179,6 @@ def echo_message(message):
 
                 for row in select("select name, number from stats;"):
                     stats = str(row[0]) + ": *" + str(row[1]) + "*\n"
-
                 reply = label_follow + \
                         follow + \
                         label_stats + \

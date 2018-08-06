@@ -17,6 +17,17 @@ accountmarkup = types.ReplyKeyboardMarkup(row_width=1)
 itembtn1 = types.KeyboardButton(btn_default_account)
 accountmarkup.add(itembtn1)
 
+adminmarkup = types.ReplyKeyboardMarkup(row_width=1)
+itembtn1 = types.KeyboardButton(btn_event)
+itembtn2 = types.KeyboardButton(btn_static)
+itembtn3 = types.KeyboardButton(btn_list_user)
+adminmarkup.add(itembtn1, itembtn2, itembtn3)
+
+sbormarkup = types.ReplyKeyboardMarkup(row_width=1)
+itembtn1 = types.KeyboardButton(btn_event_status)
+itembtn2 = types.KeyboardButton(btn_event_new)
+sbormarkup.add(itembtn1, itembtn2)
+
 eventmarkup = types.InlineKeyboardMarkup()
 row=[]
 row.append(types.InlineKeyboardButton(text=btn_name, callback_data="event_name"))
@@ -56,10 +67,4 @@ elementmarkup_soc = types.InlineKeyboardMarkup()
 elementmarkup_soc.add(types.InlineKeyboardButton(text="Instagram", url="https://www.instagram.com/element_show"))
 elementmarkup_soc.add(types.InlineKeyboardButton(text="ВКонтакте", url="https://vk.com/club92907131"))
 elementmarkup_soc.add(types.InlineKeyboardButton(text="Официальный сайт", url="http://elementshow.com"))
-
-adminmarkup = types.ReplyKeyboardMarkup(row_width=1)
-itembtn1 = types.KeyboardButton(btn_event)
-itembtn2 = types.KeyboardButton(btn_static)
-itembtn3 = types.KeyboardButton(btn_list_user)
-adminmarkup.add(itembtn1, itembtn2, itembtn3)
 
