@@ -1,10 +1,8 @@
 from functions \
     import *
 
+import schedule
 from datetime import datetime
+import time
 
-#row = select("select name from stats;")
-#print(row[0][0])
-print('status_confirm-15'[:15])
-date = datetime.now()
-print(date.strftime("%d.%m"))
+print('02.08'[:2])
