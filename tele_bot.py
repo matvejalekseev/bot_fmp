@@ -103,6 +103,7 @@ def echo_message(message):
             elif chat_id in ineventname:
                 bot.send_chat_action(chat_id, 'typing')
                 change("update events set name = '" + text + "' where status = 0;")
+                bot.send_message(chat_id, success, reply_markup=adminmarkup)
                 ineventname.remove(chat_id)
                 for row in select(
                         "select name, price, account, id, rowid from events where "
@@ -434,7 +435,7 @@ def less_day(call):
                                   parse_mode='MARKDOWN')
         else:
             ineventname.append(call.message.chat.id)
-            bot.send_message(call.message.chat.id, msg_name_event, parse_mode='MARKDOWN',
+            bot.send_message(call.message.chat.id, msg_name_event, parse_mode='MARKDOWN', reply_markup = namemarkup,
                              disable_web_page_preview=True)
     except:
         pass
