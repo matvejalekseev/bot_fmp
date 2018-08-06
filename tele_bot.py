@@ -265,6 +265,18 @@ def less_day(call):
     except:
         pass
 
+@bot.callback_query_handler(func=lambda call: call.data == 'status1')
+def less_day(call):
+    try:
+        text = ""
+        for row in select("select c.name, c.username, c.chat_id from chats c "
+                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 0 where c.status = 0;"):
+            text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+        bot.edit_message_text(label_status1 + text, call.message.chat.id,
+                          call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
+    except:
+        pass
+
 @bot.callback_query_handler(func=lambda call: call.data == 'sbor_send')
 def less_day(call):
     try:
