@@ -186,7 +186,6 @@ def echo_message(message):
                 bot.send_chat_action(chat_id, 'typing')
                 stats = ""
                 follow = ""
-
                 for row in select("select (case when status = 0 then 'Пользователей' "
                             "else 'Администраторов' end) as label,count(chat_id) from chats group by label;"):
                         follow = follow + str(row[0]) + ": *" + str(row[1]) + "*\n"
@@ -205,7 +204,13 @@ def echo_message(message):
                                  reply_markup=sboradminmarkup, disable_web_page_preview=True)
             elif text == btn_event_status:
                 bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(chat_id, in_work)
+                text = ""
+                for row in select("select case when s.status = 1 then '*Перевели:* ' "
+                                  "when s.status = 2 then '*Подтверждены:* ' "
+                                  "when s.status = 0 then '*Не перевели:* ' else '*Другие:* ' as status, count(*) "
+                                  "from status_sbor group by status;"):
+                    text = text + row[0] + row[1] + "\n"
+                bot.send_message(chat_id, status_label + text, parse_mode='MARKDOWN')
             elif text == btn_event_new:
                 bot.send_chat_action(chat_id, 'typing')
                 current_event = select("select name, price, account, rowid from events "
