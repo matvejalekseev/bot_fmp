@@ -250,7 +250,7 @@ def less_day(call):
         if user_to_send:
             for user in user_to_send:
                 k = k + 1
-                name = select("select name from u2e where chat_id = " + str(user) + ";")
+                name = select("select name from chats where chat_id = " + str(user) + ";")
                 bot.send_message(user, hello(name[0][0]) + text_to_user,
                                  parse_mode='MARKDOWN',
                                  reply_markup=sbormarkup, disable_web_page_preview=True)
