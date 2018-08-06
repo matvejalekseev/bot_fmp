@@ -29,6 +29,14 @@ cursor = conn.cursor()
 #cursor.execute("DROP TABLE u2e;")
 #cursor.execute("CREATE TABLE u2e(event_id integer, chat_id real, UNIQUE(chat_id,event_id));")
 
+# Создание таблицы "Статус текущего сбора"
+#cursor.execute("DROP TABLE status_sbor;")
+#10 - новый
+#0 - не сдал
+#1 - сдал, но не подтведил
+#2 - сдал и подтвердил
+cursor.execute("CREATE TABLE status_sbor(chat_id real, status integer default 10, UNIQUE(chat_id));")
+
 conn.commit()
 conn.close()
 

@@ -35,7 +35,17 @@ def send_welcome(message):
         change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ",'"
            + str(message.chat.username) + "','" +
            str(message.chat.last_name) + " " + str(message.chat.first_name) + "');")
+        change("insert into status_sbor(chat_id) values (" + str(message.chat.id) + ");")
         bot.send_message(message.chat.id, start_msg, reply_markup=startmarkup)
+    else:
+        bot.send_message(message.chat.id, not_private_msg)
+
+@bot.message_handler(commands=['refresh'])
+def send_welcome(message):
+    if message.chat.type == 'private':
+        change("update chats set username ='" + str(message.chat.username) + "', name ='" + str(message.chat.last_name) + " "
+               + str(message.chat.first_name) + "' where chat_id = " + str(message.chat.id) + ";")
+        bot.send_message(message.chat.id, msg_refresh, reply_markup=startmarkup)
     else:
         bot.send_message(message.chat.id, not_private_msg)
 
@@ -45,6 +55,7 @@ def send_welcome(message):
         user_id = str(message.text)[13:]
         try:
             change("delete from chats where chat_id =" + user_id + ";")
+            change("delete from status_sbor where chat_id=" + user_id + ");")
             bot.send_message(message.chat.id, success)
         except:
             pass
@@ -247,6 +258,17 @@ def less_day(call):
     except:
         pass
 
+@bot.callback_query_handler(func=lambda call: call.data == 'sbor_send')
+def less_day(call):
+    try:
+        bot.answer_callback_query(call.id, text=msg_thank)
+        bot.edit_message_reply_markup(call.from_user.id,
+                                      call.message.message_id)
+        change("update status_sbor set status = 1 where chat_id = " + str(call.from_user.id) + ";")
+
+    except:
+        pass
+
 @bot.callback_query_handler(func=lambda call: call.data == 'event_send')
 def less_day(call):
     try:
@@ -292,6 +314,7 @@ def less_day(call):
                                   call.message.chat.id, call.message.message_id,
                                   parse_mode='MARKDOWN', disable_web_page_preview=True)
             change("update events set status = 1 where status = 0;")
+            change("update status_sbor set status = 0;")
         else:
             bot.edit_message_text(text + sbor_complete_md + empty_send_list, call.message.chat.id,
                                   call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
