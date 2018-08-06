@@ -60,7 +60,7 @@ def send_welcome(message):
         date = (now.year, now.month)
         current_shown_dates[chat_id] = date  # Saving the current date in a dict
         markup = create_calendar(now.year, now.month)
-        bot.send_message(message.chat.id, start_msg, reply_markup=markup)
+        bot.send_message(message.chat.id, msg_refresh, reply_markup=markup)
     else:
         bot.send_message(message.chat.id, not_private_msg)
 
