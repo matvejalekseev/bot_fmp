@@ -359,13 +359,11 @@ def less_day(call):
         change("update status_sbor set status = 1 where chat_id = " + str(call.from_user.id) + ";")
         user = select("select chat_id, name, username from chats where chat_id=" + str(call.from_user.id) + ";")
         id = str(round(user[0][0]))
-        user_text = "[" + user[0][1] + "](https://t.me/" + user[0][2] + ")\n"
-
+        user_text = "[" + user[0][1] + "](https://t.me/" + user[0][2] + ")"
         confirmmarkup = types.InlineKeyboardMarkup()
         row = []
         row.append(types.InlineKeyboardButton(text=btn_confirm, callback_data="status_confirm-"+ id))
         confirmmarkup.row(*row)
-
         for chat in adminchatid:
             bot.send_message(chat, label_pay_1 + user_text + label_pay_2, reply_markup=confirmmarkup,
                              parse_mode='MARKDOWN', disable_web_page_preview=True)
