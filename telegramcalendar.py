@@ -10,15 +10,14 @@ def create_calendar(year,month):
     #First row - Month and Year
     row=[]
     locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
-    row.append(types.InlineKeyboardButton(calendar.month_name[month],callback_data="ignore"))
+    row.append(types.InlineKeyboardButton(calendar.month_name[month], callback_data="ignore"))
     markup.row(*row)
-
     my_calendar = calendar.monthcalendar(year, month)
     for week in my_calendar:
         row=[]
         for day in week:
             if(day==0):
-                row.append(types.InlineKeyboardButton(" ",callback_data="ignore"))
+                row.append(types.InlineKeyboardButton(" ", callback_data="ignore"))
             else:
                 now = datetime.now()
                 if datetime.strptime(str(now.day) + "." + str(now.month) + "." + str(now.year), "%d.%m.%Y") <= datetime.strptime(
@@ -29,12 +28,8 @@ def create_calendar(year,month):
         markup.row(*row)
     #Last row - Buttons
     row=[]
-    now = datetime.now()
-    if datetime.strptime(str(now.month)+"."+str(now.year), "%m.%Y") < datetime.strptime(str(month)+"."+str(year), "%m.%Y"):
-        row.append(types.InlineKeyboardButton("<",callback_data="previous-month"))
-    else:
-        row.append(types.InlineKeyboardButton(" ", callback_data="ignore"))
-    row.append(types.InlineKeyboardButton(" ",callback_data="ignore"))
-    row.append(types.InlineKeyboardButton(">",callback_data="next-month"))
+    row.append(types.InlineKeyboardButton("<", callback_data="previous-month"))
+    row.append(types.InlineKeyboardButton(" ", callback_data="ignore"))
+    row.append(types.InlineKeyboardButton(">", callback_data="next-month"))
     markup.row(*row)
     return markup
