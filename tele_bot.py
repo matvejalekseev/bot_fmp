@@ -187,6 +187,14 @@ def echo_message(message):
                 bot.send_message(chat_id, reply, parse_mode='MARKDOWN', disable_web_page_preview=True)
             elif text == btn_event:
                 bot.send_chat_action(chat_id, 'typing')
+                bot.send_message(chat_id, msg_event,
+                                 parse_mode='MARKDOWN',
+                                 reply_markup=sbormarkup, disable_web_page_preview=True)
+            elif text == btn_event_status:
+                bot.send_chat_action(chat_id, 'typing')
+                bot.send_message(chat_id, in_work)
+            elif text == btn_event_new:
+                bot.send_chat_action(chat_id, 'typing')
                 current_event = select("select name, price, account, rowid from events "
                                         "where status = 0 order by rowid desc limit 1;")
                 if len(current_event) == 0:
