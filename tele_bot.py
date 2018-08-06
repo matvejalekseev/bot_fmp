@@ -31,8 +31,8 @@ def job_bd():
             bot.send_message(chat[0], db_label + text)
 
 
-schedule.every().day.at("16:00").do(job_time)
-schedule.every().day.at("16:00").do(job_bd)
+schedule.every().day.at("15:03").do(job_time)
+schedule.every().day.at("15:03").do(job_bd)
 
 logging.basicConfig(filename="logs/tele_bot.log", level=logging.INFO)
 
