@@ -9,6 +9,7 @@ from msg import *
 import logging
 from datetime import datetime
 import time
+from telebot import types
 
 logging.basicConfig(filename="logs/tele_bot.log", level=logging.INFO)
 
@@ -18,6 +19,7 @@ ineventname = []
 ineventaccount =[]
 ineventprice = []
 ineventuser = []
+insettingstart = []
 
 for row in select("select chat_id from chats where status = 1;"):
     adminchatid.append(float(row[0]))
@@ -37,6 +39,7 @@ def send_welcome(message):
            str(message.chat.last_name) + " " + str(message.chat.first_name) + "');")
         change("insert into status_sbor(chat_id) values (" + str(message.chat.id) + ");")
         bot.send_message(message.chat.id, start_msg, reply_markup=startmarkup)
+        insettingstart.append(message.chat.id)
     else:
         bot.send_message(message.chat.id, not_private_msg)
 
@@ -335,10 +338,10 @@ def less_day(call):
     except:
         pass
 
-@bot.callback_query_handler(func=lambda call: call.data == 'status_confirm')
+@bot.callback_query_handler(func=lambda call: call.data[:15] == 'status_confirm-')
 def less_day(call):
     try:
-        id = call.message.text.split("\n")[0]
+        id = call.data[15:]
         change("update status_sbor set status = 2 where chat_id = " + id + ";")
         bot.answer_callback_query(call.id, text=msg_thank_admin)
         bot.send_message(id, msg_confirm)
@@ -357,6 +360,12 @@ def less_day(call):
         user = select("select chat_id, name, username from chats where chat_id=" + str(call.from_user.id) + ";")
         id = str(round(user[0][0]))
         user_text = "[" + user[0][1] + "](https://t.me/" + user[0][2] + ")\n"
+
+        confirmmarkup = types.InlineKeyboardMarkup()
+        row = []
+        row.append(types.InlineKeyboardButton(text=btn_confirm, callback_data="status_confirm-"+ id))
+        confirmmarkup.row(*row)
+
         for chat in adminchatid:
             bot.send_message(chat, id + label_pay + user_text, reply_markup=confirmmarkup, parse_mode='MARKDOWN',
                              disable_web_page_preview=True)
