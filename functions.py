@@ -39,7 +39,7 @@ def is_phone(s):
 def hello(name):
     phrase = ['Привет, ', 'Добрый день, ', 'Здравствуйте, ', 'Аллоха, ']
     i = random.randint(0, 3)
-    result = phrase[i] + name + "!"
+    result = phrase[i] + name + "!\n\n"
     return result
 
 def select(req, db_in = db):
