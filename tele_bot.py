@@ -43,9 +43,8 @@ def send_welcome(message):
 def send_welcome(message):
     if message.chat.id in adminchatid:
         user_id = str(message.text)[13:]
-        username = str(message.text)[14:]
         try:
-            change("delete from chats where chat_id =" + user_id + " or username = '" + username + "';")
+            change("delete from chats where chat_id =" + user_id + ";")
             bot.send_message(message.chat.id, success)
         except:
             pass
