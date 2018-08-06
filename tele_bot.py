@@ -504,7 +504,7 @@ def get_day(call):
     if(saved_date is not None):
         day=call.data[13:]
         date = datetime(int(saved_date[0]), int(saved_date[1]), int(day))
-        change("update chats set birthdate = '" + str(date.strftime("%d.%m")) + "' where chat_id = "
+        change("update chats set birthday = '" + str(date.strftime("%d.%m")) + "' where chat_id = "
                        + str(call.message.chat.id) + ";")
         bot.answer_callback_query(call.id, text="Дата выбрана")
         bot.edit_message_text(start_msg_2, call.from_user.id, call.message.message_id,
