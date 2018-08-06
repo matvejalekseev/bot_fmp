@@ -340,6 +340,7 @@ def less_day(call):
 
 @bot.callback_query_handler(func=lambda call: call.data[:15] == 'status_confirm-')
 def less_day(call):
+    logging.info("Incoming call" + str(call) + " time:" + str(datetime.now()))
     id = call.data[15:]
     bot.edit_message_reply_markup(call.from_user.id,
                                   call.message.message_id)
