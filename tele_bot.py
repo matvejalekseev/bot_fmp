@@ -55,7 +55,7 @@ def send_welcome(message):
         user_id = str(message.text)[13:]
         try:
             change("delete from chats where chat_id =" + user_id + ";")
-            change("delete from status_sbor where chat_id=" + user_id + ");")
+            change("delete from status_sbor where chat_id=" + user_id + ";")
             bot.send_message(message.chat.id, success)
         except:
             pass
@@ -206,7 +206,7 @@ def echo_message(message):
                 bot.send_chat_action(chat_id, 'typing')
                 text = ""
                 for row in select("select case when s.status = 1 then '*Перевели:* ' "
-                                  "when s.status = 2 then '*Подтверждены^* ' "
+                                  "when s.status = 2 then '*Подтверждены:* ' "
                                   "when s.status = 0 then '*Не перевели:* ' "
                                   "else '*Другие:* ' end as status, "
                                   "count(*) "
