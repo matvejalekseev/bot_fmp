@@ -300,9 +300,9 @@ def less_day(call):
     try:
         text = ""
         for row in select("select c.name, c.username, c.chat_id from chats c "
-                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 0 where c.status = 1;"):
+                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 1 where c.status = 0;"):
             text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
-        bot.edit_message_text(label_status1 + text, call.message.chat.id,
+        bot.edit_message_text(label_status2 + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
                               reply_markup=statusbackmarkup)
     except:
@@ -313,9 +313,9 @@ def less_day(call):
     try:
         text = ""
         for row in select("select c.name, c.username, c.chat_id from chats c "
-                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 0 where c.status = 2;"):
+                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 2 where c.status = 0;"):
             text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
-        bot.edit_message_text(label_status1 + text, call.message.chat.id,
+        bot.edit_message_text(label_status3 + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
                               reply_markup=statusbackmarkup)
     except:
@@ -326,10 +326,10 @@ def less_day(call):
     try:
         text = ""
         for row in select("select c.name, c.username, c.chat_id from chats c "
-                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 0 "
-                          "where c.status not in (1,2,0);"):
+                          "join status_sbor s on c.chat_id = s.chat_id and s.status not in (0,1,2) "
+                          "where c.status = 0;"):
             text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
-        bot.edit_message_text(label_status1 + text, call.message.chat.id,
+        bot.edit_message_text(label_status4 + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
                               reply_markup=statusbackmarkup)
     except:
