@@ -211,7 +211,7 @@ def echo_message(message):
                                   "else 'Другие' end as status, "
                                   "count(*) "
                                   "from status_sbor s group by status;"):
-                    text = text + row[0] + row[1] + "\n"
+                    text = text + row[0] + str(row[1]) + "\n"
                 bot.send_message(chat_id, status_label + text, parse_mode='MARKDOWN')
             elif text == btn_event_new:
                 bot.send_chat_action(chat_id, 'typing')
