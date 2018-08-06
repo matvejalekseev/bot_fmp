@@ -247,14 +247,19 @@ def less_day(call):
                             "status = 0 limit 1);"):
             user_to_send.remove(row[0])
         k = 0
-        for user in user_to_send:
-            k = k + 1
-            bot.send_message(user, text_to_user,
-                             parse_mode='MARKDOWN',
-                             reply_markup=sbormarkup, disable_web_page_preview=True)
-        change("update events set status = 1 where status = 0;")
-        bot.edit_message_text(text + sbor_complete_md + customer + count + str(k), call.message.chat.id,
-                              call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
+        if user_to_send:
+            for user in user_to_send:
+                k = k + 1
+                name = select("select name from u2e where chat_id = '" + user + "';")
+                bot.send_message(user,hello(name) + text_to_user,
+                                 parse_mode='MARKDOWN',
+                                 reply_markup=sbormarkup, disable_web_page_preview=True)
+            bot.edit_message_text(text + sbor_complete_md + customer + count + str(k), call.message.chat.id,
+                                      call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
+            change("update events set status = 1 where status = 0;")
+        else:
+            bot.edit_message_text(text + sbor_complete_md + customer + empty_send_list, call.message.chat.id,
+                                  call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
 
     except:
         bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
