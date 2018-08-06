@@ -265,6 +265,23 @@ def less_day(call):
     except:
         pass
 
+@bot.callback_query_handler(func=lambda call: call.data == 'status_back')
+def less_day(call):
+    try:
+        text = ""
+        for row in select("select case when s.status = 1 then '*Перевели:* ' "
+                          "when s.status = 2 then '*Подтверждены^* ' "
+                          "when s.status = 0 then '*Не перевели:* ' "
+                          "else '*Другие:* ' end as status, "
+                          "count(*) "
+                          "from status_sbor s group by status;"):
+            text = text + row[0] + str(row[1]) + "\n"
+        bot.edit_message_text(status_label + text, call.message.chat.id,
+                          call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
+                              reply_markup=statusmarkup)
+    except:
+        pass
+
 @bot.callback_query_handler(func=lambda call: call.data == 'status1')
 def less_day(call):
     try:
@@ -273,7 +290,48 @@ def less_day(call):
                           "join status_sbor s on c.chat_id = s.chat_id and s.status = 0 where c.status = 0;"):
             text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
         bot.edit_message_text(label_status1 + text, call.message.chat.id,
-                          call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
+                          call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
+                              reply_markup=statusbackmarkup)
+    except:
+        pass
+
+@bot.callback_query_handler(func=lambda call: call.data == 'status2')
+def less_day(call):
+    try:
+        text = ""
+        for row in select("select c.name, c.username, c.chat_id from chats c "
+                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 0 where c.status = 1;"):
+            text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+        bot.edit_message_text(label_status1 + text, call.message.chat.id,
+                          call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
+                              reply_markup=statusbackmarkup)
+    except:
+        pass
+
+@bot.callback_query_handler(func=lambda call: call.data == 'status3')
+def less_day(call):
+    try:
+        text = ""
+        for row in select("select c.name, c.username, c.chat_id from chats c "
+                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 0 where c.status = 2;"):
+            text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+        bot.edit_message_text(label_status1 + text, call.message.chat.id,
+                          call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
+                              reply_markup=statusbackmarkup)
+    except:
+        pass
+
+@bot.callback_query_handler(func=lambda call: call.data == 'status4')
+def less_day(call):
+    try:
+        text = ""
+        for row in select("select c.name, c.username, c.chat_id from chats c "
+                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 0 "
+                          "where c.status not in (1,2,0);"):
+            text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+        bot.edit_message_text(label_status1 + text, call.message.chat.id,
+                          call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
+                              reply_markup=statusbackmarkup)
     except:
         pass
 
