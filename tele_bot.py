@@ -261,9 +261,12 @@ def less_day(call):
             for user in user_to_send:
                 k = k + 1
                 name = select("select name from chats where chat_id = " + str(user) + ";")
-                bot.send_message(user, hello(name[0][0]) + text_to_user,
-                                 parse_mode='MARKDOWN',
-                                 reply_markup=sbormarkup, disable_web_page_preview=True)
+                try:
+                    bot.send_message(user, hello(name[0][0]) + text_to_user,
+                                     parse_mode='MARKDOWN',
+                                     reply_markup=sbormarkup, disable_web_page_preview=True)
+                except:
+                    pass
             bot.edit_message_text(text + sbor_complete_md + customer + count + str(k), call.message.chat.id,
                                       call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
             change("update events set status = 1 where status = 0;")
