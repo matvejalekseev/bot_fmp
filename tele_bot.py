@@ -305,7 +305,10 @@ def less_day(call):
         text = ""
         for row in select("select c.name, c.username, c.chat_id from chats c "
                           "join status_sbor s on c.chat_id = s.chat_id and s.status = 0 where c.status = 0;"):
-            text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+            if row[1] != 'None':
+                text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+            else:
+                text = text + row[0] + "\n"
         bot.edit_message_text(label_status1 + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
                               reply_markup=statusbackmarkup)
@@ -318,7 +321,10 @@ def less_day(call):
         text = ""
         for row in select("select c.name, c.username, c.chat_id from chats c "
                           "join status_sbor s on c.chat_id = s.chat_id and s.status = 1 where c.status = 0;"):
-            text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+            if row[1] != 'None':
+                text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+            else:
+                text = text + row[0] + "\n"
         bot.edit_message_text(label_status2 + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
                               reply_markup=statusbackmarkup)
@@ -331,7 +337,10 @@ def less_day(call):
         text = ""
         for row in select("select c.name, c.username, c.chat_id from chats c "
                           "join status_sbor s on c.chat_id = s.chat_id and s.status = 2 where c.status = 0;"):
-            text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+            if row[1] != 'None':
+                text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+            else:
+                text = text + row[0] + "\n"
         bot.edit_message_text(label_status3 + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
                               reply_markup=statusbackmarkup)
@@ -345,7 +354,10 @@ def less_day(call):
         for row in select("select c.name, c.username, c.chat_id from chats c "
                           "join status_sbor s on c.chat_id = s.chat_id and s.status not in (0,1,2) "
                           "where c.status = 0;"):
-            text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+            if row[1] != 'None':
+                text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
+            else:
+                text = text + row[0] + "\n"
         bot.edit_message_text(label_status4 + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
                               reply_markup=statusbackmarkup)
@@ -373,7 +385,10 @@ def less_day(call):
         change("update status_sbor set status = 1 where chat_id = " + str(call.from_user.id) + ";")
         user = select("select chat_id, name, username from chats where chat_id=" + str(call.from_user.id) + ";")
         id = str(round(user[0][0]))
-        user_text = "[" + user[0][1] + "](https://t.me/" + user[0][2] + ")"
+        if user[0][2] != 'None':
+            user_text = "[" + user[0][1] + "](https://t.me/" + user[0][2] + ")"
+        else:
+            user_text = user[0][1]
         confirmmarkup = types.InlineKeyboardMarkup()
         row = []
         row.append(types.InlineKeyboardButton(text=btn_confirm, callback_data="status_confirm-"+ id))
