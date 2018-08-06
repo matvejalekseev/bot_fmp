@@ -35,7 +35,7 @@ cursor = conn.cursor()
 #0 - не сдал
 #1 - сдал, но не подтведил
 #2 - сдал и подтвердил
-cursor.execute("CREATE TABLE status_sbor(chat_id real, status integer default 10, UNIQUE(chat_id));")
+#cursor.execute("CREATE TABLE status_sbor(chat_id real, status integer default 10, UNIQUE(chat_id));")
 
 conn.commit()
 conn.close()
