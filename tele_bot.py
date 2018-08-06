@@ -212,7 +212,7 @@ def echo_message(message):
                                   "count(*) "
                                   "from status_sbor s group by status;"):
                     text = text + row[0] + str(row[1]) + "\n"
-                bot.send_message(chat_id, status_label + text, parse_mode='MARKDOWN')
+                bot.send_message(chat_id, status_label + text, parse_mode='MARKDOWN', reply_markup=statusmarkup)
             elif text == btn_event_new:
                 bot.send_chat_action(chat_id, 'typing')
                 current_event = select("select name, price, account, rowid from events "
