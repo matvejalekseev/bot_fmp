@@ -367,8 +367,8 @@ def less_day(call):
         confirmmarkup.row(*row)
 
         for chat in adminchatid:
-            bot.send_message(chat, id + label_pay + user_text, reply_markup=confirmmarkup, parse_mode='MARKDOWN',
-                             disable_web_page_preview=True)
+            bot.send_message(chat,label_pay_1 + user_text + label_pay_2, reply_markup=confirmmarkup,
+                             parse_mode='MARKDOWN', disable_web_page_preview=True)
     except:
         pass
 
