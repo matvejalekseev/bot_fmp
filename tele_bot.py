@@ -58,6 +58,7 @@ def echo_message(message):
             if chat_id in ineventaccount:
                 bot.send_chat_action(chat_id, 'typing')
                 change("update events set account = '" + text + "' where status = 0;")
+                bot.send_message(chat_id, success, reply_markup=adminmarkup)
                 ineventaccount.remove(chat_id)
                 for row in select(
                         "select name, price, account, id, rowid from events where "
@@ -96,6 +97,7 @@ def echo_message(message):
             elif chat_id in ineventprice:
                 bot.send_chat_action(chat_id, 'typing')
                 change("update events set price = '" + text + "' where status = 0;")
+                bot.send_message(chat_id, success, reply_markup=adminmarkup)
                 ineventprice.remove(chat_id)
                 for row in select(
                         "select name, price, account, id, rowid from events where "
@@ -120,7 +122,7 @@ def echo_message(message):
                     row = select("select chat_id from chats where chat_id ='"
                                + id + "' or username = '" + username + "';")
                     if not row:
-                        bot.send_message(chat_id, user_not_found + username)
+                        bot.send_message(chat_id, user_not_found)
                     else:
                         if select("select chat_id from u2e where chat_id = (select chat_id from chats where chat_id ='"
                                + id + "' or username = '" + username + "' limit 1) "
@@ -153,7 +155,7 @@ def echo_message(message):
                     text = ""
                     users = select("select username,name,chat_id from chats where status = 0;")
                     for user in users:
-                        text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(user[2]) + "\n"
+                        text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(round(user[2])) + "\n"
                     bot.send_message(message.chat.id, ladel_users + text, parse_mode='MARKDOWN')
             elif text == btn_static:
                 bot.send_chat_action(chat_id, 'typing')
@@ -201,7 +203,7 @@ def echo_message(message):
                 text = ""
                 users = select("select username,name,chat_id from chats where status = 0;")
                 for user in users:
-                    text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(user[2]) + "\n"
+                    text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(round(user[2])) + "\n"
                 bot.send_message(message.chat.id, ladel_users + text, parse_mode='MARKDOWN')
         else:
             if text == btn_bg:
