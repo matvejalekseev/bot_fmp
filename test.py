@@ -1,12 +1,6 @@
 import schedule
 import time
 
-def job():
-    print("I'm working...")
+print(1 in [1,20])
 
 
-schedule.every(10).minutes.do(job)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)
