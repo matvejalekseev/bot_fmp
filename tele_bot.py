@@ -586,6 +586,7 @@ schedule.every().day.at("15:39").do(job_bd)
 while True:
     try:
         bot.polling()
+        time.sleep(1)
         schedule.run_pending()
     except:
         time.sleep(15)
