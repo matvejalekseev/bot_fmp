@@ -340,14 +340,11 @@ def less_day(call):
 
 @bot.callback_query_handler(func=lambda call: call.data[:15] == 'status_confirm-')
 def less_day(call):
-    try:
-        id = call.data[15:]
-        bot.edit_message_reply_markup(call.from_user.id, call.message.message_id)
-        change("update status_sbor set status = 2 where chat_id = " + id + ";")
-        bot.answer_callback_query(call.id, text=msg_thank_admin)
-        bot.send_message(id, msg_confirm)
-    except:
-        pass
+    id = call.data[15:]
+    bot.edit_message_reply_markup(call.from_user.id, call.message.message_id)
+    change("update status_sbor set status = 2 where chat_id = " + id + ";")
+    bot.answer_callback_query(call.id, text=msg_thank_admin)
+    bot.send_message(id, msg_confirm)
 
 @bot.callback_query_handler(func=lambda call: call.data == 'sbor_send')
 def less_day(call):
