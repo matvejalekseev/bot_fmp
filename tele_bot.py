@@ -41,11 +41,6 @@ def send_welcome(message):
            + str(message.chat.username) + "','" +
            str(message.chat.last_name) + " " + str(message.chat.first_name) + "');")
         change("insert into status_sbor(chat_id) values (" + str(message.chat.id) + ");")
-        bot.send_message(message.chat.id, start_msg, reply_markup=startmarkup)
-
-
-        insettingstart.append(message.chat.id)
-
         now = datetime.now()  # Current date
         chat_id = message.chat.id
         date = (now.year, now.month)
@@ -60,7 +55,12 @@ def send_welcome(message):
     if message.chat.type == 'private':
         change("update chats set username ='" + str(message.chat.username) + "', name ='" + str(message.chat.last_name) + " "
                + str(message.chat.first_name) + "' where chat_id = " + str(message.chat.id) + ";")
-        bot.send_message(message.chat.id, msg_refresh, reply_markup=startmarkup)
+        now = datetime.now()  # Current date
+        chat_id = message.chat.id
+        date = (now.year, now.month)
+        current_shown_dates[chat_id] = date  # Saving the current date in a dict
+        markup = create_calendar(now.year, now.month)
+        bot.send_message(message.chat.id, start_msg, reply_markup=markup)
     else:
         bot.send_message(message.chat.id, not_private_msg)
 
@@ -507,6 +507,8 @@ def get_day(call):
         change("update chats set birthdate = '" + str(date.strftime("%d.%m")) + "' where chat_id = "
                        + str(call.message.chat.id) + ";")
         bot.answer_callback_query(call.id, text="Дата выбрана")
+        bot.edit_message_text(start_msg, call.from_user.id, call.message.message_id,
+                              parse_mode='MARKDOWN', reply_markup=startmarkup)
     else:
         pass
 
