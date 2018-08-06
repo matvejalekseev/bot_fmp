@@ -28,11 +28,13 @@ def job_bd():
             if birthday[3:] == str(current_month) or birthday[3:] == '0'+str(current_month):
                 text = text + birthday[:2] + " - [" + bd[1] + "](https://t.me/" + bd[2] + ")\n"
         for chat in select("select chat_id from chats where status = 0;"):
-            bot.send_message(chat[0], db_label + text)
+            bot.send_message(chat[0], db_label + text, parse_mode='MARKDOWN')
 
 
 schedule.every().day.at("15:03").do(job_time)
 schedule.every().day.at("15:03").do(job_bd)
+schedule.every(1).minutes.do(job_time)
+schedule.every(1).minutes.do(job_bd)
 
 logging.basicConfig(filename="logs/tele_bot.log", level=logging.INFO)
 

@@ -1,8 +1,12 @@
-from functions \
-    import *
-
 import schedule
-from datetime import datetime
 import time
 
-print('02.08'[:2])
+def job():
+    print("I'm working...")
+
+
+schedule.every(1).minutes.do(job)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
