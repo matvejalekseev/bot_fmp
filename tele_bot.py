@@ -39,6 +39,18 @@ def send_welcome(message):
     else:
         bot.send_message(message.chat.id, not_private_msg)
 
+@bot.message_handler(commands=['delete_user'])
+def send_welcome(message):
+    if message.chat.id in adminchatid:
+        user_id = str(message.text)[13:]
+        username = str(message.text)[14:]
+        try:
+            change("delete from chats where chat_id =" + user_id + " or username = '" + username + "';")
+            bot.send_message(message.chat.id, success)
+        except:
+            pass
+    else:
+        bot.send_message(message.chat.id, not_support)
 
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
