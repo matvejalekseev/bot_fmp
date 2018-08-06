@@ -270,7 +270,7 @@ def less_day(call):
     try:
         text = ""
         for row in select("select case when s.status = 1 then '*Перевели:* ' "
-                          "when s.status = 2 then '*Подтверждены^* ' "
+                          "when s.status = 2 then '*Подтверждены:* ' "
                           "when s.status = 0 then '*Не перевели:* ' "
                           "else '*Другие:* ' end as status, "
                           "count(*) "
@@ -342,6 +342,8 @@ def less_day(call):
         change("update status_sbor set status = 2 where chat_id = " + id + ";")
         bot.answer_callback_query(call.id, text=msg_thank_admin)
         bot.send_message(id, msg_confirm)
+        bot.edit_message_reply_markup(call.from_user.id,
+                                     call.message.message_id)
     except:
         pass
 
@@ -353,10 +355,11 @@ def less_day(call):
                                       call.message.message_id)
         change("update status_sbor set status = 1 where chat_id = " + str(call.from_user.id) + ";")
         user = select("select chat_id, name, username from chats where chat_id=" + str(call.from_user.id) + ";")
-        id = str(user[0][0])
+        id = str(round(user[0][0]))
         user_text = "[" + user[0][1] + "](https://t.me/" + user[0][2] + ")\n"
         for chat in adminchatid:
-            bot.send_message(chat, id + label_pay + user_text, reply_markup=confirmmarkup)
+            bot.send_message(chat, id + label_pay + user_text, reply_markup=confirmmarkup, parse_mode='MARKDOWN',
+                             disable_web_page_preview=True)
     except:
         pass
 
