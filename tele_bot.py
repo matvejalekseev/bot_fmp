@@ -261,10 +261,10 @@ def less_day(call):
             for user in user_to_send:
                 name = select("select name from chats where chat_id = " + str(user) + ";")
                 try:
-                    k = k + 1
                     bot.send_message(user, hello(name[0][0]) + text_to_user,
                                      parse_mode='MARKDOWN',
                                      reply_markup=sbormarkup, disable_web_page_preview=True)
+                    k = k + 1
                 except:
                     e = e + 1
             bot.edit_message_text(text + sbor_complete_md + customer + count + str(k) + error_count + str(e),
