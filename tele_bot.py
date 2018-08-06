@@ -580,8 +580,8 @@ def job_bd():
             bot.send_message(chat[0], db_label + text, parse_mode='MARKDOWN')
 
 
-schedule.every().day.at("15:30").do(job_time)
-schedule.every().day.at("15:30").do(job_bd)
+schedule.every().day.at("15:34").do(job_time)
+schedule.every().day.at("15:34").do(job_bd)
 
 while True:
     schedule.run_pending()
