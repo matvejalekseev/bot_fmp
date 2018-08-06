@@ -168,6 +168,9 @@ def echo_message(message):
                     for user in users:
                         text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(round(user[2])) + "\n"
                     bot.send_message(message.chat.id, ladel_users + text, parse_mode='MARKDOWN')
+            elif text == btn_back:
+                bot.send_chat_action(chat_id, 'typing')
+                bot.send_message(chat_id, msg_back, reply_markup=adminmarkup)
             elif text == btn_static:
                 bot.send_chat_action(chat_id, 'typing')
                 stats = ""

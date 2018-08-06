@@ -26,7 +26,8 @@ adminmarkup.add(itembtn1, itembtn2, itembtn3)
 sboradminmarkup = types.ReplyKeyboardMarkup(row_width=1)
 itembtn1 = types.KeyboardButton(btn_event_status)
 itembtn2 = types.KeyboardButton(btn_event_new)
-sboradminmarkup.add(itembtn1, itembtn2)
+itembtn3 = types.KeyboardButton(btn_back)
+sboradminmarkup.add(itembtn1, itembtn2, itembtn3)
 
 eventmarkup = types.InlineKeyboardMarkup()
 row=[]
