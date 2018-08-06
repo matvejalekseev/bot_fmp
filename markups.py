@@ -7,6 +7,16 @@ itembtn2 = types.KeyboardButton(btn_egisz)
 itembtn3 = types.KeyboardButton(btn_adap)
 startmarkup.add(itembtn1, itembtn2, itembtn3)
 
+pricemarkup = types.ReplyKeyboardMarkup(row_width=1)
+itembtn1 = types.KeyboardButton(btn_100)
+itembtn2 = types.KeyboardButton(btn_150)
+itembtn3 = types.KeyboardButton(btn_250)
+pricemarkup.add(itembtn1, itembtn2, itembtn3)
+
+accountmarkup = types.ReplyKeyboardMarkup(row_width=1)
+itembtn1 = types.KeyboardButton(btn_default_account)
+accountmarkup.add(itembtn1)
+
 eventmarkup = types.InlineKeyboardMarkup()
 row=[]
 row.append(types.InlineKeyboardButton(text=btn_name, callback_data="event_name"))

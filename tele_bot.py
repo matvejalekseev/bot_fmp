@@ -113,40 +113,48 @@ def echo_message(message):
                                          parse_mode='MARKDOWN',
                                          reply_markup=eventmarkup, disable_web_page_preview=True)
             elif chat_id in ineventuser:
-                bot.send_chat_action(chat_id, 'typing')
-                id = str(text)
-                username = str(text)[1:]
-                row = select("select chat_id from chats where chat_id ='"
-                           + id + "' or username = '" + username + "';")
-                if not row:
-                    bot.send_message(chat_id, user_not_found + username)
+                if text != btn_list_user:
+                    bot.send_chat_action(chat_id, 'typing')
+                    id = str(text)
+                    username = str(text)[1:]
+                    row = select("select chat_id from chats where chat_id ='"
+                               + id + "' or username = '" + username + "';")
+                    if not row:
+                        bot.send_message(chat_id, user_not_found + username)
+                    else:
+                        if select("select chat_id from u2e where chat_id = (select chat_id from chats where chat_id ='"
+                               + id + "' or username = '" + username + "' limit 1) "
+                                "and event_id = (select id from events where status = 0 limit 1);"):
+                            change("delete from u2e where chat_id = (select chat_id from chats where chat_id ='"
+                               + id + "' or username = '" + username + "' limit 1) "
+                                "and event_id = (select id from events where status = 0 limit 1);")
+                        else:
+                            change("insert into u2e(chat_id, event_id) values((select chat_id from chats where chat_id ='"
+                               + id + "' or username = '" + username + "'), (select id from events where "
+                                "status = 0 limit 1));")
+                    for row in select(
+                            "select name, price, account, id, rowid from events where "
+                            "status = 0 order by rowid desc limit 1;"):
+                        users = select("select name, username from chats where chat_id in "
+                                       "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
+                        text = event(name=row[0], price=row[1], account=row[2],
+                                     users=users)
+                        if check_event(row[0], row[1], row[2]):
+                            bot.send_message(chat_id, text,
+                                             parse_mode='MARKDOWN',
+                                             reply_markup=eventsendmarkup, disable_web_page_preview=True)
+                        else:
+                            bot.send_message(chat_id, text,
+                                             parse_mode='MARKDOWN',
+                                             reply_markup=eventmarkup, disable_web_page_preview=True)
+                    ineventuser.remove(chat_id)
                 else:
-                    if select("select chat_id from u2e where chat_id = (select chat_id from chats where chat_id ='"
-                           + id + "' or username = '" + username + "' limit 1) "
-                            "and event_id = (select id from events where status = 0 limit 1);"):
-                        change("delete from u2e where chat_id = (select chat_id from chats where chat_id ='"
-                           + id + "' or username = '" + username + "' limit 1) "
-                            "and event_id = (select id from events where status = 0 limit 1);")
-                    else:
-                        change("insert into u2e(chat_id, event_id) values((select chat_id from chats where chat_id ='"
-                           + id + "' or username = '" + username + "'), (select id from events where "
-                            "status = 0 limit 1));")
-                for row in select(
-                        "select name, price, account, id, rowid from events where "
-                        "status = 0 order by rowid desc limit 1;"):
-                    users = select("select name, username from chats where chat_id in "
-                                   "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
-                    text = event(name=row[0], price=row[1], account=row[2],
-                                 users=users)
-                    if check_event(row[0], row[1], row[2]):
-                        bot.send_message(chat_id, text,
-                                         parse_mode='MARKDOWN',
-                                         reply_markup=eventsendmarkup, disable_web_page_preview=True)
-                    else:
-                        bot.send_message(chat_id, text,
-                                         parse_mode='MARKDOWN',
-                                         reply_markup=eventmarkup, disable_web_page_preview=True)
-                ineventuser.remove(chat_id)
+                    bot.send_chat_action(chat_id, 'typing')
+                    text = ""
+                    users = select("select username,name,chat_id from chats where status = 0;")
+                    for user in users:
+                        text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(user[2]) + "\n"
+                    bot.send_message(message.chat.id, ladel_users + text, parse_mode='MARKDOWN')
             elif text == btn_static:
                 bot.send_chat_action(chat_id, 'typing')
                 stats = ""
@@ -291,7 +299,7 @@ def less_day(call):
         else:
             ineventprice.append(call.message.chat.id)
             bot.send_message(call.message.chat.id, msg_price_event, parse_mode='MARKDOWN',
-                             disable_web_page_preview=True)
+                             disable_web_page_preview=True, reply_markup=pricemarkup)
     except:
         pass
 
@@ -306,7 +314,7 @@ def less_day(call):
         else:
             ineventaccount.append(call.message.chat.id)
             bot.send_message(call.message.chat.id, msg_account_event, parse_mode='MARKDOWN',
-                             disable_web_page_preview=True)
+                             disable_web_page_preview=True, reply_markup=accountmarkup)
     except:
         pass
 
