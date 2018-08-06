@@ -10,6 +10,7 @@ sbor_complete_md = '\n*Сбор отправлен:* '
 count = '\n*Сообщений отправил:* '
 error_count = '\n*Ошибок*: '
 empty_send_list = '\nСписок для отправки пуст'
+not_support = 'Команда не поддерживается в Вашем чате'
 
 btn_static = 'Статистика'
 btn_event = 'Сбор'
