@@ -335,6 +335,16 @@ def less_day(call):
     except:
         pass
 
+@bot.callback_query_handler(func=lambda call: call.data == 'status_confirm')
+def less_day(call):
+    try:
+        id = call.message.text.split("\n")[0]
+        change("update status_sbor set status = 2 where chat_id = " + id + ";")
+        bot.answer_callback_query(call.id, text=msg_thank_admin)
+        bot.send_message(id, msg_confirm)
+    except:
+        pass
+
 @bot.callback_query_handler(func=lambda call: call.data == 'sbor_send')
 def less_day(call):
     try:
@@ -342,7 +352,11 @@ def less_day(call):
         bot.edit_message_reply_markup(call.from_user.id,
                                       call.message.message_id)
         change("update status_sbor set status = 1 where chat_id = " + str(call.from_user.id) + ";")
-
+        user = select("select chat_id, name, username from chats where chat_id=" + str(call.from_user.id) + ";")
+        id = str(user[0][0])
+        user_text = "[" + user[0][1] + "](https://t.me/" + user[0][2] + ")\n"
+        for chat in adminchatid:
+            bot.send_message(chat, id + label_pay + user_text, reply_markup=confirmmarkup)
     except:
         pass
 
