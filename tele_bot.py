@@ -205,10 +205,10 @@ def echo_message(message):
             elif text == btn_event_status:
                 bot.send_chat_action(chat_id, 'typing')
                 text = ""
-                for row in select("select case when s.status = 1 then 'Перевели' "
-                                  "when s.status = 2 then 'Подтверждены' "
-                                  "when s.status = 0 then 'Не перевели' "
-                                  "else 'Другие' end as status, "
+                for row in select("select case when s.status = 1 then '*Перевели:* ' "
+                                  "when s.status = 2 then '*Подтверждены^* ' "
+                                  "when s.status = 0 then '*Не перевели:* ' "
+                                  "else '*Другие:* ' end as status, "
                                   "count(*) "
                                   "from status_sbor s group by status;"):
                     text = text + row[0] + str(row[1]) + "\n"
