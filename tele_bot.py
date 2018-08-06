@@ -507,8 +507,9 @@ def get_day(call):
         change("update chats set birthdate = '" + str(date.strftime("%d.%m")) + "' where chat_id = "
                        + str(call.message.chat.id) + ";")
         bot.answer_callback_query(call.id, text="Дата выбрана")
-        bot.edit_message_text(start_msg, call.from_user.id, call.message.message_id,
-                              parse_mode='MARKDOWN', reply_markup=startmarkup)
+        bot.edit_message_text(start_msg_2, call.from_user.id, call.message.message_id,
+                              parse_mode='MARKDOWN')
+        bot.edit_message_reply_markup(call.from_user.id, call.message.message_id, reply_markup = startmarkup)
     else:
         pass
 
