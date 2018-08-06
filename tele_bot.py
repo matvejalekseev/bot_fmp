@@ -249,7 +249,6 @@ def less_day(call):
                 "select name, price, account, id, rowid from events where "
                 "status = 0 order by rowid desc limit 1;"):
             text_to_user = event(name=row[0], price=row[1], account=row[2])
-
         user_to_send = []
         for row in select("select chat_id from chats where status = 0;"):
             user_to_send.append(row[0])
