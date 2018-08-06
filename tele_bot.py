@@ -580,14 +580,11 @@ def job_bd():
             bot.send_message(chat[0], db_label + text, parse_mode='MARKDOWN',disable_web_page_preview=True)
 
 
-schedule.every().day.at("15:43").do(job_time)
-schedule.every().day.at("15:43").do(job_bd)
+schedule.every().day.at("15:44").do(job_time)
+schedule.every().day.at("15:44").do(job_bd)
+
 while True:
     schedule.run_pending()
     time.sleep(15)
+    bot.polling()
 
-while True:
-    try:
-        bot.polling()
-    except:
-        time.sleep(15)
