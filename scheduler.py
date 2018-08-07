@@ -5,12 +5,23 @@ from msg import *
 from datetime import datetime
 import time
 import schedule
+from random import choice
+from string import ascii_uppercase
+
+
+
+def invite():
+    new_str = ''.join(choice(ascii_uppercase) for i in range(12))
+    change("udpate invite set str = '" + new_str + "';")
 
 def job_time():
     current_day = datetime.now().day
     if current_day in jira_sched_day:
         for chat in select("select chat_id from chats where status = 0;"):
-            bot.send_message(chat[0], msg_time_jira, parse_mode='MARKDOWN', disable_web_page_preview=True)
+            try:
+                bot.send_message(chat[0], msg_time_jira, parse_mode='MARKDOWN', disable_web_page_preview=True)
+            except:
+                pass
 
 
 def job_bd():
@@ -26,10 +37,14 @@ def job_bd():
                 else:
                     text = text + birthday[:2] + " - " + bd[1] + "\n"
         for chat in select("select chat_id from chats where status = 0;"):
-            bot.send_message(chat[0], db_label + text, parse_mode='MARKDOWN',disable_web_page_preview=True)
+            try:
+                bot.send_message(chat[0], db_label + text, parse_mode='MARKDOWN',disable_web_page_preview=True)
+            except:
+                pass
 
 schedule.every().day.at(bd_sched_time).do(job_time)
 schedule.every().day.at(jira_sched_time).do(job_bd)
+schedule.every().day.at(invite_sched_time).do(invite)
 
 bot = telebot.TeleBot(telegrambot_test)
 

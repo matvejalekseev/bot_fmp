@@ -38,6 +38,11 @@ cursor = conn.cursor()
 #2 - сдал и подтвердил
 #cursor.execute("CREATE TABLE status_sbor(chat_id real, status integer default 10, UNIQUE(chat_id));")
 
+# Создание таблицы "Инвайт"
+#cursor.execute("DROP TABLE invite;")
+cursor.execute("CREATE TABLE invite(str text);")
+cursor.execute("insert into invite(str) values ('hello');")
+
 conn.commit()
 conn.close()
 

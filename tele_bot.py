@@ -37,17 +37,22 @@ bot = telebot.TeleBot(telegrambot_test)
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     logging.info("Start" + str(message) + " time:" + str(datetime.now()))
+    str_user = message.text[7:]
+    str_current = select("select str from invite limit 1;")[0][0]
     if message.chat.type == 'private':
-        change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ",'"
-           + str(message.chat.username) + "','" +
-           str(message.chat.last_name) + " " + str(message.chat.first_name) + "');")
-        change("insert into status_sbor(chat_id) values (" + str(message.chat.id) + ");")
-        now = datetime.now()  # Current date
-        chat_id = message.chat.id
-        date = (now.year, now.month)
-        current_shown_dates[chat_id] = date  # Saving the current date in a dict
-        markup = create_calendar(now.year, now.month)
-        bot.send_message(message.chat.id, start_msg, reply_markup=markup)
+        if str_user == str_current:
+            change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ",'"
+               + str(message.chat.username) + "','" +
+               str(message.chat.last_name) + " " + str(message.chat.first_name) + "');")
+            change("insert into status_sbor(chat_id) values (" + str(message.chat.id) + ");")
+            now = datetime.now()  # Current date
+            chat_id = message.chat.id
+            date = (now.year, now.month)
+            current_shown_dates[chat_id] = date  # Saving the current date in a dict
+            markup = create_calendar(now.year, now.month)
+            bot.send_message(message.chat.id, start_msg, reply_markup=markup)
+        else:
+            bot.send_message(message.chat.id, no_invite)
     else:
         bot.send_message(message.chat.id, not_private_msg)
 

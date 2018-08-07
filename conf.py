@@ -4,4 +4,5 @@ bd_sched_time = "09:00"
 bd_sched_day = [1]
 jira_sched_time = "08:30"
 jira_sched_day = [1, 20]
+invite_sched_time = "00:00"
 #telegrambot_elem = "420685937:AAGQPM_E6O6HNBjv90u7TSMIxUJzAxO-P0o"
