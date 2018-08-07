@@ -2,9 +2,9 @@ from telebot import types
 from msg import *
 
 startmarkup = types.ReplyKeyboardMarkup(row_width=1)
-itembtn1 = types.KeyboardButton(btn_bg)
-itembtn2 = types.KeyboardButton(btn_egisz)
-itembtn3 = types.KeyboardButton(btn_adap)
+itembtn1 = types.KeyboardButton(btn_url1)
+itembtn2 = types.KeyboardButton(btn_url2)
+itembtn3 = types.KeyboardButton(btn_url3)
 startmarkup.add(itembtn1, itembtn2, itembtn3)
 
 pricemarkup = types.ReplyKeyboardMarkup(row_width=1)
@@ -84,6 +84,19 @@ sbormarkup = types.InlineKeyboardMarkup()
 row=[]
 row.append(types.InlineKeyboardButton(text=btn_sbor, callback_data="sbor_send"))
 sbormarkup.row(*row)
+
+url1markup = types.InlineKeyboardMarkup()
+for url in url_1:
+    url1markup.add(types.InlineKeyboardButton(text=url[0], url=url[1]))
+
+url2markup = types.InlineKeyboardMarkup()
+for url in url_2:
+    url2markup.add(types.InlineKeyboardButton(text=url[0], url=url[1]))
+
+url3markup = types.InlineKeyboardMarkup()
+for url in url_3:
+    url3markup.add(types.InlineKeyboardButton(text=url[0], url=url[1]))
+
 
 #Примеры
 elementmarkup_soc = types.InlineKeyboardMarkup()

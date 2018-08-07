@@ -23,7 +23,6 @@ ineventname = []
 ineventaccount =[]
 ineventprice = []
 ineventuser = []
-insettingstart = []
 
 for row in select("select chat_id from chats where status = 1;"):
     adminchatid.append(float(row[0]))
@@ -262,15 +261,18 @@ def echo_message(message):
                     text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(round(user[2])) + "\n"
                 bot.send_message(message.chat.id, ladel_users + text, parse_mode='MARKDOWN')
         else:
-            if text == btn_bg:
+            if text == btn_url1:
                 bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(chat_id, in_work)
-            elif text == btn_egisz:
+                bot.send_message(chat_id, label_url1, parse_mode='MARKDOWN',
+                                 reply_markup=url1markup, disable_web_page_preview=True)
+            elif text == btn_url2:
                 bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(chat_id, in_work)
-            elif text == btn_adap:
+                bot.send_message(chat_id, label_url2, parse_mode='MARKDOWN',
+                                 reply_markup=url2markup, disable_web_page_preview=True)
+            elif text == btn_url3:
                 bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(chat_id, in_work)
+                bot.send_message(chat_id, label_url3, parse_mode='MARKDOWN',
+                                 reply_markup=url3markup, disable_web_page_preview=True)
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'event_cancel')
