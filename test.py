@@ -1,9 +1,12 @@
-import schedule
-import time
+from functions import *
 
 
-from random import choice
-from string import ascii_uppercase
 
-new_str = ''.join(choice(ascii_uppercase) for i in range(12))
-print(new_str)
+
+str_user = 'hello'
+str_current = select("select str from invite limit 1;")[0]
+
+if str_user in str_current:
+    print('true')
+else:
+    print('no')

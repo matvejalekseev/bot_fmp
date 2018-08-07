@@ -40,8 +40,8 @@ cursor = conn.cursor()
 
 # Создание таблицы "Инвайт"
 #cursor.execute("DROP TABLE invite;")
-cursor.execute("CREATE TABLE invite(str text);")
-cursor.execute("insert into invite(str) values ('hello');")
+#cursor.execute("CREATE TABLE invite(str text);")
+#cursor.execute("insert into invite(str) values ('hello');")
 
 conn.commit()
 conn.close()
