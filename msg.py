@@ -128,10 +128,10 @@ btn_wending = 'Свадьба'
 btn_kid = 'Рождение ребёнка'
 btn_bye = 'Увольнение'
 
-
+msg_done = 'Готово'
 msg_time_jira = 'Не забудь списать время в [Jira](http://jira.bars-open.ru/)'
 msg_menu = 'А вот и меню'
-msg_confirm = 'Ваш перевод потверждён'
+msg_confirm = 'Ваш перевод подтверждён'
 msg_thank_admin = 'Спасибо'
 msg_refresh = 'Данные обновлены, осталось только дата рождения:'
 msg_thank = 'Спасибо, ждём подтверждения'

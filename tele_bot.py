@@ -328,6 +328,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'status_back')
 def less_day(call):
     try:
+        bot.answer_callback_query(call.id, text=msg_done)
         text = ""
         for row in select("select case when s.status = 1 then '*Перевели:* ' "
                           "when s.status = 2 then '*Подтверждены:* ' "
@@ -345,6 +346,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'status1')
 def less_day(call):
     try:
+        bot.answer_callback_query(call.id, text=msg_done)
         text = ""
         for row in select("select c.name, c.username, c.chat_id from chats c "
                           "join status_sbor s on c.chat_id = s.chat_id and s.status = 0 where c.status = 0;"):
@@ -361,6 +363,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'status2')
 def less_day(call):
     try:
+        bot.answer_callback_query(call.id, text=msg_done)
         text = ""
         for row in select("select c.name, c.username, c.chat_id from chats c "
                           "join status_sbor s on c.chat_id = s.chat_id and s.status = 1 where c.status = 0;"):
@@ -377,6 +380,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'status3')
 def less_day(call):
     try:
+        bot.answer_callback_query(call.id, text=msg_done)
         text = ""
         for row in select("select c.name, c.username, c.chat_id from chats c "
                           "join status_sbor s on c.chat_id = s.chat_id and s.status = 2 where c.status = 0;"):
@@ -393,6 +397,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'status4')
 def less_day(call):
     try:
+        bot.answer_callback_query(call.id, text=msg_done)
         text = ""
         for row in select("select c.name, c.username, c.chat_id from chats c "
                           "join status_sbor s on c.chat_id = s.chat_id and s.status not in (0,1,2) "
@@ -410,6 +415,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data[:15] == 'status_confirm-')
 def less_day(call):
     try:
+        bot.answer_callback_query(call.id, text=msg_done)
         id = call.data[15:]
         change("update status_sbor set status = 2 where chat_id = " + id + ";")
         bot.answer_callback_query(call.id, text=msg_thank_admin)
@@ -494,6 +500,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'event_name')
 def less_day(call):
     try:
+        bot.answer_callback_query(call.id, text=msg_done)
         row = select("select id, rowid from events where "
                     "status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
@@ -509,6 +516,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'event_price')
 def less_day(call):
     try:
+        bot.answer_callback_query(call.id, text=msg_done)
         row = select("select id, rowid from events where "
                     "status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
@@ -524,6 +532,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'event_account')
 def less_day(call):
     try:
+        bot.answer_callback_query(call.id, text=msg_done)
         row = select("select id, rowid from events where "
                     "status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
@@ -539,6 +548,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'event_user')
 def less_day(call):
     try:
+        bot.answer_callback_query(call.id, text=msg_done)
         row = select("select id, rowid from events where "
                     "status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
@@ -560,7 +570,7 @@ def get_day(call):
         date = datetime(int(saved_date[0]), int(saved_date[1]), int(day))
         change("update chats set birthday = '" + str(date.strftime("%d.%m")) + "' where chat_id = "
                        + str(call.message.chat.id) + ";")
-        bot.answer_callback_query(call.id, text="Дата выбрана")
+        bot.answer_callback_query(call.id, text=msg_done)
         bot.edit_message_text(start_msg_2, call.from_user.id, call.message.message_id,
                               parse_mode='MARKDOWN')
         bot.send_message(call.message.chat.id, msg_menu, reply_markup=startmarkup,
