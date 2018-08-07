@@ -419,11 +419,6 @@ def less_day(call):
 
             text = event(name=row[0], price=row[1], account=row[2],
                          users=users)
-
-        for row in select(
-                "select name, price, account, id, rowid from events where "
-                "status = 0 order by rowid desc limit 1;"):
-            text_to_user = event(name=row[0], price=row[1], account=row[2])
         user_to_send = []
         for row in select("select chat_id from chats where status = 0;"):
             user_to_send.append(row[0])
@@ -436,7 +431,7 @@ def less_day(call):
             for user in user_to_send:
                 name = select("select name from chats where chat_id = " + str(user) + ";")
                 try:
-                    bot.send_message(user, hello(name[0][0]) + text_to_user,
+                    bot.send_message(user, hello(name[0][0]) + text,
                                      parse_mode='MARKDOWN',
                                      reply_markup=sbormarkup, disable_web_page_preview=True)
                     k = k + 1
