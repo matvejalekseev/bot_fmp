@@ -125,7 +125,7 @@ btn_kid = 'Рождение ребёнка'
 btn_bye = 'Увольнение'
 
 
-msg_time_jira = 'Не забудь списать время в [Jira](' + url_jira + ')'
+msg_time_jira = 'Не забудь списать время в [Jira](http://jira.bars-open.ru/)'
 msg_menu = 'А вот и меню'
 msg_confirm = 'Ваш перевод потверждён'
 msg_thank_admin = 'Спасибо'
