@@ -41,7 +41,7 @@ url.append('Постановка задач')
 url.append('https://conf.bars-open.ru/pages/viewpage.action?pageId=30413239')
 url_1.append(url)
 url = []
-url.append('Предостувление доступа к БД')
+url.append('Предоставление доступа к БД')
 url.append('https://conf.bars-open.ru/pages/viewpage.action?pageId=30408754')
 url_1.append(url)
 
