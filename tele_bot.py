@@ -73,6 +73,7 @@ def send_welcome(message):
     else:
         bot.send_message(message.chat.id, not_private_msg)
 
+
 @bot.message_handler(commands=['invite'])
 def send_welcome(message):
     if inchats(message.chat.id):
