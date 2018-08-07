@@ -36,6 +36,7 @@ bot = telebot.TeleBot(telegrambot_test)
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
+    logging.info("Start" + str(message) + " time:" + str(datetime.now()))
     if message.chat.type == 'private':
         change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ",'"
            + str(message.chat.username) + "','" +
