@@ -83,6 +83,22 @@ def send_welcome(message):
     else:
         bot.send_message(message.chat.id, close_chat)
 
+@bot.message_handler(commands=['birthday'])
+def send_welcome(message):
+    if inchats(message.chat.id):
+        current_month = datetime.now().month
+        text = ""
+        for bd in select("select birthday,name,username from chats where status = 0;"):
+            birthday = bd[0]
+            if birthday[3:] == str(current_month) or birthday[3:] == '0' + str(current_month):
+                if bd[2] != 'None':
+                    text = text + birthday[:2] + " - [" + bd[1] + "](https://t.me/" + bd[2] + ")\n"
+                else:
+                    text = text + birthday[:2] + " - " + bd[1] + "\n"
+        bot.send_message(message.chat.id, db_label + text, parse_mode='MARKDOWN', disable_web_page_preview=True)
+    else:
+        bot.send_message(message.chat.id, close_chat)
+
 
 @bot.message_handler(commands=['delete_user'])
 def send_welcome(message):
@@ -276,9 +292,10 @@ def echo_message(message):
             elif text == btn_list_user:
                 bot.send_chat_action(chat_id, 'typing')
                 text = ""
-                users = select("select username,name,chat_id from chats where status = 0;")
+                users = select("select username,name,chat_id,birthday from chats where status = 0;")
                 for user in users:
-                    text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(round(user[2])) + "\n"
+                    text = text + str(user[1]) + " " + str(user[3]) + " @" \
+                           + str(user[0]) + " " + str(round(user[2])) + "\n"
                 bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
         else:
             chats = select("select chat_id from chats;")[0]
