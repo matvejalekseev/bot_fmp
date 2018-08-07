@@ -3,6 +3,13 @@ import random
 import sqlite3
 from conf import db
 
+def inchats(s):
+    chats = select("select chat_id from chats;")
+    for chat in chats:
+        if s in chat:
+            return True
+    return False
+
 def RepresentsInt(s):
     try:
         int(s)

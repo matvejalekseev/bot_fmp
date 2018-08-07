@@ -3,10 +3,11 @@ from functions import *
 
 
 
-str_user = 'hello'
-str_current = select("select str from invite limit 1;")[0]
+chat_id = -241874218
+chats = select("select chat_id from chats;")
 
-if str_user in str_current:
-    print('true')
-else:
-    print('no')
+for chat in chats:
+    if chat_id in chat:
+        print(chats)
+    else:
+        print('no')

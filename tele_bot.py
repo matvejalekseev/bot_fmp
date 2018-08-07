@@ -59,7 +59,7 @@ def send_welcome(message):
 @bot.message_handler(commands=['refresh'])
 def send_welcome(message):
     if message.chat.type == 'private':
-        if message.chat.id in select("select chat_id from chats;")[0]:
+        if inchats(message.chat.id):
             change("update chats set username ='" + str(message.chat.username) + "', name ='" + str(message.chat.last_name) + " "
                    + str(message.chat.first_name) + "' where chat_id = " + str(message.chat.id) + ";")
             now = datetime.now()  # Current date
@@ -271,8 +271,7 @@ def echo_message(message):
                 bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
         else:
             chats = select("select chat_id from chats;")[0]
-
-            if chat_id in chats:
+            if inchats(chat_id):
                 if text == btn_url1:
                     bot.send_chat_action(chat_id, 'typing')
                     bot.send_message(chat_id, label_url1, parse_mode='MARKDOWN',
@@ -286,7 +285,7 @@ def echo_message(message):
                     bot.send_message(chat_id, label_url3, parse_mode='MARKDOWN',
                                      reply_markup=url3markup, disable_web_page_preview=True)
             else:
-                bot.send_message(message.chat.id, close_chat)
+                bot.send_message(chat_id, close_chat)
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'event_cancel')
