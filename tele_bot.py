@@ -271,6 +271,7 @@ def echo_message(message):
                 bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
         else:
             chats = select("select chat_id from chats;")[0]
+
             if chat_id in chats:
                 if text == btn_url1:
                     bot.send_chat_action(chat_id, 'typing')
