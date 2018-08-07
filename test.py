@@ -3,11 +3,6 @@ from functions import *
 
 
 
-chat_id = -241874218
-chats = select("select chat_id from chats;")
+link = 'https://telegram.me/TestMyHobby_bot?start=' + select("select str from invite;")[0][0]
 
-for chat in chats:
-    if chat_id in chat:
-        print(chats)
-    else:
-        print('no')
+print(link)
