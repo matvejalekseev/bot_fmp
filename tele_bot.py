@@ -59,14 +59,17 @@ def send_welcome(message):
 @bot.message_handler(commands=['refresh'])
 def send_welcome(message):
     if message.chat.type == 'private':
-        change("update chats set username ='" + str(message.chat.username) + "', name ='" + str(message.chat.last_name) + " "
-               + str(message.chat.first_name) + "' where chat_id = " + str(message.chat.id) + ";")
-        now = datetime.now()  # Current date
-        chat_id = message.chat.id
-        date = (now.year, now.month)
-        current_shown_dates[chat_id] = date  # Saving the current date in a dict
-        markup = create_calendar(now.year, now.month)
-        bot.send_message(message.chat.id, msg_refresh, reply_markup=markup)
+        if message.chat.id in select("select chat_id from chats;")[0]:
+            change("update chats set username ='" + str(message.chat.username) + "', name ='" + str(message.chat.last_name) + " "
+                   + str(message.chat.first_name) + "' where chat_id = " + str(message.chat.id) + ";")
+            now = datetime.now()  # Current date
+            chat_id = message.chat.id
+            date = (now.year, now.month)
+            current_shown_dates[chat_id] = date  # Saving the current date in a dict
+            markup = create_calendar(now.year, now.month)
+            bot.send_message(message.chat.id, msg_refresh, reply_markup=markup)
+        else:
+            bot.send_message(message.chat.id, close_chat)
     else:
         bot.send_message(message.chat.id, not_private_msg)
 
@@ -265,20 +268,23 @@ def echo_message(message):
                 users = select("select username,name,chat_id from chats where status = 0;")
                 for user in users:
                     text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(round(user[2])) + "\n"
-                bot.send_message(message.chat.id, ladel_users + text, parse_mode='MARKDOWN')
+                bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
         else:
-            if text == btn_url1:
-                bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(chat_id, label_url1, parse_mode='MARKDOWN',
-                                 reply_markup=url1markup, disable_web_page_preview=True)
-            elif text == btn_url2:
-                bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(chat_id, label_url2, parse_mode='MARKDOWN',
-                                 reply_markup=url2markup, disable_web_page_preview=True)
-            elif text == btn_url3:
-                bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(chat_id, label_url3, parse_mode='MARKDOWN',
-                                 reply_markup=url3markup, disable_web_page_preview=True)
+            if chat_id in select("select chat_id from chats;")[0]:
+                if text == btn_url1:
+                    bot.send_chat_action(chat_id, 'typing')
+                    bot.send_message(chat_id, label_url1, parse_mode='MARKDOWN',
+                                     reply_markup=url1markup, disable_web_page_preview=True)
+                elif text == btn_url2:
+                    bot.send_chat_action(chat_id, 'typing')
+                    bot.send_message(chat_id, label_url2, parse_mode='MARKDOWN',
+                                     reply_markup=url2markup, disable_web_page_preview=True)
+                elif text == btn_url3:
+                    bot.send_chat_action(chat_id, 'typing')
+                    bot.send_message(chat_id, label_url3, parse_mode='MARKDOWN',
+                                     reply_markup=url3markup, disable_web_page_preview=True)
+            else:
+                bot.send_message(message.chat.id, close_chat)
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'event_cancel')
