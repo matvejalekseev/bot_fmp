@@ -270,7 +270,8 @@ def echo_message(message):
                     text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(round(user[2])) + "\n"
                 bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
         else:
-            if chat_id in select("select chat_id from chats;")[0]:
+            chats = select("select chat_id from chats;")[0]
+            if chat_id in chats:
                 if text == btn_url1:
                     bot.send_chat_action(chat_id, 'typing')
                     bot.send_message(chat_id, label_url1, parse_mode='MARKDOWN',
