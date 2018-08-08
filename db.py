@@ -8,7 +8,9 @@ cursor = conn.cursor()
 #cursor.execute("DROP TABLE chats;")
 #cursor.execute("CREATE TABLE chats(chat_id real, username text DEFAULT 'None', name text DEFAULT 'Your name', status INTEGER DEFAULT 0, UNIQUE(chat_id) );")
 #моя личка chat_id = '109099327'
-#cursor.execute("insert into chats(status,chat_id) values (1,-241874218);")
+#тест = -241874218
+#фмп = -310273520
+cursor.execute("insert into chats(status,chat_id) values (1,-310273520);")
 #cursor.execute("ALTER TABLE chats add birthday text;")
 
 # Создание таблицы "Статистики"
