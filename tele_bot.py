@@ -45,7 +45,7 @@ def send_welcome(message):
             current_shown_dates[chat_id] = date  # Saving the current date in a dict
             markup = create_calendar(now.year, now.month)
             bot.send_message(message.chat.id, start_msg, reply_markup=markup)
-            if str(message.chat.username):
+            if is_str(message.chat.username):
                 user_text = "[" + str(message.chat.last_name) + " " + str(message.chat.first_name) \
                             + "](https://t.me/" + str(message.chat.username) + ")"
             else:
@@ -300,8 +300,12 @@ def echo_message(message):
                 text = ""
                 users = select("select username,name,chat_id,birthday from chats where status = 0;")
                 for user in users:
-                    text = text + str(user[1]) + " " + str(user[3]) + " @" \
-                           + str(user[0]) + " " + str(round(user[2])) + "\n"
+                    if is_str(user[0]):
+                        username = '@' + str(user[0]) + ' '
+                    else:
+                        username = ''
+                    text = text + str(user[1]) + " " + str(user[3]) + " " \
+                           + username + str(round(user[2])) + "\n"
                 bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
         else:
             if inchats(chat_id):
