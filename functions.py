@@ -15,6 +15,8 @@ def markup_callbackdata(data):
             markup.row(*rowInlne)
             k = 0
             rowInlne = []
+    if rowInlne:
+        markup.row(*rowInlne)
     return markup
 
 
