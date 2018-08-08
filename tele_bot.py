@@ -265,7 +265,7 @@ def echo_message(message):
                 for row in select("select case when s.status = 1 then 'Перевели' "
                                   "when s.status = 2 then 'Подтверждены' "
                                   "when s.status = 0 then 'Не перевели' "
-                                  "else '*Другие:* ' end as status, s.status as s, "
+                                  "else 'Другие' end as status, s.status as s, "
                                   "count(*) "
                                   "from status_sbor s group by status,s;"):
                     text = text + "*" +row[0] + ":* " + str(row[2]) + "\n"
@@ -340,7 +340,7 @@ def less_day(call):
         for row in select("select case when s.status = 1 then 'Перевели' "
                           "when s.status = 2 then 'Подтверждены' "
                           "when s.status = 0 then 'Не перевели' "
-                          "else '*Другие:* ' end as status, s.status as s, "
+                          "else 'Другие' end as status, s.status as s, "
                           "count(*) "
                           "from status_sbor s group by status,s;"):
             text = text + "*" + row[0] + ":* " + str(row[2]) + "\n"
