@@ -31,7 +31,6 @@ bot = telebot.TeleBot(telegrambot_test)
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    logging.info("Start" + str(message) + " time:" + str(datetime.now()))
     str_user = message.text[7:]
     str_current = select("select str from invite limit 1;")[0][0]
     if message.chat.type == 'private':
