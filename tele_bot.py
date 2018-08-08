@@ -419,8 +419,8 @@ def less_day(call):
         change("update status_sbor set status = 2 where chat_id = " + id + ";")
         bot.answer_callback_query(call.id, text=msg_thank_admin)
         bot.send_message(id, msg_confirm)
-        bot.edit_message_reply_markup(call.message.chat.id,
-                                     call.message.message_id)
+        bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id)
+        bot.delete_message(call.message.chat.id, call.message.message_id)
     except:
         pass
 
