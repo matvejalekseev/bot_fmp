@@ -10,7 +10,7 @@ cursor = conn.cursor()
 #моя личка chat_id = '109099327'
 #тест = -241874218
 #фмп = -310273520
-cursor.execute("insert into chats(status,chat_id) values (1,-310273520);")
+#cursor.execute("insert into chats(status,chat_id) values (1,-310273520);")
 #cursor.execute("ALTER TABLE chats add birthday text;")
 
 # Создание таблицы "Статистики"
