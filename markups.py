@@ -1,13 +1,6 @@
 from telebot import types
 from msg import *
 
-testmarkup = types.ForceReply()
-
-sharemarkup = types.InlineKeyboardMarkup()
-row=[]
-row.append(types.InlineKeyboardButton(text='Share with your friends', switch_inline_query='share'))
-sharemarkup.row(*row)
-
 startmarkup = types.ReplyKeyboardMarkup(row_width=1)
 itembtn1 = types.KeyboardButton(btn_url1)
 itembtn2 = types.KeyboardButton(btn_url2)

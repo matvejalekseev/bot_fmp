@@ -78,8 +78,7 @@ def send_welcome(message):
         link = '[' + invite_label  +'](https://telegram.me/TestMyHobby_bot?start=' \
                + select("select str from invite;")[0][0] + ')'
 
-        bot.send_message(message.chat.id, msg_invite + link, parse_mode='MARKDOWN', disable_web_page_preview=True,
-                         reply_markup=testmarkup)
+        bot.send_message(message.chat.id, msg_invite + link, parse_mode='MARKDOWN', disable_web_page_preview=True)
     else:
         bot.send_message(message.chat.id, close_chat)
 
