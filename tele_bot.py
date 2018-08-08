@@ -362,11 +362,11 @@ def less_day(call):
                 text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
             else:
                 text = text + row[0] + "\n"
-        if status == 0:
+        if status == '0':
             label_status = '*Не перевели*\n'
-        elif status == 1:
+        elif status == '1':
             label_status = '*Перевели*\n'
-        elif status == 2:
+        elif status == '2':
             label_status = '*Подтверждены*\n'
         else:
             label_status = '*Другие*\n'
