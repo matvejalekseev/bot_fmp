@@ -12,6 +12,7 @@ import time
 from telebot import types
 from telegramcalendar import create_calendar
 import subprocess
+
 logging.basicConfig(filename="logs/tele_bot.log", level=logging.INFO)
 
 current_shown_dates={}
