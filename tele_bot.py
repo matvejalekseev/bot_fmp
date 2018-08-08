@@ -265,8 +265,7 @@ def echo_message(message):
                                   "count(*) "
                                   "from status_sbor s group by status,s;"):
                     text = text + row[0] + str(row[2]) + "\n"
-                    rowInlne.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + str(row[1]),
-                                                          parse_mode='MARKDOWN'))
+                    rowInlne.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + str(row[1])))
                 statusmarkup.row(*rowInlne)
                 bot.send_message(chat_id, status_label + text, parse_mode='MARKDOWN', reply_markup=statusmarkup)
             elif text == btn_event_new:
@@ -343,8 +342,7 @@ def less_day(call):
                           "count(*) "
                           "from status_sbor s group by status,s;"):
             text = text + row[0] + str(row[2]) + "\n"
-            rowInlne.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + str(row[1]),
-                                                  parse_mode='MARKDOWN'))
+            rowInlne.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + str(row[1])))
         statusmarkup.row(*rowInlne)
         bot.edit_message_text(status_label + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
