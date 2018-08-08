@@ -257,7 +257,7 @@ def echo_message(message):
                 bot.send_chat_action(chat_id, 'typing')
                 text = ""
                 statusmarkup = types.InlineKeyboardMarkup()
-                row = []
+                rowInlne = []
                 for row in select("select case when s.status = 1 then '*Перевели:* ' "
                                   "when s.status = 2 then '*Подтверждены:* ' "
                                   "when s.status = 0 then '*Не перевели:* ' "
@@ -265,9 +265,9 @@ def echo_message(message):
                                   "count(*) "
                                   "from status_sbor s group by status,s;"):
                     text = text + row[0] + str(row[2]) + "\n"
-                    row.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + row[1],
+                    rowInlne.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + row[1],
                                                           parse_mode='MARKDOWN'))
-                statusmarkup.row(*row)
+                statusmarkup.row(*rowInlne)
                 bot.send_message(chat_id, status_label + text, parse_mode='MARKDOWN', reply_markup=statusmarkup)
             elif text == btn_event_new:
                 bot.send_chat_action(chat_id, 'typing')
@@ -335,7 +335,7 @@ def less_day(call):
         bot.answer_callback_query(call.id, text=msg_done)
         text = ""
         statusmarkup = types.InlineKeyboardMarkup()
-        row = []
+        rowInlne = []
         for row in select("select case when s.status = 1 then '*Перевели:* ' "
                           "when s.status = 2 then '*Подтверждены:* ' "
                           "when s.status = 0 then '*Не перевели:* ' "
@@ -343,9 +343,9 @@ def less_day(call):
                           "count(*) "
                           "from status_sbor s group by status,s;"):
             text = text + row[0] + str(row[2]) + "\n"
-            row.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + row[1],
+            rowInlne.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + row[1],
                                                   parse_mode='MARKDOWN'))
-        statusmarkup.row(*row)
+        statusmarkup.row(*rowInlne)
         bot.edit_message_text(status_label + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
                               reply_markup=statusmarkup)
