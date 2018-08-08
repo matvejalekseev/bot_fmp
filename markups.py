@@ -1,6 +1,7 @@
 from telebot import types
 from msg import *
 
+testmarkup = types.ForceReply()
 
 sharemarkup = types.InlineKeyboardMarkup()
 row=[]
