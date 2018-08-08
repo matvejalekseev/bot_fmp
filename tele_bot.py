@@ -27,9 +27,6 @@ ineventuser = []
 for row in select("select chat_id from chats where status = 1;"):
     adminchatid.append(float(row[0]))
 
-for row in select("select chat_id from chats where status = 0;"):
-    userchatid.append(float(row[0]))
-
 bot = telebot.TeleBot(telegrambot_test)
 
 @bot.message_handler(commands=['start'])
@@ -49,6 +46,14 @@ def send_welcome(message):
             current_shown_dates[chat_id] = date  # Saving the current date in a dict
             markup = create_calendar(now.year, now.month)
             bot.send_message(message.chat.id, start_msg, reply_markup=markup)
+            if str(message.chat.username):
+                user_text = "[" + str(message.chat.last_name) + " " + str(message.chat.first_name) \
+                            + "](https://t.me/" + str(message.chat.username) + ")"
+            else:
+                user_text = str(message.chat.last_name) + " " + str(message.chat.first_name)
+            for chat in adminchatid:
+                bot.send_message(chat, msg_new_user + user_text,
+                                 parse_mode='MARKDOWN', disable_web_page_preview=True)
         else:
             bot.send_message(message.chat.id, no_invite)
     else:
