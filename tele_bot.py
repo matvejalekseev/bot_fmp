@@ -80,7 +80,7 @@ def send_welcome(message):
 @bot.message_handler(commands=['invite'])
 def send_welcome(message):
     if inchats(message.chat.id):
-        link = '[' + invite_label  +'](https://telegram.me/TestMyHobby_bot?start=' \
+        link = '[' + invite_label  +'](https://telegram.me/' + telegrambot_name + '?start=' \
                + select("select str from invite;")[0][0] + ')'
 
         bot.send_message(message.chat.id, msg_invite + link, parse_mode='MARKDOWN')
