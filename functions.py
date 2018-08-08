@@ -2,6 +2,21 @@ import re
 import random
 import sqlite3
 from conf import db
+from telebot import types
+
+def markup_callbackdata(data):
+    markup = types.InlineKeyboardMarkup()
+    rowInlne = []
+    k = 0
+    for row in data:
+        k = k + 1
+        rowInlne.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + row[1]))
+        if k == 2:
+            markup.row(*rowInlne)
+            k = 0
+            rowInlne = []
+    return markup
+
 
 def inchats(s):
     chats = select("select chat_id from chats where chat_id = " + str(s) + ";")
