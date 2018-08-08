@@ -36,16 +36,6 @@ itembtn2 = types.KeyboardButton(btn_event_new)
 itembtn3 = types.KeyboardButton(btn_back)
 sboradminmarkup.add(itembtn1, itembtn2, itembtn3)
 
-statusmarkup = types.InlineKeyboardMarkup()
-row=[]
-row.append(types.InlineKeyboardButton(text=btn_status1, callback_data="status1"))
-row.append(types.InlineKeyboardButton(text=btn_status2, callback_data="status2"))
-statusmarkup.row(*row)
-row=[]
-row.append(types.InlineKeyboardButton(text=btn_status3, callback_data="status3"))
-row.append(types.InlineKeyboardButton(text=btn_status4, callback_data="status4"))
-statusmarkup.row(*row)
-
 statusbackmarkup = types.InlineKeyboardMarkup()
 row=[]
 row.append(types.InlineKeyboardButton(text=btn_status_back, callback_data="status_back"))

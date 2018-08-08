@@ -256,13 +256,18 @@ def echo_message(message):
             elif text == btn_event_status:
                 bot.send_chat_action(chat_id, 'typing')
                 text = ""
+                statusmarkup = types.InlineKeyboardMarkup()
+                row = []
                 for row in select("select case when s.status = 1 then '*Перевели:* ' "
                                   "when s.status = 2 then '*Подтверждены:* ' "
                                   "when s.status = 0 then '*Не перевели:* ' "
-                                  "else '*Другие:* ' end as status, "
+                                  "else '*Другие:* ' end as status, s.status as s, "
                                   "count(*) "
-                                  "from status_sbor s group by status;"):
-                    text = text + row[0] + str(row[1]) + "\n"
+                                  "from status_sbor s group by status,s;"):
+                    text = text + row[0] + str(row[2]) + "\n"
+                    row.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + row[1],
+                                                          parse_mode='MARKDOWN'))
+                statusmarkup.row(*row)
                 bot.send_message(chat_id, status_label + text, parse_mode='MARKDOWN', reply_markup=statusmarkup)
             elif text == btn_event_new:
                 bot.send_chat_action(chat_id, 'typing')
@@ -329,83 +334,45 @@ def less_day(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
         text = ""
+        statusmarkup = types.InlineKeyboardMarkup()
+        row = []
         for row in select("select case when s.status = 1 then '*Перевели:* ' "
                           "when s.status = 2 then '*Подтверждены:* ' "
                           "when s.status = 0 then '*Не перевели:* ' "
-                          "else '*Другие:* ' end as status, "
+                          "else '*Другие:* ' end as status, s.status as s, "
                           "count(*) "
-                          "from status_sbor s group by status;"):
-            text = text + row[0] + str(row[1]) + "\n"
+                          "from status_sbor s group by status,s;"):
+            text = text + row[0] + str(row[2]) + "\n"
+            row.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + row[1],
+                                                  parse_mode='MARKDOWN'))
+        statusmarkup.row(*row)
         bot.edit_message_text(status_label + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
                               reply_markup=statusmarkup)
     except:
         pass
 
-@bot.callback_query_handler(func=lambda call: call.data == 'status1')
+@bot.callback_query_handler(func=lambda call: call.data[7:] == 'status-')
 def less_day(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
         text = ""
+        status = call.data[:7]
         for row in select("select c.name, c.username, c.chat_id from chats c "
-                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 0 where c.status = 0;"):
+                          "join status_sbor s on c.chat_id = s.chat_id and s.status = " + str(status) + " where c.status = 0;"):
             if row[1] != 'None':
                 text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
             else:
                 text = text + row[0] + "\n"
-        bot.edit_message_text(label_status1 + text, call.message.chat.id,
-                          call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
-                              reply_markup=statusbackmarkup)
-    except:
-        pass
-
-@bot.callback_query_handler(func=lambda call: call.data == 'status2')
-def less_day(call):
-    try:
-        bot.answer_callback_query(call.id, text=msg_done)
-        text = ""
-        for row in select("select c.name, c.username, c.chat_id from chats c "
-                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 1 where c.status = 0;"):
-            if row[1] != 'None':
-                text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
-            else:
-                text = text + row[0] + "\n"
-        bot.edit_message_text(label_status2 + text, call.message.chat.id,
-                          call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
-                              reply_markup=statusbackmarkup)
-    except:
-        pass
-
-@bot.callback_query_handler(func=lambda call: call.data == 'status3')
-def less_day(call):
-    try:
-        bot.answer_callback_query(call.id, text=msg_done)
-        text = ""
-        for row in select("select c.name, c.username, c.chat_id from chats c "
-                          "join status_sbor s on c.chat_id = s.chat_id and s.status = 2 where c.status = 0;"):
-            if row[1] != 'None':
-                text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
-            else:
-                text = text + row[0] + "\n"
-        bot.edit_message_text(label_status3 + text, call.message.chat.id,
-                          call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
-                              reply_markup=statusbackmarkup)
-    except:
-        pass
-
-@bot.callback_query_handler(func=lambda call: call.data == 'status4')
-def less_day(call):
-    try:
-        bot.answer_callback_query(call.id, text=msg_done)
-        text = ""
-        for row in select("select c.name, c.username, c.chat_id from chats c "
-                          "join status_sbor s on c.chat_id = s.chat_id and s.status not in (0,1,2) "
-                          "where c.status = 0;"):
-            if row[1] != 'None':
-                text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
-            else:
-                text = text + row[0] + "\n"
-        bot.edit_message_text(label_status4 + text, call.message.chat.id,
+        if status == 0:
+            label_status = '*Не перевели*\n'
+        elif status == 1:
+            label_status = '*Перевели*\n'
+        elif status == 2:
+            label_status = '*Подтверждены*\n'
+        else:
+            label_status = '*Другие*\n'
+        bot.edit_message_text(label_status + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
                               reply_markup=statusbackmarkup)
     except:
