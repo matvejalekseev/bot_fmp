@@ -258,13 +258,13 @@ def echo_message(message):
                 text = ""
                 statusmarkup = types.InlineKeyboardMarkup()
                 rowInlne = []
-                for row in select("select case when s.status = 1 then '*Перевели:* ' "
-                                  "when s.status = 2 then '*Подтверждены:* ' "
-                                  "when s.status = 0 then '*Не перевели:* ' "
+                for row in select("select case when s.status = 1 then 'Перевели' "
+                                  "when s.status = 2 then 'Подтверждены' "
+                                  "when s.status = 0 then 'Не перевели' "
                                   "else '*Другие:* ' end as status, s.status as s, "
                                   "count(*) "
                                   "from status_sbor s group by status,s;"):
-                    text = text + row[0] + str(row[2]) + "\n"
+                    text = text + "*" +row[0] + ":* " + str(row[2]) + "\n"
                     rowInlne.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + str(row[1])))
                 statusmarkup.row(*rowInlne)
                 bot.send_message(chat_id, status_label + text, parse_mode='MARKDOWN', reply_markup=statusmarkup)
@@ -301,7 +301,6 @@ def echo_message(message):
                            + str(user[0]) + " " + str(round(user[2])) + "\n"
                 bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
         else:
-            chats = select("select chat_id from chats;")[0]
             if inchats(chat_id):
                 if text == btn_url1:
                     bot.send_chat_action(chat_id, 'typing')
@@ -335,13 +334,13 @@ def less_day(call):
         text = ""
         statusmarkup = types.InlineKeyboardMarkup()
         rowInlne = []
-        for row in select("select case when s.status = 1 then '*Перевели:* ' "
-                          "when s.status = 2 then '*Подтверждены:* ' "
-                          "when s.status = 0 then '*Не перевели:* ' "
+        for row in select("select case when s.status = 1 then 'Перевели' "
+                          "when s.status = 2 then 'Подтверждены' "
+                          "when s.status = 0 then 'Не перевели' "
                           "else '*Другие:* ' end as status, s.status as s, "
                           "count(*) "
                           "from status_sbor s group by status,s;"):
-            text = text + row[0] + str(row[2]) + "\n"
+            text = text + "*" + row[0] + ":* " + str(row[2]) + "\n"
             rowInlne.append(types.InlineKeyboardButton(text=row[0], callback_data="status-" + str(row[1])))
         statusmarkup.row(*rowInlne)
         bot.edit_message_text(status_label + text, call.message.chat.id,
@@ -350,14 +349,15 @@ def less_day(call):
     except:
         pass
 
-@bot.callback_query_handler(func=lambda call: call.data[7:] == 'status-')
+@bot.callback_query_handler(func=lambda call: call.data[:7] == 'status-')
 def less_day(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
         text = ""
-        status = call.data[:7]
+        status = call.data[7:]
         for row in select("select c.name, c.username, c.chat_id from chats c "
-                          "join status_sbor s on c.chat_id = s.chat_id and s.status = " + str(status) + " where c.status = 0;"):
+                          "join status_sbor s on c.chat_id = s.chat_id and s.status = "
+                          + str(status) + " where c.status = 0;"):
             if row[1] != 'None':
                 text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
             else:
