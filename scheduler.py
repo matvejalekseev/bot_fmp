@@ -12,7 +12,7 @@ from string import ascii_uppercase
 
 def invite():
     new_str = ''.join(choice(ascii_uppercase) for i in range(12))
-    change("udpate invite set str = '" + new_str + "';")
+    change("update invite set str = '" + new_str + "';")
 
 def job_time():
     current_day = datetime.now().day
