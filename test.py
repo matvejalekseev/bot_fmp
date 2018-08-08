@@ -4,12 +4,14 @@ from string import ascii_uppercase
 
 
 
-new_str = ''.join(choice(ascii_uppercase) for i in range(12))
-print(new_str)
-conn = sqlite3.connect("fmp_database.db")
-cursor = conn.cursor()
-cursor.execute("update invite set str = '" + new_str + "';")
-conn.commit()
-conn.close()
+def inchats(s):
+    chats = select("select chat_id from chats where chat_id = " + str(s) + ";")
+    if chats:
+        return True
+    else:
+        return False
 
-print(str(select("select str from invite;")))
+if inchats(-241874218):
+    print('1')
+else:
+    print('0')

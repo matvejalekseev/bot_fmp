@@ -1,6 +1,13 @@
 from telebot import types
 from msg import *
 
+sharemarkup = {
+        inline_keyboard: [[{
+            text: 'Share with your friends',
+            switch_inline_query: 'share'
+        }]]
+}
+
 startmarkup = types.ReplyKeyboardMarkup(row_width=1)
 itembtn1 = types.KeyboardButton(btn_url1)
 itembtn2 = types.KeyboardButton(btn_url2)
