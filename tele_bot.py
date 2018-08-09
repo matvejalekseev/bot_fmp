@@ -1,17 +1,18 @@
 # This is a simple echo bot using the decorator mechanism.
 # It echoes any incoming text messages.
 
-import telebot
-from conf import *
-from markups import *
-from functions import *
-from msg import *
 import logging
-from datetime import datetime
-import time
-from telebot import types
-from telegramcalendar import create_calendar
 import subprocess
+import time
+from datetime import datetime
+
+import telebot
+
+from conf import *
+from functions import *
+from markups import *
+from msg import *
+from telegramcalendar import create_calendar
 
 logging.basicConfig(filename="logs/tele_bot.log", level=logging.INFO)
 
@@ -328,6 +329,7 @@ def less_day(call):
         bot.answer_callback_query(call.id, text=msg_done)
         text = ""
         data = []
+
         for row in select("select case when s.status = 1 then 'Перевели' "
                           "when s.status = 2 then 'Подтверждены' "
                           "when s.status = 0 then 'Не перевели' "
