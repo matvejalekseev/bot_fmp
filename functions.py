@@ -1,8 +1,11 @@
-import re
 import random
+import re
 import sqlite3
-from conf import db
+
 from telebot import types
+
+from conf import db
+
 
 def markup_callbackdata(data):
     markup = types.InlineKeyboardMarkup()
@@ -91,7 +94,8 @@ def select(req, db_in = db):
     except:
         pass
 
-def change(req, db_in = db):
+
+def change(req, db_in=db):
     try:
         conn = sqlite3.connect(db_in)
         cursor = conn.cursor()
@@ -102,23 +106,20 @@ def change(req, db_in = db):
     except:
         pass
 
-def event(name = None,
-          price = None,
-          account = None,
-          users = None):
+
+def event(name=None,
+          price=None,
+          account=None,
+          users=None):
     event_name = "*" + xstr(name) + "*\n"
     event_date = "*Сумма:* " + xstr(price) + "\n"
     event_time = "*Перевести:*\n" + xstr(account) + "\n"
-    event_user = ""
     if not(users):
         event_user = "Нет виновника\n"
     else:
+        event_user = "*Виновник:*\n"
         for user in users:
-            if user[1]:
-                event_user = event_user + "[" + user[0] \
-                   + "](https://t.me/" + user[1] + ")\n"
-            else:
-                event_user = event_user + user[0] + "\n"
+            event_user = event_user + prettyUsername(user[0], user[1]) + "\n"
     order = event_name + event_date + event_time + event_user
     return order
 
