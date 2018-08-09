@@ -15,6 +15,8 @@ def markup_callbackdata(data):
             markup.row(*rowInlne)
             k = 0
             rowInlne = []
+    if rowInlne:
+        markup.row(*rowInlne)
     return markup
 
 
@@ -31,6 +33,20 @@ def RepresentsInt(s):
         return True
     except ValueError:
         return False
+
+def prettyUsername(n,un):
+    if un != 'None' and un:
+        user = "[" + n + "](https://t.me/" + un + ")"
+    else:
+        user = n
+    return user
+
+def prettyUsername_wA(un):
+    if un != 'None' and un:
+        user = "@" + un
+    else:
+        user = ''
+    return user
 
 def xstr(s):
     if s is None or s == 'None':

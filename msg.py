@@ -124,6 +124,7 @@ btn_wending = 'Свадьба'
 btn_kid = 'Рождение ребёнка'
 btn_bye = 'Увольнение'
 
+msg_gratz = ' ,Поздравляю с Днём Рожденья!'
 msg_new_user = 'Добавлен новый пользователь - '
 msg_done = ''
 msg_time_jira = 'Не забудь списать время в [Jira](http://jira.bars-open.ru/)'

@@ -45,11 +45,8 @@ def send_welcome(message):
             current_shown_dates[chat_id] = date  # Saving the current date in a dict
             markup = create_calendar(now.year, now.month)
             bot.send_message(message.chat.id, start_msg, reply_markup=markup)
-            if str(message.chat.username):
-                user_text = "[" + str(message.chat.last_name) + " " + str(message.chat.first_name) \
-                            + "](https://t.me/" + str(message.chat.username) + ")"
-            else:
-                user_text = str(message.chat.last_name) + " " + str(message.chat.first_name)
+            user_text = prettyUsername(str(message.chat.last_name) + " " + str(message.chat.first_name),
+                                       str(message.chat.username))
             for chat in adminchatid:
                 bot.send_message(chat, msg_new_user + user_text,
                                  parse_mode='MARKDOWN', disable_web_page_preview=True)
@@ -81,7 +78,6 @@ def send_welcome(message):
     if inchats(message.chat.id):
         link = '[' + invite_label  +'](https://telegram.me/' + telegrambot_name + '?start=' \
                + select("select str from invite;")[0][0] + ')'
-
         bot.send_message(message.chat.id, msg_invite + link, parse_mode='MARKDOWN')
     else:
         bot.send_message(message.chat.id, close_chat)
@@ -94,10 +90,7 @@ def send_welcome(message):
         for bd in select("select birthday,name,username from chats where status = 0;"):
             birthday = bd[0]
             if birthday[3:] == str(current_month) or birthday[3:] == '0' + str(current_month):
-                if bd[2] != 'None':
-                    text = text + birthday[:2] + " - [" + bd[1] + "](https://t.me/" + bd[2] + ")\n"
-                else:
-                    text = text + birthday[:2] + " - " + bd[1] + "\n"
+                text = text + birthday[:2] + " - " + prettyUsername(bd[1], bd[2]) + "\n"
         bot.send_message(message.chat.id, db_label + text, parse_mode='MARKDOWN', disable_web_page_preview=True)
     else:
         bot.send_message(message.chat.id, close_chat)
@@ -119,7 +112,6 @@ def send_welcome(message):
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
     content_type = str(message.content_type)
-    chat_type = str(message.chat.type)
     chat_id = message.chat.id
 
     if chat_id in adminchatid:
@@ -232,7 +224,7 @@ def echo_message(message):
                     text = ""
                     users = select("select username,name,chat_id from chats where status = 0;")
                     for user in users:
-                        text = text + str(user[1]) + " " + "@" + str(user[0]) + " " + str(round(user[2])) + "\n"
+                        text = text + str(user[1]) + " " + prettyUsername_wA(str(user[0])) + " " + str(round(user[2])) + "\n"
                     bot.send_message(message.chat.id, ladel_users + text, parse_mode='MARKDOWN')
             elif text == btn_back:
                 bot.send_chat_action(chat_id, 'typing')
@@ -300,8 +292,8 @@ def echo_message(message):
                 text = ""
                 users = select("select username,name,chat_id,birthday from chats where status = 0;")
                 for user in users:
-                    text = text + str(user[1]) + " " + str(user[3]) + " @" \
-                           + str(user[0]) + " " + str(round(user[2])) + "\n"
+                    text = text + str(user[1]) + " " + str(user[3]) + " " \
+                           + prettyUsername_wA(str(user[0])) + " " + str(round(user[2])) + "\n"
                 bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
         else:
             if inchats(chat_id):
@@ -398,10 +390,7 @@ def less_day(call):
         change("update status_sbor set status = 1 where chat_id = " + str(call.from_user.id) + ";")
         user = select("select chat_id, name, username from chats where chat_id=" + str(call.from_user.id) + ";")
         id = str(round(user[0][0]))
-        if user[0][2] != 'None':
-            user_text = "[" + user[0][1] + "](https://t.me/" + user[0][2] + ")"
-        else:
-            user_text = user[0][1]
+        user_text = prettyUsername(user[0][1], user[0][2])
         confirmmarkup = types.InlineKeyboardMarkup()
         row = []
         row.append(types.InlineKeyboardButton(text=btn_confirm, callback_data="status_confirm-"+ id))
