@@ -37,7 +37,7 @@ def send_welcome(message):
         if str_user == str_current:
             change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ",'"
                + str(message.chat.username) + "','" +
-               str(message.chat.last_name) + " " + str(message.chat.first_name) + "');")
+               xstr(message.chat.last_name) + " " + xstr(message.chat.first_name) + "');")
             change("insert into status_sbor(chat_id) values (" + str(message.chat.id) + ");")
             now = datetime.now()  # Current date
             chat_id = message.chat.id
@@ -59,8 +59,9 @@ def send_welcome(message):
 def send_welcome(message):
     if message.chat.type == 'private':
         if inchats(message.chat.id):
-            change("update chats set username ='" + str(message.chat.username) + "', name ='" + str(message.chat.last_name) + " "
-                   + str(message.chat.first_name) + "' where chat_id = " + str(message.chat.id) + ";")
+            change("update chats set username ='" + str(message.chat.username) + "', name ='" +
+                   xstr(message.chat.last_name) + " "
+                   + xstr(message.chat.first_name) + "' where chat_id = " + str(message.chat.id) + ";")
             now = datetime.now()  # Current date
             chat_id = message.chat.id
             date = (now.year, now.month)
