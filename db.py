@@ -1,6 +1,7 @@
 import sqlite3
+
 from conf import db
- 
+
 conn = sqlite3.connect(db) # или :memory: чтобы сохранить в RAM
 cursor = conn.cursor()
  
@@ -38,6 +39,7 @@ cursor.execute("ALTER TABLE chats add birthday text DEFAULT 'None';")
 #0 - не сдал
 #1 - сдал, но не подтведил
 #2 - сдал и подтвердил
+# 3 - Виновник
 #cursor.execute("CREATE TABLE status_sbor(chat_id real, status integer default 10, UNIQUE(chat_id));")
 
 # Создание таблицы "Инвайт"

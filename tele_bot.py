@@ -4,7 +4,6 @@
 import logging
 import subprocess
 import time
-from datetime import datetime
 
 import telebot
 
@@ -257,6 +256,7 @@ def echo_message(message):
                 for row in select("select case when s.status = 1 then 'Перевели' "
                                   "when s.status = 2 then 'Подтверждены' "
                                   "when s.status = 0 then 'Не перевели' "
+                                  "when s.status = 3 then 'Виновники' "
                                   "else 'Другие' end as status, s.status as s, "
                                   "count(*) "
                                   "from status_sbor s group by status,s;"):
@@ -333,6 +333,7 @@ def less_day(call):
         for row in select("select case when s.status = 1 then 'Перевели' "
                           "when s.status = 2 then 'Подтверждены' "
                           "when s.status = 0 then 'Не перевели' "
+                          "when s.status = 3 then 'Виновники' "
                           "else 'Другие' end as status, s.status as s, "
                           "count(*) "
                           "from status_sbor s group by status,s;"):
@@ -363,6 +364,8 @@ def less_day(call):
             label_status = '*Перевели*\n'
         elif status == '2':
             label_status = '*Подтверждены*\n'
+        elif status == '3':
+            label_status = '*Виновники*\n'
         else:
             label_status = '*Другие*\n'
         bot.edit_message_text(label_status + text, call.message.chat.id,
@@ -427,6 +430,7 @@ def less_day(call):
         for row in select("select chat_id from u2e where event_id = (select id from events where "
                             "status = 0 limit 1);"):
             user_to_send.remove(row[0])
+            change("update status_sbor set status = 3 where chat_id = " + row[0] + ";")
         k = 0
         e = 0
         if user_to_send:
@@ -586,4 +590,4 @@ while True:
     try:
         bot.polling()
     except:
-        time.sleep(15)
+        time.sleep(3)

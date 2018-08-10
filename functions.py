@@ -1,11 +1,26 @@
 import random
 import re
 import sqlite3
+from datetime import datetime
 
 from telebot import types
 
 from conf import db
+from msg import *
 
+
+def current_date(s):
+    day = datetime.now().day
+    month = datetime.now().month
+    if month < 10:
+        current_month = '0' + str(month)
+    else:
+        current_month = str(month)
+    if day < 10:
+        current_day = '0' + str(day)
+    else:
+        current_day = str(day)
+    return current_day + '.' + current_month
 
 def markup_callbackdata(data):
     markup = types.InlineKeyboardMarkup()
@@ -113,7 +128,7 @@ def event(name=None,
           users=None):
     event_name = "*" + xstr(name) + "*\n"
     event_date = "*Сумма:* " + xstr(price) + "\n"
-    event_time = "*Перевести:*\n" + xstr(account) + "\n"
+    event_time = "*Перевести:*\n\n```" + xstr(account) + "```\n\n"
     if not(users):
         event_user = "Нет виновника\n"
     else:
@@ -128,3 +143,15 @@ def check_event(name, price, account):
         return True
     else:
         return False
+
+
+def birthday_list():
+    list = select("select birthday,name,username from chats where status = 0 "
+                  "and substr(birthday,4,2) = '" + current_date('1')[3:] + "';")
+    if list:
+        text = db_label
+        for bd in list:
+            text = text + bd[0][:2] + " - " + prettyUsername(bd[1], bd[2]) + "\n"
+    else:
+        text = empty_list_bd
+    return text
