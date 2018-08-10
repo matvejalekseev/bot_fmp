@@ -409,13 +409,7 @@ def less_day(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'event_send')
 def less_day(call):
     try:
-        bot.answer_callback_query(call.id, text=sbor_complete)
-        if call.from_user.username:
-            customer = "[" + call.from_user.first_name \
-                   + "](https://t.me/" + call.from_user.username + ")"
-        else:
-            customer = call.from_user.first_name
-
+        customer = prettyUsername(call.from_user.first_name, call.from_user.username)
         for row in select(
                 "select name, price, account, id, rowid from events where "
                 "status = 0 order by rowid desc limit 1;"):
@@ -430,9 +424,10 @@ def less_day(call):
         for row in select("select chat_id from u2e where event_id = (select id from events where "
                             "status = 0 limit 1);"):
             user_to_send.remove(row[0])
-            change("update status_sbor set status = 3 where chat_id = " + row[0] + ";")
+            change("update status_sbor set status = 3 where chat_id = " + str(row[0]) + ";")
         k = 0
         e = 0
+        bot.answer_callback_query(call.id, text=sbor_complete)
         if user_to_send:
             for user in user_to_send:
                 name = select("select name from chats where chat_id = " + str(user) + ";")
