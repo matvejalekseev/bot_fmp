@@ -217,10 +217,14 @@ def echo_message(message):
                 else:
                     bot.send_chat_action(chat_id, 'typing')
                     text = ""
-                    users = select("select username,name,chat_id from chats where status = 0;")
+                    users = select("select username,name,chat_id,birthday from chats where status = 0;")
                     for user in users:
-                        text = text + str(user[1]) + " " + prettyUsername_wA(str(user[0])) + " " + str(round(user[2])) + "\n"
-                    bot.send_message(message.chat.id, ladel_users + text, parse_mode='MARKDOWN')
+                        text = text + str(user[1]) + " " + str(user[3]) + " " + str(round(user[2])) + "\n"
+                        if len(text) > 200:
+                            bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
+                            text = ""
+                    if len(text) > 0:
+                        bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
             elif text == btn_back:
                 bot.send_chat_action(chat_id, 'typing')
                 bot.send_message(chat_id, msg_back, reply_markup=adminmarkup)
@@ -288,7 +292,7 @@ def echo_message(message):
                 text = ""
                 users = select("select username,name,chat_id,birthday from chats where status = 0;")
                 for user in users:
-                    text = text + str(user[1]) + " " + str(round(user[2])) + "\n"
+                    text = text + str(user[1]) + " " + str(user[3]) + " " + str(round(user[2])) + "\n"
                     if len(text) > 200:
                         bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
                         text = ""
