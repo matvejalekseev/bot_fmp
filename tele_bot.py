@@ -424,7 +424,6 @@ def less_day(call):
         for row in select("select chat_id from u2e where event_id = (select id from events where "
                             "status = 0 limit 1);"):
             user_to_send.remove(row[0])
-            change("update status_sbor set status = 3 where chat_id = " + str(row[0]) + ";")
         k = 0
         e = 0
         bot.answer_callback_query(call.id, text=sbor_complete)
@@ -443,6 +442,8 @@ def less_day(call):
                                   parse_mode='MARKDOWN', disable_web_page_preview=True)
             change("update events set status = 1 where status = 0;")
             change("update status_sbor set status = 0;")
+            change("update status_sbor set status = 3 where chat_id in "
+                   "(select chat_id from u2e where event_id = (select id from events where status = 0 limit 1));")
         else:
             bot.edit_message_text(text + sbor_complete_md + empty_send_list, call.message.chat.id,
                                   call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
