@@ -53,15 +53,15 @@ def RepresentsInt(s):
         return False
 
 def prettyUsername(n,un):
-    if un != 'None' and un:
-        user = "[" + n + "](https://t.me/" + un + ")"
+    if is_str(un):
+        user = "[" + n + "](https://t.me/" + xstr(un) + ")"
     else:
         user = n
     return user
 
 def prettyUsername_wA(un):
-    if un != 'None' and un:
-        user = "@" + un
+    if is_str(un):
+        user = "@" +xstr(un)
     else:
         user = ''
     return user
