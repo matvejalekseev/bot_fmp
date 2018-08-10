@@ -289,7 +289,7 @@ def echo_message(message):
                 for user in users:
                     text = text + str(user[1]) + " " + str(user[3]) + " " \
                            + prettyUsername_wA(str(user[0])) + " " + str(round(user[2])) + "\n"
-                    if len(text) > 200:
+                    if len(text) > 150:
                         bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
                         text = ""
                 if len(text) > 0:
