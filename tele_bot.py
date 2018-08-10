@@ -85,13 +85,7 @@ def send_welcome(message):
 @bot.message_handler(commands=['birthday'])
 def send_welcome(message):
     if inchats(message.chat.id):
-        current_month = datetime.now().month
-        text = ""
-        for bd in select("select birthday,name,username from chats where status = 0;"):
-            birthday = bd[0]
-            if birthday[3:] == str(current_month) or birthday[3:] == '0' + str(current_month):
-                text = text + birthday[:2] + " - " + prettyUsername(bd[1], bd[2]) + "\n"
-        bot.send_message(message.chat.id, db_label + text, parse_mode='MARKDOWN', disable_web_page_preview=True)
+        bot.send_message(message.chat.id, birthday_list(), parse_mode='MARKDOWN', disable_web_page_preview=True)
     else:
         bot.send_message(message.chat.id, close_chat)
 
