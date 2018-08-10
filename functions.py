@@ -128,7 +128,7 @@ def event(name=None,
           users=None):
     event_name = "*" + xstr(name) + "*\n"
     event_date = "*Сумма:* " + xstr(price) + "\n"
-    event_time = "*Перевести:*\n\n```" + xstr(account) + "```\n\n"
+    event_time = "*Перевести по телефону(Альфа/Сбер):*\n\n```" + xstr(account) + "```\n\n"
     if not(users):
         event_user = "Нет виновника\n"
     else:
