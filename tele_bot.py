@@ -440,10 +440,10 @@ def less_day(call):
             bot.edit_message_text(text + sbor_complete_md + customer + count + str(k) + error_count + str(e),
                                   call.message.chat.id, call.message.message_id,
                                   parse_mode='MARKDOWN', disable_web_page_preview=True)
-            change("update events set status = 1 where status = 0;")
             change("update status_sbor set status = 0;")
             change("update status_sbor set status = 3 where chat_id in "
                    "(select chat_id from u2e where event_id = (select id from events where status = 0 limit 1));")
+            change("update events set status = 1 where status = 0;")
         else:
             bot.edit_message_text(text + sbor_complete_md + empty_send_list, call.message.chat.id,
                                   call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
