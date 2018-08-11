@@ -164,8 +164,8 @@ def check_event(name, price, account):
 
 def birthday_list():
     try:
-        list = select("select birthday,name,username from chats where status = 0 "
-                      "and substr(birthday,4,2) = '" + current_date()[3:] + "';")
+        list = select("select birthday,name,username,substr(birthday,1,2) as first from chats where status = 0 "
+                      "and substr(birthday,4,2) = '" + current_date()[3:] + "' order by first;")
         if list:
             text = db_label
             for bd in list:
