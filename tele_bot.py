@@ -231,7 +231,7 @@ def echo_message(message):
                     ineventuser.remove(chat_id)
                 else:
                     bot.send_chat_action(chat_id, 'typing')
-                    bot.send_message(chat_id, users_list(), parse_mode='MARKDOWN')
+                    bot.send_message(chat_id, users_list())
             elif text == btn_back:
                 bot.send_chat_action(chat_id, 'typing')
                 bot.send_message(chat_id, msg_back, reply_markup=adminmarkup)
@@ -296,7 +296,7 @@ def echo_message(message):
                                              reply_markup=eventmarkup, disable_web_page_preview=True)
             elif text == btn_list_user:
                 bot.send_chat_action(chat_id, 'typing')
-                bot.send_message(chat_id, users_list(), parse_mode='MARKDOWN')
+                bot.send_message(chat_id, users_list())
         else:
             if inchats(chat_id):
                 if text == btn_url1:
