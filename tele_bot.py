@@ -31,78 +31,93 @@ bot = telebot.TeleBot(telegrambot_test)
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    str_user = message.text[7:]
-    str_current = select("select str from invite limit 1;")[0][0]
-    if message.chat.type == 'private':
-        if str_user == str_current:
-            change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ",'"
-               + str(message.chat.username) + "','" +
-               xstr(message.chat.last_name) + " " + xstr(message.chat.first_name) + "');")
-            change("insert into status_sbor(chat_id) values (" + str(message.chat.id) + ");")
-            now = datetime.now()  # Current date
-            chat_id = message.chat.id
-            date = (now.year, now.month)
-            current_shown_dates[chat_id] = date  # Saving the current date in a dict
-            markup = create_calendar(now.year, now.month)
-            bot.send_message(message.chat.id, start_msg, reply_markup=markup)
-            user_text = prettyUsername(str(message.chat.last_name) + " " + str(message.chat.first_name),
-                                       str(message.chat.username))
-            for chat in adminchatid:
-                bot.send_message(chat, msg_new_user + user_text,
-                                 parse_mode='MARKDOWN', disable_web_page_preview=True)
+    try:
+        str_user = message.text[7:]
+        str_current = select("select str from invite limit 1;")[0][0]
+        if message.chat.type == 'private':
+            if str_user == str_current:
+                change("insert into chats(chat_id, username, name) values (" + str(message.chat.id) + ",'"
+                   + str(message.chat.username) + "','" +
+                   prettyPrintName(message.chat.last_name, message.chat.first_name) + "');")
+                change("insert into status_sbor(chat_id) values (" + str(message.chat.id) + ");")
+                now = datetime.now()  # Current date
+                chat_id = message.chat.id
+                date = (now.year, now.month)
+                current_shown_dates[chat_id] = date  # Saving the current date in a dict
+                markup = create_calendar(now.year, now.month)
+                bot.send_message(message.chat.id, start_msg, reply_markup=markup)
+                user_text = prettyUsername(prettyPrintName(message.chat.last_name, message.chat.first_name),
+                                           str(message.chat.username))
+                for chat in adminchatid:
+                    bot.send_message(chat, msg_new_user + user_text,
+                                     parse_mode='MARKDOWN', disable_web_page_preview=True)
+            else:
+                bot.send_message(message.chat.id, no_invite)
         else:
-            bot.send_message(message.chat.id, no_invite)
-    else:
-        bot.send_message(message.chat.id, not_private_msg)
+            bot.send_message(message.chat.id, not_private_msg)
+    except:
+        pass
 
 @bot.message_handler(commands=['refresh'])
 def send_welcome(message):
-    if message.chat.type == 'private':
-        if inchats(message.chat.id):
-            change("update chats set username ='" + str(message.chat.username) + "', name ='" +
-                   xstr(message.chat.last_name) + " "
-                   + xstr(message.chat.first_name) + "' where chat_id = " + str(message.chat.id) + ";")
-            now = datetime.now()  # Current date
-            chat_id = message.chat.id
-            date = (now.year, now.month)
-            current_shown_dates[chat_id] = date  # Saving the current date in a dict
-            markup = create_calendar(now.year, now.month)
-            bot.send_message(message.chat.id, msg_refresh, reply_markup=markup)
+    try:
+        if message.chat.type == 'private':
+            if inchats(message.chat.id):
+                change("update chats set username ='" + str(message.chat.username) + "', name ='" +
+                       prettyPrintName(message.chat.last_name, message.chat.first_name)
+                       + "' where chat_id = " + str(message.chat.id) + ";")
+                now = datetime.now()  # Current date
+                chat_id = message.chat.id
+                date = (now.year, now.month)
+                current_shown_dates[chat_id] = date  # Saving the current date in a dict
+                markup = create_calendar(now.year, now.month)
+                bot.send_message(message.chat.id, msg_refresh, reply_markup=markup)
+            else:
+                bot.send_message(message.chat.id, close_chat)
         else:
-            bot.send_message(message.chat.id, close_chat)
-    else:
-        bot.send_message(message.chat.id, not_private_msg)
+            bot.send_message(message.chat.id, not_private_msg)
+    except:
+        pass
 
 
 @bot.message_handler(commands=['invite'])
 def send_welcome(message):
-    if inchats(message.chat.id):
-        link = '[' + invite_label  +'](https://telegram.me/' + telegrambot_name + '?start=' \
-               + select("select str from invite;")[0][0] + ')'
-        bot.send_message(message.chat.id, msg_invite + link, parse_mode='MARKDOWN')
-    else:
-        bot.send_message(message.chat.id, close_chat)
+    try:
+        if inchats(message.chat.id):
+            link = '[' + invite_label  +'](https://telegram.me/' + telegrambot_name + '?start=' \
+                   + select("select str from invite;")[0][0] + ')'
+            bot.send_message(message.chat.id, msg_invite + link, parse_mode='MARKDOWN')
+        else:
+            bot.send_message(message.chat.id, close_chat)
+    except:
+        pass
 
 @bot.message_handler(commands=['birthday'])
 def send_welcome(message):
-    if inchats(message.chat.id):
-        bot.send_message(message.chat.id, birthday_list(), parse_mode='MARKDOWN', disable_web_page_preview=True)
-    else:
-        bot.send_message(message.chat.id, close_chat)
+    try:
+        if inchats(message.chat.id):
+            bot.send_message(message.chat.id, birthday_list(), parse_mode='MARKDOWN', disable_web_page_preview=True)
+        else:
+            bot.send_message(message.chat.id, close_chat)
+    except:
+        pass
 
 
 @bot.message_handler(commands=['delete_user'])
 def send_welcome(message):
-    if message.chat.id in adminchatid:
-        user_id = str(message.text)[13:]
-        try:
-            change("delete from chats where chat_id =" + user_id + ";")
-            change("delete from status_sbor where chat_id=" + user_id + ";")
-            bot.send_message(message.chat.id, success)
-        except:
-            pass
-    else:
-        bot.send_message(message.chat.id, not_support)
+    try:
+        if message.chat.id in adminchatid:
+            user_id = str(message.text)[13:]
+            try:
+                change("delete from chats where chat_id =" + user_id + ";")
+                change("delete from status_sbor where chat_id=" + user_id + ";")
+                bot.send_message(message.chat.id, success)
+            except:
+                pass
+        else:
+            bot.send_message(message.chat.id, not_support)
+    except:
+        pass
 
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
@@ -216,15 +231,7 @@ def echo_message(message):
                     ineventuser.remove(chat_id)
                 else:
                     bot.send_chat_action(chat_id, 'typing')
-                    text = ""
-                    users = select("select username,name,chat_id,birthday from chats where status = 0;")
-                    for user in users:
-                        text = text + str(user[1]) + " " + str(user[3]) + " " + str(round(user[2])) + "\n"
-                        if len(text) > 200:
-                            bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
-                            text = ""
-                    if len(text) > 0:
-                        bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
+                    bot.send_message(chat_id, users_list(), parse_mode='MARKDOWN')
             elif text == btn_back:
                 bot.send_chat_action(chat_id, 'typing')
                 bot.send_message(chat_id, msg_back, reply_markup=adminmarkup)
@@ -289,15 +296,7 @@ def echo_message(message):
                                              reply_markup=eventmarkup, disable_web_page_preview=True)
             elif text == btn_list_user:
                 bot.send_chat_action(chat_id, 'typing')
-                text = ""
-                users = select("select username,name,chat_id,birthday from chats where status = 0;")
-                for user in users:
-                    text = text + str(user[1]) + " " + str(user[3]) + " " + str(round(user[2])) + "\n"
-                    if len(text) > 200:
-                        bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
-                        text = ""
-                if len(text) > 0:
-                    bot.send_message(chat_id, ladel_users + text, parse_mode='MARKDOWN')
+                bot.send_message(chat_id, users_list(), parse_mode='MARKDOWN')
         else:
             if inchats(chat_id):
                 if text == btn_url1:
@@ -331,7 +330,6 @@ def less_day(call):
         bot.answer_callback_query(call.id, text=msg_done)
         text = ""
         data = []
-
         for row in select("select case when s.status = 1 then 'Перевели' "
                           "when s.status = 2 then 'Подтверждены' "
                           "when s.status = 0 then 'Не перевели' "
@@ -353,13 +351,9 @@ def less_day(call):
         bot.answer_callback_query(call.id, text=msg_done)
         text = ""
         status = call.data[7:]
-        for row in select("select c.name, c.username, c.chat_id from chats c "
-                          "join status_sbor s on c.chat_id = s.chat_id and s.status = "
-                          + str(status) + " where c.status = 0;"):
-            if row[1] != 'None':
-                text = text + "[" + row[0] + "](https://t.me/" + row[1] + ")\n"
-            else:
-                text = text + row[0] + "\n"
+        for row in select("select c.name, c.username, c.chat_id from chats c join status_sbor s on "
+                          "c.chat_id = s.chat_id and s.status = " + str(status) + " where c.status = 0;"):
+            text = text + prettyUsername(row[0], row[1]) + "\n"
         if status == '0':
             label_status = '*Не перевели*\n'
         elif status == '1':
@@ -400,7 +394,7 @@ def less_day(call):
         user_text = prettyUsername(user[0][1], user[0][2])
         confirmmarkup = types.InlineKeyboardMarkup()
         row = []
-        row.append(types.InlineKeyboardButton(text=btn_confirm, callback_data="status_confirm-"+ id))
+        row.append(types.InlineKeyboardButton(text=btn_confirm, callback_data="status_confirm-" + id))
         confirmmarkup.row(*row)
         for chat in adminchatid:
             bot.send_message(chat, label_pay_1 + user_text + label_pay_2, reply_markup=confirmmarkup,
@@ -458,8 +452,7 @@ def less_day(call):
 def less_day(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
-        row = select("select id, rowid from events where "
-                    "status = 0 order by rowid desc limit 1;")
+        row = select("select id, rowid from events where status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
             bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
                                   parse_mode='MARKDOWN')
@@ -474,8 +467,7 @@ def less_day(call):
 def less_day(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
-        row = select("select id, rowid from events where "
-                    "status = 0 order by rowid desc limit 1;")
+        row = select("select id, rowid from events where status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
             bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
                                   parse_mode='MARKDOWN')
@@ -490,8 +482,7 @@ def less_day(call):
 def less_day(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
-        row = select("select id, rowid from events where "
-                    "status = 0 order by rowid desc limit 1;")
+        row = select("select id, rowid from events where status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
             bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
                                   parse_mode='MARKDOWN')
@@ -506,8 +497,7 @@ def less_day(call):
 def less_day(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
-        row = select("select id, rowid from events where "
-                    "status = 0 order by rowid desc limit 1;")
+        row = select("select id, rowid from events where status = 0 order by rowid desc limit 1;")
         if len(row) == 0:
             bot.edit_message_text(msg_start_new, call.from_user.id, call.message.message_id,
                                   parse_mode='MARKDOWN')
