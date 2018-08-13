@@ -43,12 +43,12 @@ cursor = conn.cursor()
 #cursor.execute("CREATE TABLE status_sbor(chat_id real, status integer default 10, UNIQUE(chat_id));")
 
 # Создание таблицы "Статусы"
-cursor.execute("CREATE TABLE statuses(id integer, name text, UNIQUE(id));")
-cursor.execute("INSERT INTO statuses(id,name) VALUES (0,'Не перевели');")
-cursor.execute("INSERT INTO statuses(id,name) VALUES (1,'Перевели');")
-cursor.execute("INSERT INTO statuses(id,name) VALUES (2,'Подтверждены');")
-cursor.execute("INSERT INTO statuses(id,name) VALUES (3,'Виновники');")
-cursor.execute("INSERT INTO statuses(id,name) VALUES (10,'Новый пользователь');")
+#cursor.execute("CREATE TABLE statuses(id integer, name text, UNIQUE(id));")
+#cursor.execute("INSERT INTO statuses(id,name) VALUES (0,'Не перевели');")
+#cursor.execute("INSERT INTO statuses(id,name) VALUES (1,'Перевели');")
+#cursor.execute("INSERT INTO statuses(id,name) VALUES (2,'Подтверждены');")
+#cursor.execute("INSERT INTO statuses(id,name) VALUES (3,'Виновники');")
+#cursor.execute("INSERT INTO statuses(id,name) VALUES (10,'Новый пользователь');")
 
 
 # Создание таблицы "Инвайт"
