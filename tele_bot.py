@@ -42,7 +42,7 @@ def send_welcome(message):
                 user_text = prettyUsername(prettyPrintName(message.chat.last_name, message.chat.first_name),
                                            str(message.chat.username))
                 for chat in admin_list():
-                    bot.send_message(chat, msg_new_user + user_text,
+                    bot.send_message(chat[0], msg_new_user + user_text,
                                      parse_mode='MARKDOWN', disable_web_page_preview=True)
             else:
                 bot.send_message(message.chat.id, no_invite)
@@ -345,7 +345,7 @@ def less_day(call):
         row.append(types.InlineKeyboardButton(text=btn_confirm, callback_data="status_confirm-" + id))
         confirmmarkup.row(*row)
         for chat in admin_list():
-            bot.send_message(chat, label_pay_1 + user_text + label_pay_2, reply_markup=confirmmarkup,
+            bot.send_message(chat[0], label_pay_1 + user_text + label_pay_2, reply_markup=confirmmarkup,
                              parse_mode='MARKDOWN', disable_web_page_preview=True)
     except:
         pass
@@ -515,8 +515,7 @@ def ignore(call):
 
 try:
     for admin_chat_id in admin_list():
-        bot.send_chat_action(admin_chat_id, 'typing')
-        bot.send_message(admin_chat_id, to_work_ready, reply_markup=adminmarkup)
+        bot.send_message(admin_chat_id[0], to_work_ready, reply_markup=adminmarkup)
 except:
     pass
 
