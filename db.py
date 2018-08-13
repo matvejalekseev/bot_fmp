@@ -6,13 +6,13 @@ conn = sqlite3.connect(db) # или :memory: чтобы сохранить в RA
 cursor = conn.cursor()
  
 # Создание таблицы "Чаты"
-cursor.execute("DROP TABLE chats;")
-cursor.execute("CREATE TABLE chats(chat_id real, username text DEFAULT 'None', name text DEFAULT 'Your name', status INTEGER DEFAULT 0, UNIQUE(chat_id) );")
+#cursor.execute("DROP TABLE chats;")
+#cursor.execute("CREATE TABLE chats(chat_id real, username text DEFAULT 'None', name text DEFAULT 'Your name', status INTEGER DEFAULT 0, UNIQUE(chat_id) );")
 #моя личка chat_id = '109099327'
 #тест = -241874218
 #фмп = -310273520
-cursor.execute("insert into chats(status,chat_id) values (1,-241874218);")
-cursor.execute("ALTER TABLE chats add birthday text DEFAULT 'None';")
+#cursor.execute("insert into chats(status,chat_id) values (1,-241874218);")
+#cursor.execute("ALTER TABLE chats add birthday text DEFAULT 'None';")
 
 # Создание таблицы "Статистики"
 #cursor.execute("DROP TABLE stats;")
