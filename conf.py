@@ -1,9 +1,0 @@
-telegrambot_test = "575202317:AAGlHvAyBjPlBlOS0oxLOB6toarGV51HxVQ"
-telegrambot_name = "TestMyHobby_bot"
-db = "fmp_database.db"
-bd_sched_time = "08:15"
-bd_sched_day = [1, 10]
-jira_sched_time = "08:16"
-jira_sched_day = [1, 20, 10]
-invite_sched_time = "00:00"
-#telegrambot_elem = "420685937:AAGQPM_E6O6HNBjv90u7TSMIxUJzAxO-P0o"
