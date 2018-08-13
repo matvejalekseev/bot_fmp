@@ -6,6 +6,11 @@ from telebot import types
 from conf import db
 from msg import *
 
+def admin_list():
+    return select("select chat_id from chats where status = 1;")
+
+def user_list():
+    return select("select chat_id from chats where status = 0;")
 
 def current_date():
     try:
@@ -136,31 +141,33 @@ def change(req, db_in=db):
         pass
 
 
-def event(name=None,
-          price=None,
-          account=None,
-          users=None):
+def event():
     try:
-        event_name = "*" + xstr(name) + "*\n"
-        event_date = "*Сумма:* " + xstr(price) + "\n"
-        event_time = "*Перевести по телефону(Альфа/Сбер):*\n\n```" + xstr(account) + "```\n\n"
-        if not(users):
+        row = select("select name, price, account, id, rowid from events where status = 0 "
+                     "order by rowid desc limit 1;")
+        users_in = select("select name, username from chats where chat_id in "
+                           "( select chat_id from u2e where event_id = " + str(row[0][3]) + ");")
+        event_name = "*" + xstr(row[0][0]) + "*\n"
+        event_date = "*Сумма:* " + xstr(row[0][1]) + "\n"
+        event_time = "*Перевести по телефону(Альфа/Сбер):*\n\n```" + xstr(row[0][2]) + "```\n\n"
+        if not(users_in):
             event_user = "Нет виновника\n"
         else:
             event_user = "*Виновник:*\n"
-            for user in users:
+            for user in users_in:
                 event_user = event_user + prettyUsername(user[0], user[1]) + "\n"
         order = event_name + event_date + event_time + event_user
         return order
     except:
         return error
 
-def check_event(name, price, account):
-    if is_str(name) and is_str(price) and is_str(account):
+def check_event():
+    row = select("select name, price, account, id, rowid from events where status = 0 "
+                 "order by rowid desc limit 1;")
+    if is_str(row[0][0]) and is_str(row[0][1]) and is_str(row[0][2]):
         return True
     else:
         return False
-
 
 def birthday_list():
     try:

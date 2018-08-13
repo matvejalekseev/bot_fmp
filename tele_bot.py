@@ -4,9 +4,7 @@
 import logging
 import subprocess
 import time
-
 import telebot
-
 from conf import *
 from functions import *
 from markups import *
@@ -17,15 +15,10 @@ logging.basicConfig(filename="logs/tele_bot.log", level=logging.INFO)
 
 current_shown_dates={}
 
-adminchatid = []
-userchatid = []
 ineventname = []
 ineventaccount =[]
 ineventprice = []
 ineventuser = []
-
-for row in select("select chat_id from chats where status = 1;"):
-    adminchatid.append(float(row[0]))
 
 bot = telebot.TeleBot(telegrambot_test)
 
@@ -40,15 +33,15 @@ def send_welcome(message):
                    + str(message.chat.username) + "','" +
                    prettyPrintName(message.chat.last_name, message.chat.first_name) + "');")
                 change("insert into status_sbor(chat_id) values (" + str(message.chat.id) + ");")
-                now = datetime.now()  # Current date
+                now = datetime.now()
                 chat_id = message.chat.id
                 date = (now.year, now.month)
-                current_shown_dates[chat_id] = date  # Saving the current date in a dict
+                current_shown_dates[chat_id] = date
                 markup = create_calendar(now.year, now.month)
                 bot.send_message(message.chat.id, start_msg, reply_markup=markup)
                 user_text = prettyUsername(prettyPrintName(message.chat.last_name, message.chat.first_name),
                                            str(message.chat.username))
-                for chat in adminchatid:
+                for chat in admin_list():
                     bot.send_message(chat, msg_new_user + user_text,
                                      parse_mode='MARKDOWN', disable_web_page_preview=True)
             else:
@@ -66,10 +59,10 @@ def send_welcome(message):
                 change("update chats set username ='" + str(message.chat.username) + "', name ='" +
                        prettyPrintName(message.chat.last_name, message.chat.first_name)
                        + "' where chat_id = " + str(message.chat.id) + ";")
-                now = datetime.now()  # Current date
+                now = datetime.now()
                 chat_id = message.chat.id
                 date = (now.year, now.month)
-                current_shown_dates[chat_id] = date  # Saving the current date in a dict
+                current_shown_dates[chat_id] = date
                 markup = create_calendar(now.year, now.month)
                 bot.send_message(message.chat.id, msg_refresh, reply_markup=markup)
             else:
@@ -106,7 +99,7 @@ def send_welcome(message):
 @bot.message_handler(commands=['delete_user'])
 def send_welcome(message):
     try:
-        if message.chat.id in adminchatid:
+        if inadminchats(message.chat.id):
             user_id = str(message.text)[13:]
             try:
                 change("delete from chats where chat_id =" + user_id + ";")
@@ -124,7 +117,7 @@ def echo_message(message):
     content_type = str(message.content_type)
     chat_id = message.chat.id
 
-    if chat_id in adminchatid:
+    if inadminchats(chat_id):
         logging.info("Incoming message on admin chat" + str(message) + " time:" + str(datetime.now()))
     else:
         logging.info("Incoming message on public chat" + str(message) + " time:" + str(datetime.now()))
@@ -132,67 +125,46 @@ def echo_message(message):
     if content_type == 'text':
         change("update stats set number = number+1 where stat = 'messages';")
         text = str(message.text)
-        if chat_id in adminchatid:
+        if inadminchats(chat_id):
             if chat_id in ineventaccount:
                 bot.send_chat_action(chat_id, 'typing')
                 change("update events set account = '" + text + "' where status = 0;")
                 bot.send_message(chat_id, success, reply_markup=adminmarkup)
                 ineventaccount.remove(chat_id)
-                for row in select(
-                        "select name, price, account, id, rowid from events where "
-                        "status = 0 order by rowid desc limit 1;"):
-                    users = select("select name, username from chats where chat_id in "
-                                   "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
-                    text = event(name=row[0], price=row[1], account=row[2],
-                                 users=users)
-                    if check_event(row[0], row[1], row[2]):
-                        bot.send_message(chat_id, text,
-                                         parse_mode='MARKDOWN',
-                                         reply_markup=eventsendmarkup, disable_web_page_preview=True)
-                    else:
-                        bot.send_message(chat_id, text,
-                                         parse_mode='MARKDOWN',
-                                         reply_markup=eventmarkup, disable_web_page_preview=True)
+                if check_event():
+                    bot.send_message(chat_id, event(),
+                                     parse_mode='MARKDOWN',
+                                     reply_markup=eventsendmarkup, disable_web_page_preview=True)
+                else:
+                    bot.send_message(chat_id, event(),
+                                     parse_mode='MARKDOWN',
+                                     reply_markup=eventmarkup, disable_web_page_preview=True)
             elif chat_id in ineventname:
                 bot.send_chat_action(chat_id, 'typing')
                 change("update events set name = '" + text + "' where status = 0;")
                 bot.send_message(chat_id, success, reply_markup=adminmarkup)
                 ineventname.remove(chat_id)
-                for row in select(
-                        "select name, price, account, id, rowid from events where "
-                        "status = 0 order by rowid desc limit 1;"):
-                    users = select("select name, username from chats where chat_id in "
-                                   "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
-                    text = event(name=row[0], price=row[1], account=row[2],
-                                 users=users)
-                    if check_event(row[0], row[1], row[2]):
-                        bot.send_message(chat_id, text,
-                                         parse_mode='MARKDOWN',
-                                         reply_markup=eventsendmarkup, disable_web_page_preview=True)
-                    else:
-                        bot.send_message(chat_id, text,
-                                         parse_mode='MARKDOWN',
-                                         reply_markup=eventmarkup, disable_web_page_preview=True)
+                if check_event():
+                    bot.send_message(chat_id, event(),
+                                     parse_mode='MARKDOWN',
+                                     reply_markup=eventsendmarkup, disable_web_page_preview=True)
+                else:
+                    bot.send_message(chat_id, event(),
+                                     parse_mode='MARKDOWN',
+                                     reply_markup=eventmarkup, disable_web_page_preview=True)
             elif chat_id in ineventprice:
                 bot.send_chat_action(chat_id, 'typing')
                 change("update events set price = '" + text + "' where status = 0;")
                 bot.send_message(chat_id, success, reply_markup=adminmarkup)
                 ineventprice.remove(chat_id)
-                for row in select(
-                        "select name, price, account, id, rowid from events where "
-                        "status = 0 order by rowid desc limit 1;"):
-                    users = select("select name, username from chats where chat_id in "
-                                   "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
-                    text = event(name=row[0], price=row[1], account=row[2],
-                                 users=users)
-                    if check_event(row[0], row[1], row[2]):
-                        bot.send_message(chat_id, text,
-                                         parse_mode='MARKDOWN',
-                                         reply_markup=eventsendmarkup, disable_web_page_preview=True)
-                    else:
-                        bot.send_message(chat_id, text,
-                                         parse_mode='MARKDOWN',
-                                         reply_markup=eventmarkup, disable_web_page_preview=True)
+                if check_event():
+                    bot.send_message(chat_id, event(),
+                                     parse_mode='MARKDOWN',
+                                     reply_markup=eventsendmarkup, disable_web_page_preview=True)
+                else:
+                    bot.send_message(chat_id, event(),
+                                     parse_mode='MARKDOWN',
+                                     reply_markup=eventmarkup, disable_web_page_preview=True)
             elif chat_id in ineventuser:
                 if text != btn_list_user:
                     bot.send_chat_action(chat_id, 'typing')
@@ -213,21 +185,14 @@ def echo_message(message):
                             change("insert into u2e(chat_id, event_id) values((select chat_id from chats where chat_id ='"
                                + id + "' or username = '" + username + "'), (select id from events where "
                                 "status = 0 limit 1));")
-                    for row in select(
-                            "select name, price, account, id, rowid from events where "
-                            "status = 0 order by rowid desc limit 1;"):
-                        users = select("select name, username from chats where chat_id in "
-                                       "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
-                        text = event(name=row[0], price=row[1], account=row[2],
-                                     users=users)
-                        if check_event(row[0], row[1], row[2]):
-                            bot.send_message(chat_id, text,
-                                             parse_mode='MARKDOWN',
-                                             reply_markup=eventsendmarkup, disable_web_page_preview=True)
-                        else:
-                            bot.send_message(chat_id, text,
-                                             parse_mode='MARKDOWN',
-                                             reply_markup=eventmarkup, disable_web_page_preview=True)
+                    if check_event():
+                        bot.send_message(chat_id, event(),
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventsendmarkup, disable_web_page_preview=True)
+                    else:
+                        bot.send_message(chat_id, event(),
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventmarkup, disable_web_page_preview=True)
                     ineventuser.remove(chat_id)
                 else:
                     bot.send_chat_action(chat_id, 'typing')
@@ -259,13 +224,8 @@ def echo_message(message):
                 bot.send_chat_action(chat_id, 'typing')
                 text = ""
                 data = []
-                for row in select("select case when s.status = 1 then 'Перевели' "
-                                  "when s.status = 2 then 'Подтверждены' "
-                                  "when s.status = 0 then 'Не перевели' "
-                                  "when s.status = 3 then 'Виновники' "
-                                  "else 'Другие' end as status, s.status as s, "
-                                  "count(*) "
-                                  "from status_sbor s group by status,s;"):
+                for row in select("select st.name as st, s.status as s, count(*) "
+                                  "from status_sbor s join statuses st on st.id = s.status group by st,s;"):
                     text = text + "*" +row[0] + ":* " + str(row[2]) + "\n"
                     data.append([row[0], str(row[1])])
                 bot.send_message(chat_id, status_label + text, parse_mode='MARKDOWN',
@@ -279,21 +239,14 @@ def echo_message(message):
                     bot.send_message(message.chat.id, event(), parse_mode='MARKDOWN',
                                      reply_markup=eventmarkup)
                 else:
-                    for row in select(
-                            "select name, price, account, id, rowid from events where "
-                            "status = 0 order by rowid desc limit 1;"):
-                        users = select("select name, username from chats where chat_id in "
-                                       "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
-                        text = event(name=row[0], price=row[1], account=row[2],
-                                     users=users)
-                        if check_event(row[0], row[1], row[2]):
-                            bot.send_message(chat_id, text,
-                                             parse_mode='MARKDOWN',
-                                             reply_markup=eventsendmarkup, disable_web_page_preview=True)
-                        else:
-                            bot.send_message(chat_id, text,
-                                             parse_mode='MARKDOWN',
-                                             reply_markup=eventmarkup, disable_web_page_preview=True)
+                    if check_event():
+                        bot.send_message(chat_id, event(),
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventsendmarkup, disable_web_page_preview=True)
+                    else:
+                        bot.send_message(chat_id, event(),
+                                         parse_mode='MARKDOWN',
+                                         reply_markup=eventmarkup, disable_web_page_preview=True)
             elif text == btn_list_user:
                 bot.send_chat_action(chat_id, 'typing')
                 bot.send_message(chat_id, users_list())
@@ -330,13 +283,8 @@ def less_day(call):
         bot.answer_callback_query(call.id, text=msg_done)
         text = ""
         data = []
-        for row in select("select case when s.status = 1 then 'Перевели' "
-                          "when s.status = 2 then 'Подтверждены' "
-                          "when s.status = 0 then 'Не перевели' "
-                          "when s.status = 3 then 'Виновники' "
-                          "else 'Другие' end as status, s.status as s, "
-                          "count(*) "
-                          "from status_sbor s group by status,s;"):
+        for row in select("select st.name as st, s.status as s, count(*) "
+                          "from status_sbor s join statuses st on st.id = s.status group by st,s;"):
             text = text + "*" + row[0] + ":* " + str(row[2]) + "\n"
             data.append([row[0], str(row[1])])
         bot.edit_message_text(status_label + text, call.message.chat.id,
@@ -396,7 +344,7 @@ def less_day(call):
         row = []
         row.append(types.InlineKeyboardButton(text=btn_confirm, callback_data="status_confirm-" + id))
         confirmmarkup.row(*row)
-        for chat in adminchatid:
+        for chat in admin_list():
             bot.send_message(chat, label_pay_1 + user_text + label_pay_2, reply_markup=confirmmarkup,
                              parse_mode='MARKDOWN', disable_web_page_preview=True)
     except:
@@ -566,7 +514,7 @@ def ignore(call):
     bot.answer_callback_query(call.id, text="")
 
 try:
-    for admin_chat_id in adminchatid:
+    for admin_chat_id in admin_list():
         bot.send_chat_action(admin_chat_id, 'typing')
         bot.send_message(admin_chat_id, to_work_ready, reply_markup=adminmarkup)
 except:
