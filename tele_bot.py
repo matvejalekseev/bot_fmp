@@ -354,14 +354,6 @@ def less_day(call):
 def less_day(call):
     try:
         customer = prettyUsername(call.from_user.first_name, call.from_user.username)
-        for row in select(
-                "select name, price, account, id, rowid from events where "
-                "status = 0 order by rowid desc limit 1;"):
-            users = select("select name, username from chats where chat_id in "
-                           "( select chat_id from u2e where event_id = " + str(row[3]) + ");")
-
-            text = event(name=row[0], price=row[1], account=row[2],
-                         users=users)
         user_to_send = []
         for row in select("select chat_id from chats where status = 0;"):
             user_to_send.append(row[0])
@@ -375,13 +367,13 @@ def less_day(call):
             for user in user_to_send:
                 name = select("select name from chats where chat_id = " + str(user) + ";")
                 try:
-                    bot.send_message(user, hello(name[0][0]) + text,
+                    bot.send_message(user, hello(name[0][0]) + event(),
                                      parse_mode='MARKDOWN',
                                      reply_markup=sbormarkup, disable_web_page_preview=True)
                     k = k + 1
                 except:
                     e = e + 1
-            bot.edit_message_text(text + sbor_complete_md + customer + count + str(k) + error_count + str(e),
+            bot.edit_message_text(event() + sbor_complete_md + customer + count + str(k) + error_count + str(e),
                                   call.message.chat.id, call.message.message_id,
                                   parse_mode='MARKDOWN', disable_web_page_preview=True)
             change("update status_sbor set status = 0;")
@@ -389,7 +381,7 @@ def less_day(call):
                    "(select chat_id from u2e where event_id = (select id from events where status = 0 limit 1));")
             change("update events set status = 1 where status = 0;")
         else:
-            bot.edit_message_text(text + sbor_complete_md + empty_send_list, call.message.chat.id,
+            bot.edit_message_text(event() + sbor_complete_md + empty_send_list, call.message.chat.id,
                                   call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True)
 
     except:
