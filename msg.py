@@ -95,7 +95,7 @@ url.append('https://portal.bars-open.ru/services/bp/121/list.php')
 url_3.append(url)
 url = []
 url.append('Реестр бланков заявлений')
-url.append('https://conf.bars-open.ru/pages/viewpage.action?pageId=16452933')
+url.append('https://conf.bars-open.ru/pages/viewpage.action?pageId=16452931')
 url_3.append(url)
 
 btn_confirm = 'Подтвердить'
