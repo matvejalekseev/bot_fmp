@@ -710,6 +710,7 @@ def holiday_delete(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'holiday_end')
 def holiday_end(call):
     change("update status_sbor set status = 5 where chat_id = " + str(call.from_user.id) + ";")
+    change("delete from holidays where chat_id = " + str(call.from_user.id) + ";")
     bot.edit_message_reply_markup(call.from_user.id,
                                   call.message.message_id)
     bot.send_message(call.from_user.id, msg_holiday_ended)
