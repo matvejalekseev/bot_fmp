@@ -30,14 +30,6 @@ def change_stats_down(n,s):
         change("update stats set number = number-" + str(n) + " where stat = '" + str(s) + "';")
     return True
 
-def holidaymarkup(id):
-    if inholiday(id):
-        return inholidaymarkup
-    elif holidayexists(id):
-        return holidayexistsmarkup
-    else:
-        return holidaymarkup
-
 def current_date():
     try:
         return str(datetime.now().strftime("%d.%m"))

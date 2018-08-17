@@ -81,8 +81,15 @@ def send_welcome(message):
     try:
         if inchats(message.chat.id):
             if message.chat.type == 'private':
-                bot.send_message(message.chat.id, holiday_list(), reply_markup=holidaymarkup(message.chat.id),
-                                 parse_mode='MARKDOWN', disable_web_page_preview=True)
+                if inholiday(message.chat.id):
+                    bot.send_message(message.chat.id, holiday_list(), reply_markup=inholidaymarkup,
+                                     parse_mode='MARKDOWN', disable_web_page_preview=True)
+                elif holidayexists(message.chat.id):
+                    bot.send_message(message.chat.id, holiday_list(), reply_markup=holidayexistsmarkup,
+                                     parse_mode='MARKDOWN', disable_web_page_preview=True)
+                else:
+                    bot.send_message(message.chat.id, holiday_list(), reply_markup=holidaymarkup,
+                                     parse_mode='MARKDOWN', disable_web_page_preview=True)
             else:
                 bot.send_message(message.chat.id, holiday_list(), parse_mode='MARKDOWN', disable_web_page_preview=True)
         else:
