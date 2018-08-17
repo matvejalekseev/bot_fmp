@@ -12,19 +12,34 @@ def admin_list():
 def user_list():
     return select("select chat_id from chats where status = 0;")
 
+def user_list_with_name():
+    return select("select chat_id,name from chats where status = 0;")
+
+def user_list_to_send():
+    return select("select c.chat_id from chats c "
+                  "join status_sbor ss on ss.chat_id = c.chat_id and ss.status not in (4) where c.status = 0;")
+
+def change_stats(n,s):
+    if n > 0:
+        change("update stats set number = number+" + str(n) + " where stat = '" + str(s) + "';")
+    return True
+
+def change_stats_down(n,s):
+    if n > 0:
+        change("update stats set number = number-" + str(n) + " where stat = '" + str(s) + "';")
+    return True
+
+
+
 def current_date():
     try:
-        day = datetime.now().day
-        month = datetime.now().month
-        if month < 10:
-            current_month = '0' + str(month)
-        else:
-            current_month = str(month)
-        if day < 10:
-            current_day = '0' + str(day)
-        else:
-            current_day = str(day)
-        return current_day + '.' + current_month
+        return str(datetime.now().strftime("%d.%m"))
+    except:
+        return error
+
+def current_date_with_year():
+    try:
+        return str(datetime.now().strftime("%d.%m.%Y"))
     except:
         return error
 
@@ -63,6 +78,45 @@ def RepresentsInt(s):
         return True
     except:
         return False
+
+def all_event_end():
+    if select("select 1 from events where status = 1;"):
+        return False
+    else:
+        return True
+
+def is_open_event(id):
+    if select("select 1 from events where status = 1 and id = " + str(id) + ";"):
+        return True
+    else:
+        return False
+
+def is_proccess__user_event(id):
+    if select("select status from status_sbor where status = 0 and chat_id = " + str(id) + ";"):
+        return True
+    else:
+        return False
+
+def list_users_to_remind():
+      return select("select chat_id from status_sbor where status = 0")
+
+def event_status():
+    try:
+        if all_event_end():
+            return 'Сбор завершён\n'
+        else:
+            return 'Сбор открыт\n'
+    except:
+        return error
+
+def statusName(id):
+    try:
+        if select("select name from statuses where id = " + str(id) + ";"):
+            return select("select name from statuses where id = " + str(id) + ";")[0][0]
+        else:
+            return "Другое"
+    except:
+        return error
 
 def prettyUsername(n,un):
     try:
@@ -140,6 +194,25 @@ def change(req, db_in=db):
     except:
         pass
 
+def event_in_proccess():
+    try:
+        row = select("select name, price, account, id, rowid from events where status = 1 "
+                     "order by rowid desc limit 1;")
+        users_in = select("select name, username from chats where chat_id in "
+                           "( select chat_id from u2e where event_id = " + str(row[0][3]) + ");")
+        event_name = "*" + xstr(row[0][0]) + "*\n"
+        event_date = "*Сумма:* " + xstr(row[0][1]) + "\n"
+        event_time = "*Перевести по телефону(Альфа/Сбер):*\n\n```" + xstr(row[0][2]) + "```\n\n"
+        if not(users_in):
+            event_user = "Нет виновника\n"
+        else:
+            event_user = "*Виновник:*\n"
+            for user in users_in:
+                event_user = event_user + prettyUsername(user[0], user[1]) + "\n"
+        order = event_name + event_date + event_time + event_user
+        return order
+    except:
+        return error
 
 def event():
     try:

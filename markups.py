@@ -26,15 +26,17 @@ accountmarkup.add(itembtn1)
 
 adminmarkup = types.ReplyKeyboardMarkup(row_width=1)
 itembtn1 = types.KeyboardButton(btn_event)
-itembtn2 = types.KeyboardButton(btn_static)
-itembtn3 = types.KeyboardButton(btn_list_user)
-adminmarkup.add(itembtn1, itembtn2, itembtn3)
+itembtn2 = types.KeyboardButton(btn_mass_send)
+itembtn3 = types.KeyboardButton(btn_static)
+itembtn4 = types.KeyboardButton(btn_list_user)
+adminmarkup.add(itembtn1, itembtn2, itembtn3, itembtn4)
 
 sboradminmarkup = types.ReplyKeyboardMarkup(row_width=1)
 itembtn1 = types.KeyboardButton(btn_event_status)
 itembtn2 = types.KeyboardButton(btn_event_new)
-itembtn3 = types.KeyboardButton(btn_back)
-sboradminmarkup.add(itembtn1, itembtn2, itembtn3)
+itembtn3 = types.KeyboardButton(btn_event_end)
+itembtn4 = types.KeyboardButton(btn_back)
+sboradminmarkup.add(itembtn1, itembtn2, itembtn3, itembtn4)
 
 statusbackmarkup = types.InlineKeyboardMarkup()
 row=[]
@@ -70,11 +72,6 @@ row=[]
 row.append(types.InlineKeyboardButton(text=btn_send, callback_data="event_send"))
 eventsendmarkup.row(*row)
 
-sbormarkup = types.InlineKeyboardMarkup()
-row=[]
-row.append(types.InlineKeyboardButton(text=btn_sbor, callback_data="sbor_send"))
-sbormarkup.row(*row)
-
 url1markup = types.InlineKeyboardMarkup()
 for url in url_1:
     url1markup.add(types.InlineKeyboardButton(text=url[0], url=url[1]))
@@ -87,10 +84,17 @@ url3markup = types.InlineKeyboardMarkup()
 for url in url_3:
     url3markup.add(types.InlineKeyboardButton(text=url[0], url=url[1]))
 
+stopmasssendmarkup = types.InlineKeyboardMarkup()
+stopmasssendmarkup.add(types.InlineKeyboardButton(text=btn_mass_send_back, callback_data="cancel_mass_send"))
 
-#Примеры
-elementmarkup_soc = types.InlineKeyboardMarkup()
-elementmarkup_soc.add(types.InlineKeyboardButton(text="Instagram", url="https://www.instagram.com/element_show"))
-elementmarkup_soc.add(types.InlineKeyboardButton(text="ВКонтакте", url="https://vk.com/club92907131"))
-elementmarkup_soc.add(types.InlineKeyboardButton(text="Официальный сайт", url="http://elementshow.com"))
+masssendmarkup = types.InlineKeyboardMarkup()
+masssendmarkup.add(types.InlineKeyboardButton(text=btn_mass_send_ok, callback_data="send_mass"))
+masssendmarkup.add(types.InlineKeyboardButton(text=btn_mass_send_back, callback_data="cancel_mass_send"))
+
+likemarkup = types.InlineKeyboardMarkup()
+row=[]
+row.append(types.InlineKeyboardButton(text=btn_like, callback_data="like"))
+row.append(types.InlineKeyboardButton(text=btn_dislike, callback_data="dislike"))
+likemarkup.row(*row)
+
 
