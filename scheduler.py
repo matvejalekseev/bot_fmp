@@ -60,7 +60,7 @@ def job_event_reminder():
 
 def job_holyday_start():
     try:
-        start = select("select chat_id from holidays where action = 'start' and date = '" + current_date_with_year() + "';")
+        start = select("select chat_id from holidays where action = 'start' and date = '"+current_date_with_year()+"';")
         for chat in start:
             bot.send_message(chat[0], msg_holiday_start_gratz,
                              parse_mode='MARKDOWN', disable_web_page_preview=True)
@@ -72,12 +72,12 @@ def job_holyday_start():
 
 def job_holyday_stop():
     try:
-        stop = select("select chat_id from holidays where action = 'stop' and date = '" + current_date_with_year() + "';")
+        stop = select("select chat_id from holidays where action = 'stop' and date = '"+current_date_with_year()+"';")
         for chat in stop:
             bot.send_message(chat[0], msg_holiday_stop_gratz,
                              parse_mode='MARKDOWN', disable_web_page_preview=True)
             change_stats_down(1, 'holiday')
-            change("update status_sbor set status = 0 where chat_id = " + str(chat[0]) + ";")
+            change("update status_sbor set status = 5 where chat_id = " + str(chat[0]) + ";")
             change("delete from holidays where action = 'stop' and chat_id = " + str(chat[0]) + ";")
     except:
         pass

@@ -79,20 +79,14 @@ def send_welcome(message):
 @bot.message_handler(commands=['holiday'])
 def send_welcome(message):
     try:
-        if message.chat.type == 'private':
-            if inchats(message.chat.id):
-                now = datetime.now()
-                date = (now.year, now.month)
-                current_shown_dates[message.chat.id] = date
-                markup = create_calendar_with_year_to_future(now.year, now.month)
-                insetholidaystep1.append(message.chat.id)
-                bot.send_message(message.chat.id, msg_holiday_start, reply_markup=markup)
-                change("update status_sbor set status = 0 where chat_id = " + str(message.chat.id) + ";")
-                change("delete from holidays where chat_id = " + str(message.chat.id) + ";")
+        if inchats(message.chat.id):
+            if message.chat.type == 'private':
+                bot.send_message(message.chat.id, holiday_list(), reply_markup=holidaymarkup(message.chat.id),
+                                 parse_mode='MARKDOWN', disable_web_page_preview=True)
             else:
-                bot.send_message(message.chat.id, close_chat)
+                bot.send_message(message.chat.id, holiday_list(), parse_mode='MARKDOWN', disable_web_page_preview=True)
         else:
-            bot.send_message(message.chat.id, not_private_msg)
+            bot.send_message(message.chat.id, close_chat)
     except:
         pass
 
@@ -337,7 +331,7 @@ def echo_message(message):
 
 
 @bot.callback_query_handler(func=lambda call: call.data == 'event_cancel')
-def less_day(call):
+def event_cancel(call):
     try:
         bot.answer_callback_query(call.id, text=msg_cancel)
         bot.edit_message_text(msg_cancel_md, call.message.chat.id,
@@ -346,7 +340,7 @@ def less_day(call):
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data == 'cancel_mass_send')
-def less_day(call):
+def cancel_mass_send(call):
     try:
         bot.answer_callback_query(call.id, text=msg_cancel)
         bot.edit_message_text(msg_cancel_mass_send, call.message.chat.id,
@@ -356,7 +350,7 @@ def less_day(call):
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data == 'status_back')
-def less_day(call):
+def status_back(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
         text = ""
@@ -372,7 +366,7 @@ def less_day(call):
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data[:7] == 'status-')
-def less_day(call):
+def status(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
         text = ""
@@ -388,7 +382,7 @@ def less_day(call):
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data[:13] == 'sbor_confirm-')
-def less_day(call):
+def sbor_confirm(call):
     try:
         if all_event_end():
             bot.answer_callback_query(call.id, text=msg_sbor_is_over)
@@ -402,14 +396,14 @@ def less_day(call):
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data == 'sbor_confirm_no')
-def less_day(call):
+def sbor_confirm_no(call):
     try:
         bot.delete_message(call.message.chat.id, call.message.message_id)
     except:
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data[:15] == 'status_confirm-')
-def less_day(call):
+def status_confirm(call):
     try:
         if all_event_end():
             bot.answer_callback_query(call.id, text=msg_sbor_is_over)
@@ -426,7 +420,7 @@ def less_day(call):
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data[:10] == 'sbor_send-')
-def less_day(call):
+def sbor_send(call):
     try:
         sbor_id = call.data[10:]
         if is_open_event(sbor_id):
@@ -457,7 +451,7 @@ def less_day(call):
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data == 'event_send')
-def less_day(call):
+def event_send(call):
     try:
         customer = prettyUsername(call.from_user.first_name, call.from_user.username)
         user_to_send = []
@@ -489,7 +483,7 @@ def less_day(call):
                                   parse_mode='MARKDOWN', disable_web_page_preview=True)
             change_stats(k, 'event')
             change_stats(e, 'eventError')
-            change("update status_sbor set status = 0;")
+            change("update status_sbor set status = 0 where status <> 4;")
             change("update status_sbor set status = 3 where chat_id in "
                    "(select chat_id from u2e where event_id = (select id from events where status = 0 limit 1));")
             change("update events set status = 1 where status = 0;")
@@ -502,7 +496,7 @@ def less_day(call):
                               parse_mode='MARKDOWN')
 
 @bot.callback_query_handler(func=lambda call: call.data == 'event_name')
-def less_day(call):
+def event_name(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
         row = select("select id, rowid from events where status = 0 order by rowid desc limit 1;")
@@ -517,7 +511,7 @@ def less_day(call):
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data == 'event_price')
-def less_day(call):
+def event_price(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
         row = select("select id, rowid from events where status = 0 order by rowid desc limit 1;")
@@ -532,7 +526,7 @@ def less_day(call):
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data == 'event_account')
-def less_day(call):
+def event_account(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
         row = select("select id, rowid from events where status = 0 order by rowid desc limit 1;")
@@ -547,7 +541,7 @@ def less_day(call):
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data == 'event_user')
-def less_day(call):
+def event_user(call):
     try:
         bot.answer_callback_query(call.id, text=msg_done)
         row = select("select id, rowid from events where status = 0 order by rowid desc limit 1;")
@@ -562,7 +556,7 @@ def less_day(call):
         pass
 
 @bot.callback_query_handler(func=lambda call: call.data == 'send_mass')
-def less_day(call):
+def send_mass(call):
     bot.answer_callback_query(call.id, text=msg_done)
     try:
         k = 0
@@ -686,6 +680,33 @@ def ignore(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'less_day')
 def less_day(call):
     bot.answer_callback_query(call.id, text=msg_less_day)
+
+@bot.callback_query_handler(func=lambda call: call.data == 'holiday_refresh')
+def holiday_refresh(call):
+    now = datetime.now()
+    date = (now.year, now.month)
+    current_shown_dates[call.from_user.id] = date
+    markup = create_calendar_with_year_to_future(now.year, now.month)
+    insetholidaystep1.append(call.from_user.id)
+    bot.send_message(call.from_user.id, msg_holiday_start, reply_markup=markup)
+    change("delete from holidays where chat_id = " + str(call.from_user.id) + ";")
+    bot.edit_message_reply_markup(call.from_user.id,
+                                  call.message.message_id)
+
+@bot.callback_query_handler(func=lambda call: call.data == 'holiday_delete')
+def holiday_delete(call):
+    change("delete from holidays where chat_id = " + str(call.from_user.id) + ";")
+    bot.edit_message_reply_markup(call.from_user.id,
+                                  call.message.message_id)
+    bot.send_message(call.from_user.id, msg_holiday_deleted)
+
+@bot.callback_query_handler(func=lambda call: call.data == 'holiday_end')
+def holiday_end(call):
+    change("update status_sbor set status = 5 where chat_id = " + str(call.from_user.id) + ";")
+    bot.edit_message_reply_markup(call.from_user.id,
+                                  call.message.message_id)
+    bot.send_message(call.from_user.id, msg_holiday_ended)
+
 
 try:
     for admin_chat_id in admin_list():

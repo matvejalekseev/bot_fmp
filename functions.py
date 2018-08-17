@@ -5,6 +5,7 @@ from datetime import datetime
 from telebot import types
 from conf import db
 from msg import *
+from markups import *
 
 def admin_list():
     return select("select chat_id from chats where status = 1;")
@@ -29,7 +30,13 @@ def change_stats_down(n,s):
         change("update stats set number = number-" + str(n) + " where stat = '" + str(s) + "';")
     return True
 
-
+def holidaymarkup(id):
+    if inholiday(id):
+        return inholidaymarkup
+    elif holidayexists(id):
+        return holidayexistsmarkup
+    else:
+        return holidaymarkup
 
 def current_date():
     try:
@@ -72,6 +79,20 @@ def inchats(s):
     else:
         return False
 
+def inholiday(s):
+    chats = select("select chat_id from status_sbor where status = 4 and chat_id = " + str(s) + ";")
+    if chats:
+        return True
+    else:
+        return False
+
+def holidayexists(s):
+    chats = select("select chat_id from holidays where chat_id = " + str(s) + ";")
+    if chats:
+        return True
+    else:
+        return False
+
 def RepresentsInt(s):
     try:
         int(s)
@@ -98,7 +119,7 @@ def is_proccess__user_event(id):
         return False
 
 def list_users_to_remind():
-      return select("select chat_id from status_sbor where status = 0")
+      return select("select chat_id from status_sbor where status = 0;")
 
 def event_status():
     try:
@@ -252,6 +273,40 @@ def birthday_list():
                 text = text + bd[0][:2] + " - " + prettyUsername(bd[1], bd[2]) + "\n"
         else:
             text = empty_list_bd
+        return text
+    except:
+        return error
+
+def holiday_list():
+    try:
+        in_holiday = select("select c.name,c.username,h.date,substr(h.date,1,2),substr(h.date,4,2),substr(h.date,7,4)"
+                            " from chats c join status_sbor ss on ss.chat_id = c.chat_id"
+                            " and ss.status = 4 left join holidays h on h.chat_id = c.chat_id and h.action = 'stop' "
+                            "where c.status = 0 order by 4,5,6;")
+        future_holiday = select("select c.name,c.username,begin.date,end.date,substr(begin.date,1,2),"
+                                "substr(begin.date,4,2),substr(begin.date,7,4) from chats c join holidays begin "
+                                "on begin.chat_id = c.chat_id and begin.action = 'start' join holidays end "
+                                "on end.chat_id = c.chat_id and end.action = 'stop' join status_sbor ss "
+                                "on ss.chat_id = c.chat_id and ss.status <> 4 order by 4,5,6;")
+        if in_holiday and future_holiday:
+            text = in_holiday_label
+            for holiday in in_holiday:
+                text = text + "До " + holiday[2] + " - " + prettyUsername(holiday[0], holiday[1]) + "\n"
+            text = text + "\n" + future_holiday_label
+            for holiday in future_holiday:
+                text = text + "С " + holiday[2] + " по " + holiday[3] + " - " + prettyUsername(holiday[0], holiday[1]) \
+                       + "\n"
+        elif future_holiday:
+            text = future_holiday_label
+            for holiday in future_holiday:
+                text = text + "С " + holiday[2] + " по " + holiday[3] + " - " + prettyUsername(holiday[0], holiday[1]) \
+                       + "\n"
+        elif in_holiday:
+            text = in_holiday_label
+            for holiday in in_holiday:
+                text = text + holiday[2] + " - " + prettyUsername(holiday[0], holiday[1]) + "\n"
+        else:
+            text = empty_list_holiday
         return text
     except:
         return error

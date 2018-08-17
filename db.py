@@ -58,6 +58,7 @@ cursor.execute("INSERT INTO stats(stat,name) VALUES ('holiday','В отпуск�
 #cursor.execute("INSERT INTO statuses(id,name) VALUES (2,'Подтверждены');")
 #cursor.execute("INSERT INTO statuses(id,name) VALUES (3,'Виновники');")
 cursor.execute("INSERT INTO statuses(id,name) VALUES (4,'В отпуске');")
+cursor.execute("INSERT INTO statuses(id,name) VALUES (5,'Только из отпуска');")
 #cursor.execute("INSERT INTO statuses(id,name) VALUES (10,'Новый пользователь');")
 
 
@@ -67,7 +68,7 @@ cursor.execute("INSERT INTO statuses(id,name) VALUES (4,'В отпуске');")
 #cursor.execute("insert into invite(str) values ('hello');")
 
 # Создание таблицы "Отпуска"
-cursor.execute("DROP TABLE holidays;")
+#cursor.execute("DROP TABLE holidays;")
 cursor.execute("CREATE TABLE holidays(chat_id real, action text DEFAULT 'start', date text DEFAULT 'None');")
 
 
