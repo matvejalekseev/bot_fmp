@@ -49,9 +49,9 @@ def create_calendar_with_year_to_future(year,month):
                 row.append(types.InlineKeyboardButton(" ",callback_data="ignore"))
             else:
                 now = datetime.now()
-                if datetime.strptime(str(now.day) + "." + str(now.month) + "." + str(now.year), "%d.%m.%Y") > datetime.strptime(
+                if datetime.strptime(str(now.day) + "." + str(now.month) + "." + str(now.year), "%d.%m.%Y") < datetime.strptime(
                         str(day) + "." + str(month) + "." + str(year), "%d.%m.%Y"):
-                    row.append(types.InlineKeyboardButton(str(day),callback_data="calendar-day-"+str(day)))
+                    row.append(types.InlineKeyboardButton(str(day), callback_data="calendar-day-"+str(day)))
                 else:
                     row.append(types.InlineKeyboardButton(str(day), callback_data="less_day"))
 
