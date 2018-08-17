@@ -274,12 +274,12 @@ def holiday_list():
         in_holiday = select("select c.name,c.username,h.date,substr(h.date,1,2),substr(h.date,4,2),substr(h.date,7,4)"
                             " from chats c join status_sbor ss on ss.chat_id = c.chat_id"
                             " and ss.status = 4 left join holidays h on h.chat_id = c.chat_id and h.action = 'stop' "
-                            "where c.status = 0 order by 4,5,6;")
+                            "where c.status = 0 order by 6,5,4;")
         future_holiday = select("select c.name,c.username,begin.date,end.date,substr(begin.date,1,2),"
                                 "substr(begin.date,4,2),substr(begin.date,7,4) from chats c join holidays begin "
                                 "on begin.chat_id = c.chat_id and begin.action = 'start' join holidays end "
                                 "on end.chat_id = c.chat_id and end.action = 'stop' join status_sbor ss "
-                                "on ss.chat_id = c.chat_id and ss.status <> 4 order by 4,5,6;")
+                                "on ss.chat_id = c.chat_id and ss.status <> 4 order by 6,5,4;")
         if in_holiday and future_holiday:
             text = in_holiday_label
             for holiday in in_holiday:
