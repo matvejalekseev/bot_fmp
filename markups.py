@@ -101,7 +101,6 @@ holidaymarkup = types.InlineKeyboardMarkup()
 holidaymarkup.add(types.InlineKeyboardButton(text=btn_holiday_refresh, callback_data="holiday_refresh"))
 
 inholidaymarkup = types.InlineKeyboardMarkup()
-inholidaymarkup.add(types.InlineKeyboardButton(text=btn_holiday_refresh, callback_data="holiday_refresh"))
 inholidaymarkup.add(types.InlineKeyboardButton(text=btn_holiday_end, callback_data="holiday_end"))
 
 holidayexistsmarkup = types.InlineKeyboardMarkup()
