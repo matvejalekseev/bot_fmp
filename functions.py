@@ -20,6 +20,20 @@ def user_list_to_send():
     return select("select c.chat_id from chats c "
                   "join status_sbor ss on ss.chat_id = c.chat_id and ss.status not in (4) where c.status = 0;")
 
+def user_list_to_send_with_name():
+    return select("select c.chat_id,c.name from chats c "
+                  "join status_sbor ss on ss.chat_id = c.chat_id and ss.status not in (4) where c.status = 0;")
+
+def update_stop_holiday_date(id, stop_date):
+    start_date = select("select date from holidays where chat_id = " + str(id) + ";")[0][0]
+    if datetime.strptime(start_date, "%d.%m.%Y") > datetime.strptime(stop_date, "%d.%m.%Y"):
+        change("update holidays set date = '" + stop_date + "' where action = 'start' and chat_id = " + str(id) + ";")
+        change("insert into holidays(chat_id,date,action) values (" + str(id) + ", '"
+               + start_date + "','stop');")
+    else:
+        change("insert into holidays(chat_id,date,action) values (" + str(id) + ", '"
+               + stop_date + "','stop');")
+
 def change_stats(n,s):
     if n > 0:
         change("update stats set number = number+" + str(n) + " where stat = '" + str(s) + "';")
@@ -306,8 +320,8 @@ def holiday_list():
 
 def users_list():
     try:
-        list = select("select birthday,name,username,chat_id,substr(birthday,4,2) as first "
-                      "from chats where status = 0 order by first;")
+        list = select("select birthday,name,username,chat_id,substr(birthday,4,2) as first,substr(birthday,1,2) as s "
+                      "from chats where status = 0 order by first,s;")
         if list:
             text = ladel_users
             for user in list:

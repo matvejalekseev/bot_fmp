@@ -23,6 +23,11 @@ invite_label = 'просто жми на ссылку'
 mass_send_label = 'Собщение для отправки:\n\n'
 mass_send_label_done = '*Отправлено: *\n\n'
 
+btn_jira_1 = 'Списание рабочего времени'
+link_jira_1 = 'https://conf.bars-open.ru/pages/viewpage.action?pageId=28403312'
+btn_jira_2 = 'Списание нерабочего времени'
+link_jira_2 = 'https://conf.bars-open.ru/pages/viewpage.action?pageId=44600064'
+
 
 btn_url1 = 'Регламенты'
 label_url1 = 'Здесь можно найти полезные регламенты'

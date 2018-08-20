@@ -84,6 +84,10 @@ url3markup = types.InlineKeyboardMarkup()
 for url in url_3:
     url3markup.add(types.InlineKeyboardButton(text=url[0], url=url[1]))
 
+jiramarkup = types.InlineKeyboardMarkup()
+jiramarkup.add(types.InlineKeyboardButton(text=btn_jira_1, url=link_jira_1))
+jiramarkup.add(types.InlineKeyboardButton(text=btn_jira_2, url=link_jira_2))
+
 stopmasssendmarkup = types.InlineKeyboardMarkup()
 stopmasssendmarkup.add(types.InlineKeyboardButton(text=btn_mass_send_back, callback_data="cancel_mass_send"))
 

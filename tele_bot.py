@@ -464,9 +464,12 @@ def event_send(call):
         user_to_send = []
         for row in user_list_to_send():
             user_to_send.append(row[0])
-        for row in select("select chat_id from u2e where event_id = (select id from events where "
-                            "status = 0 limit 1);"):
-            user_to_send.remove(row[0])
+        try:
+            for row in select("select chat_id from u2e where event_id = (select id from events where "
+                            "status = 0 limit 1) and status <> 4;"):
+                user_to_send.remove(row[0])
+        except:
+            pass
         k = 0
         e = 0
         bot.answer_callback_query(call.id, text=sbor_complete)
@@ -492,7 +495,8 @@ def event_send(call):
             change_stats(e, 'eventError')
             change("update status_sbor set status = 0 where status <> 4;")
             change("update status_sbor set status = 3 where chat_id in "
-                   "(select chat_id from u2e where event_id = (select id from events where status = 0 limit 1));")
+                   "(select chat_id from u2e where event_id = (select id from events where status = 0 limit 1)) "
+                   "and status <> 4;")
             change("update events set status = 1 where status = 0;")
         else:
             bot.edit_message_text(event() + sbor_complete_md + empty_send_list, call.message.chat.id,
@@ -620,8 +624,7 @@ def get_day(call):
             bot.edit_message_text(msg_holiday_step_2, call.from_user.id, call.message.message_id,
                                   parse_mode='MARKDOWN', reply_markup=markup)
         elif call.message.chat.id in insetholidaystep2:
-            change("insert into holidays(chat_id,date,action) values (" + str(call.from_user.id) + ", '"
-                   + str(date_in.strftime("%d.%m.%Y")) + "','stop');")
+            update_stop_holiday_date(call.from_user.id, str(date_in.strftime("%d.%m.%Y")))
             insetholidaystep2.remove(call.from_user.id)
             bot.edit_message_text(msg_holiday_done, call.from_user.id, call.message.message_id,
                                   parse_mode='MARKDOWN')
@@ -703,6 +706,7 @@ def holiday_refresh(call):
 @bot.callback_query_handler(func=lambda call: call.data == 'holiday_delete')
 def holiday_delete(call):
     change("delete from holidays where chat_id = " + str(call.from_user.id) + ";")
+    change("delete from holidays where action = 'stop' and chat_id = " + str(call.from_user.id) + ";")
     bot.edit_message_reply_markup(call.from_user.id,
                                   call.message.message_id)
     bot.send_message(call.from_user.id, msg_holiday_deleted)
@@ -711,6 +715,7 @@ def holiday_delete(call):
 def holiday_end(call):
     change("update status_sbor set status = 5 where chat_id = " + str(call.from_user.id) + ";")
     change("delete from holidays where chat_id = " + str(call.from_user.id) + ";")
+    change_stats_down(1, 'holiday')
     bot.edit_message_reply_markup(call.from_user.id,
                                   call.message.message_id)
     bot.send_message(call.from_user.id, msg_holiday_ended)
