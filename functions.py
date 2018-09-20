@@ -2,7 +2,6 @@ import random
 import re
 import sqlite3
 from datetime import datetime
-from telebot import types
 from conf import db
 from msg import *
 from markups import *
