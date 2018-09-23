@@ -1,6 +1,3 @@
-# This is a simple echo bot using the decorator mechanism.
-# It echoes any incoming text messages.
-
 import logging
 import subprocess
 import time
@@ -727,7 +724,7 @@ try:
 except:
     pass
 
-subprocess.Popen("python3 scheduler.py", shell=True)
+subprocess.Popen("python3.5 scheduler.py", shell=True)
 
 while True:
     try:
