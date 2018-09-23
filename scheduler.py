@@ -5,7 +5,6 @@ import schedule
 import telebot
 from conf import *
 from functions import *
-from msg import *
 from markups import *
 
 
