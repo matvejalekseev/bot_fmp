@@ -463,7 +463,7 @@ def event_send(call):
             user_to_send.append(row[0])
         try:
             for row in select("select chat_id from u2e where event_id = (select id from events where "
-                            "status = 0 limit 1) and status <> 4;"):
+                            "status = 0 limit 1);"):
                 user_to_send.remove(row[0])
         except:
             pass
