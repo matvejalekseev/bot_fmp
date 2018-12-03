@@ -3,7 +3,6 @@ import re
 import sqlite3
 from datetime import datetime
 from conf import db
-from msg import *
 from markups import *
 
 def admin_list():
