@@ -377,7 +377,7 @@ def status(call):
         status = call.data[7:]
         for row in select("select c.name, c.username, c.chat_id from chats c join status_sbor s on "
                           "c.chat_id = s.chat_id and s.status = " + str(status) + " where c.status = 0;"):
-            text = text + prettyUsername(row[0], row[1]) + " ```/confirm " + str(round(row[2])) + "```\n"
+            text = text + prettyUsername(row[0], row[1]) + " ```" + str(round(row[2])) + "```\n"
         label_status = '*' + statusName(status) + '*\n'
         bot.edit_message_text(label_status + text, call.message.chat.id,
                           call.message.message_id, parse_mode='MARKDOWN', disable_web_page_preview=True,
