@@ -145,7 +145,7 @@ def send_welcome(message):
                     bot.send_chat_action(chat[0], 'typing')
                 except:
                     text = text + '<a href="tg://user?id=' + str(round(chat[0])) + '">' + chat[1] + '</a>\n'
-            bot.send_message(message.chat.id, text)
+            bot.send_message(message.chat.id, 'От меня отписались:\n' + text, parse_mode='HTML')
         else:
             bot.send_message(message.chat.id, not_support)
     except:
