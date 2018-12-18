@@ -134,6 +134,24 @@ def send_welcome(message):
     except:
         pass
 
+
+@bot.message_handler(commands=['check_users'])
+def send_welcome(message):
+    try:
+        if inadminchats(message.chat.id):
+            text = ''
+            for chat in user_list_with_name():
+                try:
+                    bot.send_chat_action(chat[0], 'typing')
+                except:
+                    text = text + '<a href="tg://user?id=' + str(round(chat[0])) + '">' + chat[1] + '</a>\n'
+            bot.send_message(message.chat.id, text)
+        else:
+            bot.send_message(message.chat.id, not_support)
+    except:
+        pass
+
+
 @bot.message_handler(commands=['confirm'])
 def send_welcome(message):
     try:
@@ -152,6 +170,7 @@ def send_welcome(message):
             bot.send_message(message.chat.id, not_support)
     except:
         pass
+
 
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
