@@ -743,7 +743,6 @@ try:
 except:
     pass
 
-subprocess.Popen("python3.5 scheduler.py", shell=True)
 
 while True:
     try:
