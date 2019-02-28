@@ -88,6 +88,24 @@ schedule.every().day.at(event_reminder_sched_time).do(job_event_reminder)
 schedule.every().day.at(holiday_start_time).do(job_holiday_start)
 schedule.every().day.at(holiday_stop_time).do(job_holiday_stop)
 
+#Удалить
+def window_time():
+    try:
+        current_weekday = datetime.today().weekday()
+        if current_weekday in [0, 1, 2, 3, 4]:
+            for chat in user_list_to_send_window_with_name():
+                try:
+                    bot.send_message(chat[0], hello(chat[1]) + msg_time_window, parse_mode='MARKDOWN',
+                                     disable_web_page_preview=True)
+                except:
+                    pass
+    except:
+        pass
+
+schedule.every().day.at("15:00").do(window_time)
+schedule.every().day.at("11:20").do(window_time)
+#конец
+
 bot = telebot.TeleBot(telegrambot_test)
 
 while True:

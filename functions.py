@@ -22,6 +22,7 @@ def user_list_to_send_with_name():
     return select("select c.chat_id,c.name from chats c "
                   "join status_sbor ss on ss.chat_id = c.chat_id and ss.status not in (4) where c.status = 0;")
 
+
 def update_stop_holiday_date(id, stop_date):
     start_date = select("select date from holidays where chat_id = " + str(id) + ";")[0][0]
     if datetime.strptime(start_date, "%d.%m.%Y") > datetime.strptime(stop_date, "%d.%m.%Y"):
@@ -331,6 +332,7 @@ def users_list():
     except:
         return error
 
+
 def prettyPrintName(ln, fn):
     try:
         if is_str(ln) and is_str(fn):
@@ -341,3 +343,9 @@ def prettyPrintName(ln, fn):
             return fn
     except:
         return error
+
+
+#Удалить
+def user_list_to_send_window_with_name():
+    return select("select c.chat_id,c.name from chats c "
+                  "where c.chat_id in (217516150, 109099327, 90923700);")
