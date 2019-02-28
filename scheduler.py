@@ -6,6 +6,7 @@ import telebot
 from conf import *
 from functions import *
 from markups import *
+from datetime import date, timedelta
 
 
 def invite():
@@ -18,7 +19,8 @@ def invite():
 def job_time():
     try:
         current_day = datetime.now().day
-        if current_day in jira_sched_day:
+        next_day = (date.today() + timedelta(days=1)).day
+        if current_day in jira_sched_day or next_day == 1:
             for chat in user_list_to_send_with_name():
                 try:
                     bot.send_message(chat[0], hello(chat[1]) + msg_time_jira, parse_mode='MARKDOWN', disable_web_page_preview=True,
