@@ -52,6 +52,20 @@ def send_welcome(message):
         pass
 
 
+@bot.message_handler(commands=['help'])
+def send_welcome(message):
+    try:
+        if message.chat.type == 'private':
+            if inchats(message.chat.id):
+                bot.send_message(message.chat.id, msg_help, reply_markup=startmarkup)
+            else:
+                bot.send_message(message.chat.id, close_chat)
+        else:
+            bot.send_message(message.chat.id, not_private_msg)
+    except:
+        pass
+
+
 @bot.message_handler(commands=['refresh'])
 def send_welcome(message):
     try:
@@ -72,6 +86,7 @@ def send_welcome(message):
             bot.send_message(message.chat.id, not_private_msg)
     except:
         pass
+
 
 @bot.message_handler(commands=['holiday'])
 def send_welcome(message):

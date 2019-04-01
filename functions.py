@@ -346,6 +346,8 @@ def prettyPrintName(ln, fn):
 
 
 #Удалить
+'''
 def user_list_to_send_window_with_name():
     return select("select c.chat_id,c.name from chats c "
                   "where c.chat_id in (217516150, 109099327, 90923700);")
+'''

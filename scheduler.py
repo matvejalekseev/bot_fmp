@@ -43,7 +43,7 @@ def job_bd():
         if day in bd_sched_day:
             for chat in user_list_with_name():
                 try:
-                    bot.send_message(chat[0], hello(chat[1]) + birthday_list(), parse_mode='MARKDOWN', disable_web_page_preview=True)
+                    bot.send_message(chat[0], hello(chat[1]) + birthday_list(), parse_mode='MARKDOWN', disable_web_page_preview=True, reply_markup=startmarkup)
                 except:
                     pass
     except:
@@ -91,6 +91,7 @@ schedule.every().day.at(holiday_start_time).do(job_holiday_start)
 schedule.every().day.at(holiday_stop_time).do(job_holiday_stop)
 
 #Удалить
+'''
 def window_time():
     try:
         current_weekday = datetime.today().weekday()
@@ -106,6 +107,7 @@ def window_time():
 
 schedule.every().day.at("15:00").do(window_time)
 schedule.every().day.at("11:20").do(window_time)
+'''
 #конец
 
 bot = telebot.TeleBot(telegrambot_test)
