@@ -603,7 +603,7 @@ def send_mass(call):
     try:
         k = 0
         e = 0
-        text = call.message.text.lstrip(mass_send_label)
+        text = call.message.text[len(mass_send_label):]
         for row in user_list_with_name():
             try:
                 bot.send_message(row[0], hello(row[1])  + text,
