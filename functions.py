@@ -248,7 +248,7 @@ def event():
                            "( select chat_id from u2e where event_id = " + str(row[0][3]) + ");")
         event_name = "*" + xstr(row[0][0]) + "*\n"
         event_date = "*Сумма:* " + xstr(row[0][1]) + "\n"
-        event_time = "*Перевести по телефону(Альфа/Сбер/Наличные):*\n\n```" + xstr(row[0][2]) + "```\n\n"
+        event_time = "*Перевести по телефону:*\n\n```" + xstr(row[0][2]) + "```\n\n"
         if not(users_in):
             event_user = "Нет виновника\n"
         else:
